@@ -1,0 +1,26 @@
+# AppCode
+.idea/
+
+# Bundler
+.vendor/
+
+# Carthage
+Carthage/
+
+# CocoaPods
+Pods/
+
+# Git
+*.orig
+
+# macOS
+.DS_Store
+
+# SPM
+.build/
+
+# BUILD.sh
+*.xcframework
+
+# Xcode
+xcuserdata/
