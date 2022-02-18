@@ -1,5 +1,5 @@
 //
-//  Response.swift
+//  ResponseValidator.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -22,40 +22,12 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
+public enum ResponseValidationDisposition {
+   case useObjectResponseConverter
+   case useErrorResponseConverter
+   case completeWithError(Error)
+}
 
-public final class Response {
-   public let request: URLRequest
-   public let statusCode: Int
-   public let headers: [String: String]
-   public let body: Data
-
-   // MARK: - Init
-
-   public init(request: URLRequest, statusCode: Int, headers: [String: String], body: Data) {
-      self.request = request
-      self.statusCode = statusCode
-      self.headers = headers
-      self.body = body
-   }
-
-   convenience init(request: URLRequest, httpURLResponse: HTTPURLResponse, body: Data) {
-      self.init(
-         request: request,
-         statusCode: httpURLResponse.statusCode,
-         headers: httpURLResponse.allHeaderFields as? [String: String] ?? [:],
-         body: body
-      )
-   }
-
-   // MARK: - Header Accessors
-
-   func contentTypeMIME() -> MIME? {
-      guard let contentType = headers["Content-Type"] else {
-         return nil
-      }
-
-      let mimeString = contentType.components(separatedBy: ";")[0]
-      return .make(mimeString: mimeString)
-   }
+public protocol ResponseValidator {
+   func validate(_ response: Response) -> ResponseValidationDisposition
 }

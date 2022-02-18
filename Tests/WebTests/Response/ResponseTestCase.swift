@@ -28,7 +28,9 @@ import Web
 import XCTest
 
 final class ResponseTestCase: XCTestCase {
-   func test_response_isBeingInitedFromHTTPURLResponseCorrectly() throws {
+   // MARK: - Test Cases
+
+   func test_response_isInitedFromHTTPURLResponseCorrectly() throws {
       let body = Data([0x01, 0x02, 0x03])
       let url = try XCTUnwrap(URL(string: "https://serivce.com"))
       let statusCode = 200
@@ -46,5 +48,40 @@ final class ResponseTestCase: XCTestCase {
       XCTAssertEqual(response.statusCode, statusCode)
       XCTAssertEqual(response.headers, headers)
       XCTAssertEqual(response.body, body)
+   }
+
+   func test_response_returnsNilMIME_ifNoContentType() throws {
+      let response = try makeResponse(contentType: nil)
+      let mime = response.contentTypeMIME()
+      XCTAssertNil(mime)
+   }
+
+   func test_response_returnsMIME_ifContentType() throws {
+      let expectedMIME = MIME(type: "application", subtype: "json")
+      let response = try makeResponse(contentType: "application/json")
+      let mime = response.contentTypeMIME()
+      XCTAssertEqual(mime, expectedMIME)
+   }
+
+   func test_response_returnsMIME_ifContentType_withCharset() throws {
+      let expectedMIME = MIME(type: "application", subtype: "json")
+      let response = try makeResponse(contentType: "application/json; charset=utf8")
+      let mime = response.contentTypeMIME()
+      XCTAssertEqual(mime, expectedMIME)
+   }
+
+   // MARK: - Factory
+
+   private func makeResponse(contentType: String?) throws -> Response {
+      let url = try XCTUnwrap(URL(string: "https://service.com"))
+      let request = URLRequest(url: url)
+      return Response(
+         request: request,
+         statusCode: 200,
+         headers: contentType.map { contentType in
+            ["Content-Type": contentType]
+         } ?? [:],
+         body: Data()
+      )
    }
 }

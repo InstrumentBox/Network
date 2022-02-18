@@ -1,5 +1,5 @@
 //
-//  Response.swift
+//  URLRequest+Accept.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,38 +24,13 @@
 
 import Foundation
 
-public final class Response {
-   public let request: URLRequest
-   public let statusCode: Int
-   public let headers: [String: String]
-   public let body: Data
-
-   // MARK: - Init
-
-   public init(request: URLRequest, statusCode: Int, headers: [String: String], body: Data) {
-      self.request = request
-      self.statusCode = statusCode
-      self.headers = headers
-      self.body = body
-   }
-
-   convenience init(request: URLRequest, httpURLResponse: HTTPURLResponse, body: Data) {
-      self.init(
-         request: request,
-         statusCode: httpURLResponse.statusCode,
-         headers: httpURLResponse.allHeaderFields as? [String: String] ?? [:],
-         body: body
-      )
-   }
-
-   // MARK: - Header Accessors
-
-   func contentTypeMIME() -> MIME? {
-      guard let contentType = headers["Content-Type"] else {
-         return nil
+extension URLRequest {
+   func acceptMIMEs() -> [MIME] {
+      guard let accept = allHTTPHeaderFields?["Accept"] else {
+         return []
       }
 
-      let mimeString = contentType.components(separatedBy: ";")[0]
-      return .make(mimeString: mimeString)
+      let mimeStrings = accept.components(separatedBy: ", ")
+      return mimeStrings.compactMap(MIME.make)
    }
 }
