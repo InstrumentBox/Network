@@ -1,5 +1,5 @@
 //
-//  WebClient.swift
+//  RequestAuthorizer.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -22,8 +22,8 @@
 //  THE SOFTWARE.
 //
 
-public protocol WebClient: AnyObject {
-   func execute<Request: Web.Request>(
-      _ request: Request
-   ) async throws -> Request.ObjectResponseConverter.ConvertedResponse
+public protocol RequestAuthorizer {
+   func authorizationHeader<Request: Web.Request>(
+      for request: Request
+   ) async throws -> AuthorizationHeader
 }

@@ -1,5 +1,5 @@
 //
-//  WebClient.swift
+//  URLSessionWebClient.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -22,8 +22,33 @@
 //  THE SOFTWARE.
 //
 
-public protocol WebClient: AnyObject {
-   func execute<Request: Web.Request>(
+import Foundation
+
+public final class URLSessionWebClient: WebClient {
+   private let configuration: URLSessionWebClientConfiguration
+   private let session: URLSession
+
+   // MARK: - Init
+
+   public init(configuration: URLSessionWebClientConfiguration) {
+      self.configuration = configuration
+      session = URLSession(configuration: configuration.sessionConfiguration)
+   }
+
+   deinit {
+      session.invalidateAndCancel()
+   }
+
+   // MARK: - WebClient
+
+   public func execute<Request: Web.Request>(
       _ request: Request
-   ) async throws -> Request.ObjectResponseConverter.ConvertedResponse
+   ) async throws -> Request.ObjectResponseConverter.ConvertedResponse {
+      let execution = RequestExecution(
+         request: request,
+         session: session,
+         configuration: configuration
+      )
+      return try await execution.execute()
+   }
 }

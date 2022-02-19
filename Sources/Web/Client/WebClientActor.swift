@@ -1,5 +1,5 @@
 //
-//  WebClient.swift
+//  WebClientActor.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -22,8 +22,11 @@
 //  THE SOFTWARE.
 //
 
-public protocol WebClient: AnyObject {
-   func execute<Request: Web.Request>(
-      _ request: Request
-   ) async throws -> Request.ObjectResponseConverter.ConvertedResponse
+@globalActor
+final actor WebClientActor {
+   static let shared = WebClientActor()
+
+   // MARK: - Init
+
+   private init() { }
 }

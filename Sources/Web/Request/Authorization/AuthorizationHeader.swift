@@ -1,5 +1,5 @@
 //
-//  WebClient.swift
+//  AuthorizationHeader.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -22,8 +22,14 @@
 //  THE SOFTWARE.
 //
 
-public protocol WebClient: AnyObject {
-   func execute<Request: Web.Request>(
-      _ request: Request
-   ) async throws -> Request.ObjectResponseConverter.ConvertedResponse
+public struct AuthorizationHeader: Hashable {
+   public let name: String
+   public let value: String
+
+   // MARK: - Init
+
+   public init(name: String, value: String) {
+      self.name = name
+      self.value = value
+   }
 }
