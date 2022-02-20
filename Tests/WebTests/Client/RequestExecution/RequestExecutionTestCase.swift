@@ -33,7 +33,7 @@ final class RequestExecutionTestCase: XCTestCase {
    func test_requestExecution_returnsObject() async throws {
       let execution = makeExecution(protocolClass: UserWebTestsURLProtocol.self)
       let user = try await execution.execute()
-      XCTAssertEqual(user, User.johnAppleseed)
+      XCTAssertEqual(user, .johnAppleseed)
    }
 
    func test_requestExecution_returnsObject_ifRequestAuthorized() async throws {
@@ -42,7 +42,7 @@ final class RequestExecutionTestCase: XCTestCase {
          requestAuthorizer: WebTestsRequestAuthorizer()
       )
       let user = try await execution.execute()
-      XCTAssertEqual(user, User.johnAppleseed)
+      XCTAssertEqual(user, .johnAppleseed)
    }
 
    func test_requestExecution_throwsAPIError_ifRequestNotAuthorized() async throws {
@@ -51,7 +51,7 @@ final class RequestExecutionTestCase: XCTestCase {
          _ = try await execution.execute()
          XCTFail("Unexpected successful result")
       } catch let error as APIError {
-         XCTAssertEqual(error, APIError.notAuthorized)
+         XCTAssertEqual(error, .notAuthorized)
       } catch {
          XCTFail("Unexpected error thrown: \(error)")
       }
@@ -63,7 +63,7 @@ final class RequestExecutionTestCase: XCTestCase {
          _ = try await execution.execute()
          XCTFail("Unexpected successful result")
       } catch let error as APIError {
-         XCTAssertEqual(error, APIError.userNotFound)
+         XCTAssertEqual(error, .userNotFound)
       } catch {
          XCTFail("Unexpected error thrown: \(error)")
       }
