@@ -1,5 +1,5 @@
 //
-//  NotHTTPResponseWebTestsURLProtocol.swift
+//  AuthorizedWebTestsURLProtocol.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,13 +24,28 @@
 
 import Foundation
 
-final class NotHTTPResponseWebTestsURLProtocol: WebTestsURLProtocol {
-   override var response: URLResponse {
-      URLResponse(
-         url: request.url!,
-         mimeType: headers["Content-Type"] ?? "text/plain",
-         expectedContentLength: 3,
-         textEncodingName: "utf8"
-      )
+final class AuthorizedWebTestsURLProtocol: WebTestsURLProtocol {
+   override var statusCode: Int {
+      isAuthorized ? 200 : 401
+   }
+
+   override var headers: [String : String] {
+      ["Content-Type": "application/json; charset=utf8"]
+   }
+
+   override var body: Data {
+      isAuthorized ? User.johnAppleseed.toJSONData() : APIError.notAuthorized.toJSONData()
+   }
+
+   private var isAuthorized: Bool {
+      guard
+         let headers = request.allHTTPHeaderFields,
+         let authorizationHeader = headers["Authorization"],
+         authorizationHeader == "Basic 123"
+      else {
+         return false
+      }
+
+      return true
    }
 }

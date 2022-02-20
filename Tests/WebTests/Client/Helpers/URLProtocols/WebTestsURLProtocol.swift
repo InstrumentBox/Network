@@ -34,8 +34,15 @@ class WebTestsURLProtocol: URLProtocol {
    override final class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
 
    override final func startLoading() {
-      let timer = Timer(timeInterval: 0.1, repeats: false) { [weak self] _ in
-         self?.startFetching()
+      let timer = Timer(timeInterval: 0.1, repeats: false) { [unowned self] _ in
+         if returnsError {
+            let error = URLError(.cancelled)
+            client?.urlProtocol(self, didFailWithError: error)
+         } else {
+            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .allowed)
+            client?.urlProtocol(self, didLoad: body)
+         }
+         client?.urlProtocolDidFinishLoading(self)
       }
       RunLoop.current.add(timer, forMode: .common)
       self.timer = timer
@@ -44,32 +51,14 @@ class WebTestsURLProtocol: URLProtocol {
    override final func stopLoading() {
       timer?.invalidate()
       timer = nil
-      stopFetching()
-   }
-
-   // MARK: - Fetching
-
-   func startFetching() {
-      if returnsError {
-         client?.urlProtocol(self, didFailWithError: error)
-      } else {
-         let response = makeURLResponse()
-         let body = makeBody()
-         client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .allowed)
-         client?.urlProtocol(self, didLoad: body)
-      }
+      let error = URLError(.cancelled)
+      client?.urlProtocol(self, didFailWithError: error)
       client?.urlProtocolDidFinishLoading(self)
    }
-
-   func stopFetching() { }
 
    // MARK: - Response Construction
 
    var returnsError: Bool { false }
-
-   var error: Error {
-      URLError(.cancelled)
-   }
 
    var statusCode: Int { 200 }
 
@@ -77,7 +66,7 @@ class WebTestsURLProtocol: URLProtocol {
       ["Content-Type": "application/octet-stream; charset=utf8"]
    }
 
-   func makeURLResponse() -> URLResponse {
+   var response: URLResponse {
       HTTPURLResponse(
          url: request.url!,
          statusCode: statusCode,
@@ -86,7 +75,7 @@ class WebTestsURLProtocol: URLProtocol {
       )!
    }
 
-   func makeBody() -> Data {
+   var body: Data {
       Data([0x01, 0x02, 0x03])
    }
 }

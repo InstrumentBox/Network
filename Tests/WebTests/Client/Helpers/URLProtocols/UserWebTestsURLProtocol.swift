@@ -1,5 +1,5 @@
 //
-//  NotHTTPResponseWebTestsURLProtocol.swift
+//  UserWebTestsURLProtocol.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,13 +24,12 @@
 
 import Foundation
 
-final class NotHTTPResponseWebTestsURLProtocol: WebTestsURLProtocol {
-   override var response: URLResponse {
-      URLResponse(
-         url: request.url!,
-         mimeType: headers["Content-Type"] ?? "text/plain",
-         expectedContentLength: 3,
-         textEncodingName: "utf8"
-      )
+final class UserWebTestsURLProtocol: WebTestsURLProtocol {
+   override var headers: [String : String] {
+      ["Content-Type": "application/json; charset=utf8"]
+   }
+
+   override var body: Data {
+      User.johnAppleseed.toJSONData()
    }
 }

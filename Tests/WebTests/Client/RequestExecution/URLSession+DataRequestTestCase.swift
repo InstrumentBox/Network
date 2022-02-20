@@ -67,6 +67,7 @@ final class URLSessionDataRequestTestCase: XCTestCase {
          let session = makeSession(protocolClass: NotHTTPResponseWebTestsURLProtocol.self)
          let request = try makeURLRequest()
          _ = try await session.newData(for: request)
+         XCTFail("Unexpected successful result")
       } catch let error as URLError {
          XCTAssertEqual(error.code, .badServerResponse)
       } catch {
@@ -79,6 +80,7 @@ final class URLSessionDataRequestTestCase: XCTestCase {
          let session = makeSession(protocolClass: NotHTTPResponseWebTestsURLProtocol.self)
          let request = try makeURLRequest()
          _ = try await session.prevData(for: request)
+         XCTFail("Unexpected successful result")
       } catch let error as URLError {
          XCTAssertEqual(error.code, .badServerResponse)
       } catch {
@@ -88,9 +90,10 @@ final class URLSessionDataRequestTestCase: XCTestCase {
 
    func _test_session_throwsURLSystemError_usingPrevAPI() async {
       do {
-         let session = makeSession(protocolClass: NotHTTPResponseWebTestsURLProtocol.self)
+         let session = makeSession(protocolClass: ErrorWebTestsURLProtocol.self)
          let request = try makeURLRequest()
          _ = try await session.prevData(for: request)
+         XCTFail("Unexpected successful result")
       } catch let error as URLError {
          XCTAssertEqual(error.code, .cancelled)
       } catch {

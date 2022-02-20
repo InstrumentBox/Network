@@ -1,5 +1,5 @@
 //
-//  NotHTTPResponseWebTestsURLProtocol.swift
+//  UserRequest.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -23,14 +23,22 @@
 //
 
 import Foundation
+import Web
 
-final class NotHTTPResponseWebTestsURLProtocol: WebTestsURLProtocol {
-   override var response: URLResponse {
-      URLResponse(
-         url: request.url!,
-         mimeType: headers["Content-Type"] ?? "text/plain",
-         expectedContentLength: 3,
-         textEncodingName: "utf8"
+struct UserRequest: Request {
+   var objectResponseConverter: JSONDecoderResponseConverter<User> {
+      JSONDecoderResponseConverter()
+   }
+
+   var errorResponseConverter: JSONDecoderResponseConverter<APIError> {
+      JSONDecoderResponseConverter()
+   }
+
+   func toURLRequest(with baseURL: URL?) throws -> URLRequest {
+      try URLRequest(
+         url: URL(path: "users/42", baseURL: baseURL),
+         method: .get,
+         headers: ["Accept": "application/json"]
       )
    }
 }

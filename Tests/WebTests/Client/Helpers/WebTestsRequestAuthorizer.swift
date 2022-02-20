@@ -1,5 +1,5 @@
 //
-//  NotHTTPResponseWebTestsURLProtocol.swift
+//  WebTestsRequestAuthorizer.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -22,15 +22,12 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
+import Web
 
-final class NotHTTPResponseWebTestsURLProtocol: WebTestsURLProtocol {
-   override var response: URLResponse {
-      URLResponse(
-         url: request.url!,
-         mimeType: headers["Content-Type"] ?? "text/plain",
-         expectedContentLength: 3,
-         textEncodingName: "utf8"
-      )
+final class WebTestsRequestAuthorizer: RequestAuthorizer {
+   func authorizationHeader<Request: Web.Request>(
+      for request: Request
+   ) async throws -> AuthorizationHeader {
+      AuthorizationHeader(name: "Authorization", value: "Basic 123")
    }
 }

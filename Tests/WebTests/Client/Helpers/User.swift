@@ -1,5 +1,5 @@
 //
-//  WebClientTestCase.swift
+//  User.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -22,9 +22,18 @@
 //  THE SOFTWARE.
 //
 
-@testable
-import Web
+import Foundation
 
-import XCTest
+struct User: Decodable, Equatable {
+   static let johnAppleseed = User(name: "John Appleseed", age: 42)
 
-final class WebClientTestCase: XCTestCase { }
+   let name: String
+   let age: Int
+
+   // MARK: - Stuff
+
+   func toJSONData() -> Data {
+      let rawJSON = #"{"name": "\#(self.name)", "age": \#(self.age)}"#
+      return rawJSON.data(using: .utf8)!
+   }
+}

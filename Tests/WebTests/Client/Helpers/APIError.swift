@@ -1,5 +1,5 @@
 //
-//  NotHTTPResponseWebTestsURLProtocol.swift
+//  APIError.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,13 +24,17 @@
 
 import Foundation
 
-final class NotHTTPResponseWebTestsURLProtocol: WebTestsURLProtocol {
-   override var response: URLResponse {
-      URLResponse(
-         url: request.url!,
-         mimeType: headers["Content-Type"] ?? "text/plain",
-         expectedContentLength: 3,
-         textEncodingName: "utf8"
-      )
+struct APIError: Error, Decodable, Equatable {
+   static let userNotFound = APIError(code: 404, message: "User Not Found")
+   static let notAuthorized = APIError(code: 401, message: "Not Authorized")
+
+   let code: Int
+   let message: String
+
+   // MARK: - Stuff
+
+   func toJSONData() -> Data {
+      let rawJSON = #"{"code": \#(self.code), "message": "\#(self.message)"}"#
+      return rawJSON.data(using: .utf8)!
    }
 }
