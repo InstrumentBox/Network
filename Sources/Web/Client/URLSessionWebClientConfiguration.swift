@@ -25,10 +25,23 @@
 import Foundation
 
 public final class URLSessionWebClientConfiguration {
+   /// Base URL that is used by web client.
+   ///
+   /// If you use `URL(path:baseURL) throws` initializer provided by this library and your base
+   /// URL contains path, you probably should end it with `/` as this initializer uses relative URL
+   /// mechanism.
+   ///
+   /// Example
+   ///
+   /// ```swift
+   /// configuration.baseURL = URL(string: "https://api.myservice.com/v1/")
+   /// ```
    public var baseURL: URL?
+
    public var requestAuthorizer: RequestAuthorizer?
    public var serverTrustPolicies: [String: ServerTrustPolicy]?
 
+   /// Configuration of underlying `URLSession` object.
    public let sessionConfiguration: URLSessionConfiguration
 
    // MARK: - Init
@@ -39,10 +52,12 @@ public final class URLSessionWebClientConfiguration {
 
    // MARK: - Predefined
 
+   /// A configuration that uses default url session configuration.
    public static var `default`: URLSessionWebClientConfiguration {
       URLSessionWebClientConfiguration(sessionConfiguration: .default)
    }
 
+   /// A configuration that uses ephemeral url session configuration.
    public static var ephemeral: URLSessionWebClientConfiguration {
       URLSessionWebClientConfiguration(sessionConfiguration: .ephemeral)
    }

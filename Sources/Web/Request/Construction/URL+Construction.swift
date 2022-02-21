@@ -29,19 +29,74 @@ public enum URLConstructionError: Error {
 }
 
 extension URL {
+   /// Creates and returns URL that consists of concatenated `path` and `baseURL`.
+   ///
+   /// This initializer works with relative URL mechanism so the result depends on whether you start
+   /// your path with `/` or not and whether you end your base URL with `/` or not.
+   ///
+   /// Examples:
+   ///
+   /// ```swift
+   /// path = "path/to/resource"
+   /// baseURL = "https://api.myservice.com/v1/group/"
+   /// completeURL = "https://apy.myservice.com/v1/group/path/to/resource"
+   ///
+   ///
+   /// path = "/path/to/resource"
+   /// baseURL = "https://api.myservice.com/v1/group/"
+   /// completeURL = "https://apy.myservice.com/path/to/resource"
+   ///
+   ///
+   /// path = "path/to/resource"
+   /// baseURL = "https://api.myservice.com/v1/group"
+   /// completeURL = "https://apy.myservice.com/v1/path/to/resource"
+   /// ```
+   ///
+   /// - Parameters:
+   ///   - path: A string which will be added to base URL.
+   ///   - baseURL: A base URL of service web client works with.
    public init(path: String, baseURL: URL?) throws {
       let isPathCompleteURL = path.range(of: "://") != nil
 
       let comps = URLComponents(string: path)
       let completeURL = isPathCompleteURL ? comps?.url : comps?.url(relativeTo: baseURL)
 
-      if let completeURL = completeURL {
-         self = completeURL
-      } else {
+      guard let completeURL = completeURL else {
          throw URLConstructionError.cannotConstructURL(path: path, baseURL: baseURL)
       }
+
+      self = completeURL
    }
 
+   /// Creates and returns URL that consists of concatenated `path`, `baseURL`, and percent encoded
+   /// `query` using `URLEncoder`.
+   ///
+   /// This initializer works with relative URL mechanism so the result depends on whether you start
+   /// your path with `/` or not and whether you end your base URL with `/` or not.
+   ///
+   /// Examples:
+   ///
+   /// ```swift
+   /// path = "path/to/resource"
+   /// baseURL = "https://api.myservice.com/v1/group/"
+   /// completeURL = "https://apy.myservice.com/v1/group/path/to/resource"
+   ///
+   ///
+   /// path = "/path/to/resource"
+   /// baseURL = "https://api.myservice.com/v1/group/"
+   /// completeURL = "https://apy.myservice.com/path/to/resource"
+   ///
+   ///
+   /// path = "path/to/resource"
+   /// baseURL = "https://api.myservice.com/v1/group"
+   /// completeURL = "https://apy.myservice.com/v1/path/to/resource"
+   /// ```
+   ///
+   /// - Parameters:
+   ///   - path: A string which will be added to base URL.
+   ///   - baseURL: A base URL of service web client works with.
+   ///   - query: Query parameters that will be added to URL.
+   ///   - encoder: URLEncoder that will be used to encode query parameters.
    public init(
       path: String,
       baseURL: URL?,
@@ -54,10 +109,10 @@ extension URL {
       comps?.percentEncodedQuery = try encoder.encode(query)
       let completeURL = isPathCompleteURL ? comps?.url : comps?.url(relativeTo: baseURL)
 
-      if let completeURL = completeURL {
-         self = completeURL
-      } else {
+      guard let completeURL = completeURL else {
          throw URLConstructionError.cannotConstructURL(path: path, baseURL: baseURL)
       }
+
+      self = completeURL
    }
 }

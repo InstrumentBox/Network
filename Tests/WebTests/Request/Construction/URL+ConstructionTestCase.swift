@@ -46,12 +46,8 @@ final class URLConstructionTestCase: XCTestCase {
 
    func test_url_isConstructedWithQuery() throws {
       let expectedURL = URL(string: "https://api.service.com/v1/test/endpoint?params%5Bkey%5D=value")
-      let resultURL = try URL(
-         path: "test/endpoint",
-         baseURL: baseURL,
-         query: ["params": ["key": "value"]]
-      )
-      XCTAssertEqual(resultURL.absoluteString, expectedURL?.absoluteString)
+      let url = try URL(path: "test/endpoint", baseURL: baseURL, query: ["params": ["key": "value"]])
+      XCTAssertEqual(url.absoluteString, expectedURL?.absoluteString)
    }
 
    func test_urlInitializer_throwsError() {
