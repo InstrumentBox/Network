@@ -1,5 +1,5 @@
 //
-//  URLSessionWebClientConfiguration.swift
+//  PublicKeysServerTrustPolicy.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,26 +24,35 @@
 
 import Foundation
 
-public final class URLSessionWebClientConfiguration {
-   public var baseURL: URL?
-   public var requestAuthorizer: RequestAuthorizer?
-   public var serverTrustPolicies: [String: ServerTrustPolicy]?
-
-   public let sessionConfiguration: URLSessionConfiguration
+public final class PublicKeysServerTrustPolicy: ServerTrustPolicy {
+   private let keys: [SecKey]
+   private let evaluateHost: Bool
 
    // MARK: - Init
 
-   private init(sessionConfiguration: URLSessionConfiguration) {
-      self.sessionConfiguration = sessionConfiguration
+   public init(keys: [SecKey], evaluateHost: Bool = true) {
+      self.keys = keys
+      self.evaluateHost = evaluateHost
    }
 
-   // MARK: - Predefined
+   // MARK: - ServerTrustPolicy
 
-   public static var `default`: URLSessionWebClientConfiguration {
-      URLSessionWebClientConfiguration(sessionConfiguration: .default)
-   }
+   public func evaluate(_ serverTrust: SecTrust, for host: String) -> Bool {
+      let host = host as CFString
+      let policy = SecPolicyCreateSSL(true, evaluateHost ? host : nil)
+      SecTrustSetPolicies(serverTrust, policy)
+      guard SecTrustEvaluateWithError(serverTrust, nil) else {
+         return false
+      }
 
-   public static var ephemeral: URLSessionWebClientConfiguration {
-      URLSessionWebClientConfiguration(sessionConfiguration: .ephemeral)
+      let serverKeys = serverTrust.certificates.compactMap(\.publicKey)
+      for serverKey in serverKeys {
+         for key in keys {
+            if serverKey.equals(to: key) {
+               return true
+            }
+         }
+      }
+      return false
    }
 }

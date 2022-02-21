@@ -1,5 +1,5 @@
 //
-//  URLSessionWebClientConfiguration.swift
+//  SecKey+Equatable.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,26 +24,14 @@
 
 import Foundation
 
-public final class URLSessionWebClientConfiguration {
-   public var baseURL: URL?
-   public var requestAuthorizer: RequestAuthorizer?
-   public var serverTrustPolicies: [String: ServerTrustPolicy]?
-
-   public let sessionConfiguration: URLSessionConfiguration
-
-   // MARK: - Init
-
-   private init(sessionConfiguration: URLSessionConfiguration) {
-      self.sessionConfiguration = sessionConfiguration
+extension SecKey {
+   public static func allPublicKeys(in bundle: Bundle = .main) -> [SecKey] {
+      SecCertificate.all(in: bundle).compactMap(\.publicKey)
    }
 
-   // MARK: - Predefined
-
-   public static var `default`: URLSessionWebClientConfiguration {
-      URLSessionWebClientConfiguration(sessionConfiguration: .default)
-   }
-
-   public static var ephemeral: URLSessionWebClientConfiguration {
-      URLSessionWebClientConfiguration(sessionConfiguration: .ephemeral)
+   func equals(to key: SecKey) -> Bool {
+      let this = self as AnyObject
+      let that = key as AnyObject
+      return this.isEqual(that)
    }
 }

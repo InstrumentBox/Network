@@ -1,5 +1,5 @@
 //
-//  URLSessionWebClientConfiguration.swift
+//  SecTrust+Web.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,26 +24,16 @@
 
 import Foundation
 
-public final class URLSessionWebClientConfiguration {
-   public var baseURL: URL?
-   public var requestAuthorizer: RequestAuthorizer?
-   public var serverTrustPolicies: [String: ServerTrustPolicy]?
-
-   public let sessionConfiguration: URLSessionConfiguration
-
-   // MARK: - Init
-
-   private init(sessionConfiguration: URLSessionConfiguration) {
-      self.sessionConfiguration = sessionConfiguration
-   }
-
-   // MARK: - Predefined
-
-   public static var `default`: URLSessionWebClientConfiguration {
-      URLSessionWebClientConfiguration(sessionConfiguration: .default)
-   }
-
-   public static var ephemeral: URLSessionWebClientConfiguration {
-      URLSessionWebClientConfiguration(sessionConfiguration: .ephemeral)
+extension SecTrust {
+   var certificates: [SecCertificate] {
+      if #available(iOS 15.0, macOS 12.0, macCatalyst 15.0, tvOS 15.0, watchOS 8.0, *) {
+         return (SecTrustCopyCertificateChain(self) as? [SecCertificate]) ?? []
+      } else {
+         let count = SecTrustGetCertificateCount(self)
+         return (0..<count).compactMap { idx in
+            SecTrustGetCertificateAtIndex(self, idx)
+         }
+      }
    }
 }
+

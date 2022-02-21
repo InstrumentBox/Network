@@ -1,5 +1,5 @@
 //
-//  URLSessionWebClientConfiguration.swift
+//  TrustAllServerTrustPolicy.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,26 +24,12 @@
 
 import Foundation
 
-public final class URLSessionWebClientConfiguration {
-   public var baseURL: URL?
-   public var requestAuthorizer: RequestAuthorizer?
-   public var serverTrustPolicies: [String: ServerTrustPolicy]?
-
-   public let sessionConfiguration: URLSessionConfiguration
-
+public final class TrustAllServerTrustPolicy: ServerTrustPolicy {
    // MARK: - Init
 
-   private init(sessionConfiguration: URLSessionConfiguration) {
-      self.sessionConfiguration = sessionConfiguration
-   }
+   public init() { }
 
-   // MARK: - Predefined
+   // MARK: - ServerTrustPolicy
 
-   public static var `default`: URLSessionWebClientConfiguration {
-      URLSessionWebClientConfiguration(sessionConfiguration: .default)
-   }
-
-   public static var ephemeral: URLSessionWebClientConfiguration {
-      URLSessionWebClientConfiguration(sessionConfiguration: .ephemeral)
-   }
+   public func evaluate(_ serverTrust: SecTrust, for host: String) -> Bool { true }
 }

@@ -1,5 +1,5 @@
 //
-//  URLSessionWebClientConfiguration.swift
+//  SecCertificate+Web.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,26 +24,41 @@
 
 import Foundation
 
-public final class URLSessionWebClientConfiguration {
-   public var baseURL: URL?
-   public var requestAuthorizer: RequestAuthorizer?
-   public var serverTrustPolicies: [String: ServerTrustPolicy]?
+extension SecCertificate {
+   public static func all(in bundle: Bundle = .main) -> [SecCertificate] {
+      let paths = [".cer", ".CER", ".crt", ".CRT", ".der", ".DER"].flatMap { ext -> [String] in
+         bundle.paths(forResourcesOfType: ext, inDirectory: nil)
+      }
 
-   public let sessionConfiguration: URLSessionConfiguration
+      return paths.compactMap { path in
+         guard
+            let data = try? Data(contentsOf: URL(fileURLWithPath: path)) as CFData,
+            let cert = SecCertificateCreateWithData(nil, data)
+         else {
+            return nil
+         }
 
-   // MARK: - Init
-
-   private init(sessionConfiguration: URLSessionConfiguration) {
-      self.sessionConfiguration = sessionConfiguration
+         return cert
+      }
    }
 
-   // MARK: - Predefined
+   var publicKey: SecKey? {
+      var publicKey: SecKey?
 
-   public static var `default`: URLSessionWebClientConfiguration {
-      URLSessionWebClientConfiguration(sessionConfiguration: .default)
+      var trust: SecTrust?
+      let policy = SecPolicyCreateBasicX509()
+      let trustCreationStatus = SecTrustCreateWithCertificates(self, policy, &trust)
+
+      if let trust = trust, trustCreationStatus == errSecSuccess {
+         publicKey = SecTrustCopyPublicKey(trust)
+      }
+
+      return publicKey
    }
 
-   public static var ephemeral: URLSessionWebClientConfiguration {
-      URLSessionWebClientConfiguration(sessionConfiguration: .ephemeral)
+   func equals(to cert: SecCertificate) -> Bool {
+      let this = SecCertificateCopyData(self) as Data
+      let that = SecCertificateCopyData(cert) as Data
+      return this == that
    }
 }

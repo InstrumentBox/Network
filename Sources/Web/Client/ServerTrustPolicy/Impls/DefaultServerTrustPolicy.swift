@@ -1,5 +1,5 @@
 //
-//  URLSessionWebClientConfiguration.swift
+//  DefaultServerTrustPolicy.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,26 +24,21 @@
 
 import Foundation
 
-public final class URLSessionWebClientConfiguration {
-   public var baseURL: URL?
-   public var requestAuthorizer: RequestAuthorizer?
-   public var serverTrustPolicies: [String: ServerTrustPolicy]?
-
-   public let sessionConfiguration: URLSessionConfiguration
+public final class DefaultServerTrustPolicy: ServerTrustPolicy {
+   private let evaluateHost: Bool
 
    // MARK: - Init
 
-   private init(sessionConfiguration: URLSessionConfiguration) {
-      self.sessionConfiguration = sessionConfiguration
+   public init(evaluateHost: Bool = true) {
+      self.evaluateHost = evaluateHost
    }
 
-   // MARK: - Predefined
+   // MARK: - ServerTrustPolicy
 
-   public static var `default`: URLSessionWebClientConfiguration {
-      URLSessionWebClientConfiguration(sessionConfiguration: .default)
-   }
-
-   public static var ephemeral: URLSessionWebClientConfiguration {
-      URLSessionWebClientConfiguration(sessionConfiguration: .ephemeral)
+   public func evaluate(_ serverTrust: SecTrust, for host: String) -> Bool {
+      let host = host as CFString
+      let policy = SecPolicyCreateSSL(true, evaluateHost ? host : nil)
+      SecTrustSetPolicies(serverTrust, policy)
+      return SecTrustEvaluateWithError(serverTrust, nil)
    }
 }

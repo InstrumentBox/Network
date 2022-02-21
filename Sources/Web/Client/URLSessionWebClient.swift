@@ -32,7 +32,12 @@ public final class URLSessionWebClient: WebClient {
 
    public init(configuration: URLSessionWebClientConfiguration) {
       self.configuration = configuration
-      session = URLSession(configuration: configuration.sessionConfiguration)
+      let delegate = WebURLSessionDelegate(configuration: configuration)
+      session = URLSession(
+         configuration: configuration.sessionConfiguration,
+         delegate: delegate,
+         delegateQueue: nil
+      )
    }
 
    deinit {
