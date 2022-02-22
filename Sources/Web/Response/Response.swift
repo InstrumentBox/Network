@@ -24,7 +24,7 @@
 
 import Foundation
 
-public final class Response {
+public final class Response: Equatable {
    public let request: URLRequest
    public let statusCode: Int
    public let headers: [String: String]
@@ -46,6 +46,15 @@ public final class Response {
          headers: httpURLResponse.allHeaderFields as? [String: String] ?? [:],
          body: body
       )
+   }
+
+   // MARK: - Equatable
+
+   public static func ==(lhs: Response, rhs: Response) -> Bool {
+      lhs.request == rhs.request &&
+      lhs.statusCode == rhs.statusCode &&
+      lhs.headers == rhs.headers &&
+      lhs.body == rhs.body
    }
 
    // MARK: - Header Accessors

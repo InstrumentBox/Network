@@ -41,7 +41,8 @@ final class RequestExecution<Request: Web.Request> {
 
    @WebClientActor
    func execute() async throws -> Request.ObjectResponseConverter.ConvertedResponse {
-      let response = try await executeRequest()
+      var response = try await executeRequest()
+      response = try await handleTwoFactorAuthenticationChallengeIfNeeded(response)
       let object = try processResponse(response)
       return object
    }
@@ -52,8 +53,23 @@ final class RequestExecution<Request: Web.Request> {
          let header = try await requestAuthorizer.authorizationHeader(for: request)
          urlRequest.addValue(header.value, forHTTPHeaderField: header.name)
       }
-      let response = try await session.data(for: urlRequest)
-      return response
+
+      return try await session.data(for: urlRequest)
+   }
+
+   private func handleTwoFactorAuthenticationChallengeIfNeeded(
+      _ response: Response
+   ) async throws -> Response {
+      guard let handler = configuration.twoFactorAuthenticationChallengeHandler else {
+         return response
+      }
+
+      let challenge = TwoFactorAuthenticationChallenge(
+         response: response,
+         handler: handler,
+         session: session
+      )
+      return try await challenge.handleIfNeeded()
    }
 
    private func processResponse(

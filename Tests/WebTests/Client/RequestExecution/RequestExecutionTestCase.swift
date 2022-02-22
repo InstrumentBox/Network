@@ -85,15 +85,40 @@ final class RequestExecutionTestCase: XCTestCase {
       }
    }
 
+   func test_requestExecution_returnsObject_if2FA() async throws {
+      let execution = makeExecution(
+         protocolClass: TwoFactorAuthenticationWebTestsURLProtocol.self
+      ) { c in
+         Task {
+            do {
+               let header = TwoFactorAuthenticationHeader(name: "X-2FA", value: "1234")
+               try await c.authenticate(with: header)
+               c.complete()
+            } catch {
+               c.complete(with: error)
+            }
+         }
+      }
+
+      let object = try await execution.execute()
+      XCTAssertEqual(object, .johnAppleseed)
+   }
+
    // MARK: - Factory
 
    private func makeExecution(
       protocolClass: URLProtocol.Type,
-      requestAuthorizer: RequestAuthorizer? = nil
+      requestAuthorizer: RequestAuthorizer? = nil,
+      handle2FA: ((TwoFactorAuthenticationChallenge) -> Void)? = nil
    ) -> RequestExecution<UserRequest> {
       let configuration: URLSessionWebClientConfiguration = .ephemeral
       configuration.sessionConfiguration.protocolClasses = [protocolClass]
       configuration.requestAuthorizer = requestAuthorizer
+      configuration.twoFactorAuthenticationChallengeHandler = handle2FA.map { handle in
+         let handler = WebTests2FAChallengeHandler()
+         handler.handleStub = handle
+         return handler
+      }
       let session = URLSession(configuration: configuration.sessionConfiguration)
       let request = UserRequest()
       return RequestExecution(request: request, session: session, configuration: configuration)

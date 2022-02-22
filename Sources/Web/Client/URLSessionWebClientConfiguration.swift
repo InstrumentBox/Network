@@ -40,6 +40,7 @@ public final class URLSessionWebClientConfiguration {
 
    public var requestAuthorizer: RequestAuthorizer?
    public var serverTrustPolicies: [String: ServerTrustPolicy]?
+   public var twoFactorAuthenticationChallengeHandler: TwoFactorAuthenticationChallengeHandler?
 
    /// Configuration of underlying `URLSession` object.
    public let sessionConfiguration: URLSessionConfiguration
