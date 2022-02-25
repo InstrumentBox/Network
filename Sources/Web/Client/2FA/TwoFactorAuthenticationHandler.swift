@@ -1,5 +1,5 @@
 //
-//  TwoFactorAuthenticationChallengeHandler.swift
+//  TwoFactorAuthenticationHandler.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,7 +24,7 @@
 
 /// A protocol you need to implement and set to `URLSessionWebClientConfiguration` to handle
 /// authentication challenges.
-public protocol TwoFactorAuthenticationChallengeHandler: AnyObject {
+public protocol TwoFactorAuthenticationHandler: AnyObject {
    /// Checks response and returns flag if 2FA process needs to be started.
    ///
    /// - Parameters:

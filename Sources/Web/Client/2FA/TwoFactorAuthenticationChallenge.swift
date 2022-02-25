@@ -39,12 +39,12 @@ public final class TwoFactorAuthenticationChallenge {
    private var continuation: UnsafeContinuation<Response, Error>?
 
    private var response: Response
-   private let handler: TwoFactorAuthenticationChallengeHandler
+   private let handler: TwoFactorAuthenticationHandler
    private let session: URLSession
 
    // MARK: - Init
 
-   init(response: Response, handler: TwoFactorAuthenticationChallengeHandler, session: URLSession) {
+   init(response: Response, handler: TwoFactorAuthenticationHandler, session: URLSession) {
       self.response = response
       self.handler = handler
       self.session = session
@@ -72,6 +72,7 @@ public final class TwoFactorAuthenticationChallenge {
 
    /// Cancels authentication challenge.
    /// `TwoFactorAuthenticationChallengeError.cancelled` error will be thrown by a web client.
+   @WebClientActor
    public func cancel() {
       let error: TwoFactorAuthenticationChallengeError = .cancelled
       continuation?.resume(throwing: error)
@@ -108,6 +109,7 @@ public final class TwoFactorAuthenticationChallenge {
    ///
    /// - Parameters:
    ///   - error: An error that will be thrown by a web client.
+   @WebClientActor
    public func complete(with error: Error? = nil) {
       if let error = error {
          continuation?.resume(throwing: error)

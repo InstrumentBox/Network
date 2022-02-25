@@ -62,7 +62,7 @@ final class RequestExecution<Request: Web.Request> {
    private func handleTwoFactorAuthenticationChallengeIfNeeded(
       _ response: Response
    ) async throws -> Response {
-      guard let handler = configuration.twoFactorAuthenticationChallengeHandler else {
+      guard let handler = configuration.twoFactorAuthenticationHandler else {
          return response
       }
 

@@ -24,7 +24,7 @@
 
 import Web
 
-final class WebTests2FAChallengeHandler: TwoFactorAuthenticationChallengeHandler {
+final class WebTests2FAChallengeHandler: TwoFactorAuthenticationHandler {
    func responseRequiresTwoFactorAuthentication(_ response: Response) -> Bool {
       response.statusCode == 600
    }

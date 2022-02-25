@@ -53,7 +53,7 @@ public final class URLSessionWebClientConfiguration {
    public var serverTrustPolicies: [String: ServerTrustPolicy]?
 
    /// Handler that will be used to receive 2FA challenges.
-   public var twoFactorAuthenticationChallengeHandler: TwoFactorAuthenticationChallengeHandler?
+   public var twoFactorAuthenticationHandler: TwoFactorAuthenticationHandler?
 
    /// Configuration of underlying `URLSession` object.
    public let sessionConfiguration: URLSessionConfiguration

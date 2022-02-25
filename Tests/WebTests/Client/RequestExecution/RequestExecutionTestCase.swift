@@ -114,7 +114,7 @@ final class RequestExecutionTestCase: XCTestCase {
       let configuration: URLSessionWebClientConfiguration = .ephemeral
       configuration.sessionConfiguration.protocolClasses = [protocolClass]
       configuration.requestAuthorizer = requestAuthorizer
-      configuration.twoFactorAuthenticationChallengeHandler = handle2FA.map { handle in
+      configuration.twoFactorAuthenticationHandler = handle2FA.map { handle in
          let handler = WebTests2FAChallengeHandler()
          handler.handleStub = handle
          return handler
