@@ -24,11 +24,18 @@
 
 import Foundation
 
+/// A body converter that takes `Any` object and uses `JSONSerialization` to convert an object to a
+/// body data. The MIME type of a result is *application/json*.
 public struct JSONSerializationBodyConverter: BodyConverter {
    private let options: JSONSerialization.WritingOptions
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `JSONSerializationBodyConverter` with given options.
+   ///
+   /// - Parameters:
+   ///   - options: Options for creating the JSON data. See `JSONSerialization.WritingOptions`
+   ///              for possible values.
    public init(options: JSONSerialization.WritingOptions = []) {
       self.options = options
    }

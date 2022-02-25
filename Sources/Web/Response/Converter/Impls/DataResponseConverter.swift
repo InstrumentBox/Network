@@ -24,9 +24,11 @@
 
 import Foundation
 
+/// A response converter that just returns response body.
 public struct DataResponseConverter: ResponseConverter {
    // MARK: - Init
 
+   /// Creates and returns an instance of `DataResponseConverter`.
    public init() { }
 
    // MARK: - ResponseConverter

@@ -22,9 +22,11 @@
 //  THE SOFTWARE.
 //
 
+/// A response converter that just returns received response.
 public struct AsIsResponseConverter: ResponseConverter {
    // MARK: - Init
 
+   /// Creates and returns an instance of `AsIsResponseConverter`.
    public init() { }
 
    // MARK: - ResponseConverter

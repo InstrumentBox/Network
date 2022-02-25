@@ -25,6 +25,12 @@
 import Foundation
 
 extension SecCertificate {
+   /// Finds and returns all certificates in a given bundle. A certificate is a file with one of the
+   /// following extensions: .cer/.CER, .crt/.CRT, or .der/.DER.
+   ///
+   /// - Parameters:
+   ///   - bundle: Bundle, in which certificates should be found. Defaults to `Bundle.main`.
+   /// - Returns: Array of certificates found in given bundle.
    public static func all(in bundle: Bundle = .main) -> [SecCertificate] {
       let paths = [".cer", ".CER", ".crt", ".CRT", ".der", ".DER"].flatMap { ext -> [String] in
          bundle.paths(forResourcesOfType: ext, inDirectory: nil)

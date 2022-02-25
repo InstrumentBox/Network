@@ -26,6 +26,12 @@
 import Foundation
 
 extension URLRequest {
+   /// Creates and returns URL request that consists of URL, method, and headers.
+   ///
+   /// - Parameters:
+   ///   - url: A URL that will be used to send request to.
+   ///   - method: An HTTP method to use for request
+   ///   - headers: HTTP headers to add to a request.
    public init(url: URL, method: Method, headers: [String: String]? = nil) {
       self.init(url: url)
 
@@ -37,6 +43,16 @@ extension URLRequest {
       }
    }
 
+   /// Creates and returns URL request that consists of URL, method, and headers. In addition, adds
+   /// body and *Content-Type* header to a request using passed `BodyConverter`.
+   ///
+   /// - Parameters:
+   ///   - url: A URL that will be used to send request to.
+   ///   - method: An HTTP method to use for request
+   ///   - headers: HTTP headers to add to a request.
+   ///   - body: An object that will be converted to `Data` and set a body of a request.
+   ///   - converter: A `BodyConverter` that is used to convert body and from which content type
+   ///                value will be taken to set *Content-Type* header.
    public init<BodyConverter: Web.BodyConverter>(
       url: URL,
       method: Method,

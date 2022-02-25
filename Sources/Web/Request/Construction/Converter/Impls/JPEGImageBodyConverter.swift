@@ -26,17 +26,30 @@
 
 import UIKit
 
+/// An error that is thrown when `JPEGImageBodyConverter` is failed.
 @available(iOS 13.0, tvOS 13.0, macCatalyst 13.1, watchOS 6.0, *)
 public enum JPEGImageBodyConverterError: Error {
+   /// Thrown when can't convert image to data.
    case cannotConvertToData(UIImage)
 }
 
+/// A body converter that take a jpeg image and converts it to a body data. The MIME type of a
+/// result is *image/jpeg*.
+///
+/// - Note: This converter is only available on platforms that support `UIKit`.
 @available(iOS 13.0, tvOS 13.0, macCatalyst 13.1, watchOS 6.0, *)
 public struct JPEGImageBodyConverter: BodyConverter {
    private let compressionQuality: CGFloat
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `JPEGImageBodyConverter` with given parameters.
+   ///
+   /// - Parameters:
+   ///   - compressionQuality: The quality of the resulting JPEG image, expressed as a value from
+   ///                         0.0 to 1.0. The value 0.0 represents the maximum compression
+   ///                         (or lowest quality) while the value 1.0 represents the least
+   ///                         compression (or best quality). Defaults to 1.0.
    public init(compressionQuality: CGFloat = 1.0) {
       self.compressionQuality = compressionQuality
    }

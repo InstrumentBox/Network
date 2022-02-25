@@ -22,12 +22,28 @@
 //  THE SOFTWARE.
 //
 
+/// A disposition of a validator after analyzing a response.
 public enum ResponseValidationDisposition {
+   /// Tells to use an object response converter of a `Request` (e.g. status code of a response is
+   /// 2xx).
    case useObjectResponseConverter
+
+   /// Tells to use an error response converter of a `Request` (e.g status code of a response is
+   /// not 2xx).
    case useErrorResponseConverter
+
+   /// Tells to complete with an error occurred during response validation (e.g. *Content-Type* and
+   /// *Accept* headers don't match).
    case completeWithError(Error)
 }
 
+/// A protocol you need to conform an object to use it a response validator.
 public protocol ResponseValidator {
+   /// Validate a response and dispose what way a `WebClient` should go further.
+   ///
+   /// - Parameters:
+   ///   - response: A response that needs to be validated.
+   /// - Returns: A disposition of what way go further. See `ResponseValidationDisposition`
+   ///            for more information.
    func validate(_ response: Response) -> ResponseValidationDisposition
 }

@@ -22,7 +22,21 @@
 //  THE SOFTWARE.
 //
 
+/// A protocol you need to implement and set to `URLSessionWebClientConfiguration` to allow
+/// `WebClient` to authorize all sent requests.
+///
+/// Request authorizer is a good place where you can ask your authorization token from a keychain
+/// or pause requests and refresh an authorization token using a refresh token and store new token
+/// in keychain.
+///
+/// - Note: Request authorizer is intended to be used if you authorize your requests with HTTP
+///         header.
 public protocol RequestAuthorizer {
+   /// Asks authorizer for an authorization header.
+   ///
+   /// - Parameters:
+   ///   - request: A request that is needed to be authorized.
+   /// - Returns: An authorization header that will be used to authorize request.
    func authorizationHeader<Request: Web.Request>(
       for request: Request
    ) async throws -> AuthorizationHeader

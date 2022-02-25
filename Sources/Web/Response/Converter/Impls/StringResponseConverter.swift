@@ -22,15 +22,22 @@
 //  THE SOFTWARE.
 //
 
+/// An error that is thrown when `StringResponseConverter` failed.
 public enum StringResponseConverterError: Error {
+   /// Thrown if response body can't be converted to a string.
    case cannotConvertToString
 }
 
+/// A response converter that takes response body and converts it to a string.
 public struct StringResponseConverter: ResponseConverter {
    private let encoding: String.Encoding
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `StringResponseConverter` with a given parameter.
+   ///
+   /// - Parameters:
+   ///   -  encoding: The encoding used by data. For possible values, see `String.Encoding`.
    public init(encoding: String.Encoding = .utf8) {
       self.encoding = encoding
    }

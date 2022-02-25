@@ -26,21 +26,28 @@
 
 import UIKit
 
+/// An error that is thrown when `PNGImageBodyConverter` is failed.
 @available(iOS 13.0, tvOS 13.0, macCatalyst 13.1, watchOS 6.0, *)
 public enum PNGImageBodyConverterError: Error {
+   /// Thrown when can't convert image to data.
    case cannotConvertToData(UIImage)
 }
 
+/// A body converter that take an png image and converts it to a body data. The MIME type of a
+/// result is *image/png*.
+///
+/// - Note: This converter is only available on platforms that support `UIKit`.
 @available(iOS 13.0, tvOS 13.0, macCatalyst 13.1, watchOS 6.0, *)
 public struct PNGImageBodyConverter: BodyConverter {
    // MARK: - Init
 
+   /// Creates and returns an instance of `PNGImageBodyConverter` with given parameters.
    public init() { }
 
    // MARK: - BodyConverter
 
    public var contentType: String {
-      "image/jpeg"
+      "image/png"
    }
 
    public func convert(_ body: UIImage) throws -> Data {

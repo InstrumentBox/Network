@@ -24,13 +24,27 @@
 
 import Foundation
 
+/// A policy that uses the pinned public keys to validate the server trust.
+///
+/// The server trust is considered valid if one of the pinned public keys match one of the server
+/// certificate public keys. By evaluating both the certificate chain and host, public key pinning
+/// provides a very secure form of server trust evaluation mitigating most, if not all, MITM
+/// attacks. Applications are encouraged to always evaluate the host and require a valid certificate
+/// chain in production environments.
 public final class PublicKeysServerTrustPolicy: ServerTrustPolicy {
    private let keys: [SecKey]
    private let evaluateHost: Bool
 
    // MARK: - Init
 
-   public init(keys: [SecKey], evaluateHost: Bool = true) {
+   /// Creates and returns a `PublicKeysServerTrustPolicy` with provided parameters.
+   ///
+   /// - Parameters:
+   ///   - keys: Array of `SecKey`s to use to evaluate public keys. Defaults to public keys of all
+   ///           certificates included in the main bundle.
+   ///   - evaluateHost: Determines whether or not the policy should evaluate the host, in addition
+   ///                   to performing the default evaluation. Defaults to `true`.
+   public init(keys: [SecKey] = SecKey.allPublicKeys(), evaluateHost: Bool = true) {
       self.keys = keys
       self.evaluateHost = evaluateHost
    }

@@ -24,14 +24,21 @@
 
 import Foundation
 
+/// An error that is thrown when URL encoding is failed.
 public enum URLEncoderError: Error {
+   /// Thrown when can't encode string using percent encoding.
    case cannotPercentEncode(String)
 }
 
+/// An object that encodes instances of `[String: Any]` into URL-encoded query strings.
 public final class URLEncoder {
+   /// Global setting for array key encoding. Defaults to `.brackets`.
    public static var arrayKeyEncoding: ArrayKeyEncoding = .brackets
+
+   /// Global setting for bool encoding. Defaults to `.literal`.
    public static var boolEncoding: BoolEncoding = .literal
 
+   /// A character set of allowed (non-escaped) characters.
    public static let allowedCharacterSet: CharacterSet = {
       let delimiters = ":#[]@"
       let subDelimiters = "!$&'()*+,;="
@@ -44,6 +51,12 @@ public final class URLEncoder {
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `URLEncoder` with given parameters.
+   ///
+   /// - Parameters:
+   ///   - arrayKeyEncoding: Encoding to apply to array keys. Defaults to
+   ///                       `URLEncoder.arrayKeyEncoding`.
+   ///   - boolEncoding: Encoding to apply to boolean values. Defaults to `URLEncoder.boolEncoding`.
    public init(
       arrayKeyEncoding: ArrayKeyEncoding = URLEncoder.arrayKeyEncoding,
       boolEncoding: BoolEncoding = URLEncoder.boolEncoding
@@ -54,6 +67,12 @@ public final class URLEncoder {
 
    // MARK: - Encoding
 
+   /// Encodes the a given dict of `[String: Any]` as a URL-encoded string.
+   ///
+   /// - Parameters:
+   ///   -  dict: A dictionary that will be encoded.
+   /// - Returns: A URL-encoded string.
+   /// - Throws:  `URLEncoderError` if encoding failed.
    public func encode(_ dict: [String: Any]) throws -> String {
       try dict.flatMap(encode).joined(separator: "&")
    }

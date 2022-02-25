@@ -24,12 +24,17 @@
 
 import Foundation
 
+/// An implementation of a `WebClient` based on `URLSession`.
 public final class URLSessionWebClient: WebClient {
    private let configuration: URLSessionWebClientConfiguration
    private let session: URLSession
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `URLSessionWebClient` with a given configuration.
+   ///
+   /// - Parameters:
+   ///   - configuration: Configuration that will be used to create a web client.
    public init(configuration: URLSessionWebClientConfiguration) {
       self.configuration = configuration
       let delegate = WebURLSessionDelegate(configuration: configuration)

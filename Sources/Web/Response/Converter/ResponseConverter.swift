@@ -22,8 +22,16 @@
 //  THE SOFTWARE.
 //
 
+/// A protocol you need to conform an object to make this object to convert a received response.
 public protocol ResponseConverter {
+   /// A type of object converter results in.
    associatedtype ConvertedResponse
 
+   /// Does the conversion from a response to some object.
+   ///
+   /// - Parameters:
+   ///   - response: A response that needs to be converted.
+   /// - Returns: An object in which response has been converted.
+   /// - Throws: An error occurred during conversion.
    func convert(_ response: Response) throws -> ConvertedResponse
 }

@@ -22,9 +22,11 @@
 //  THE SOFTWARE.
 //
 
+/// A response converter that returns nothing.
 public struct EmptyResponseConverter: ResponseConverter {
    // MARK: - Init
 
+   /// Creates and returns an instance of `EmptyResponseConverter`.
    public init() { }
 
    // MARK: - ResponseConverter

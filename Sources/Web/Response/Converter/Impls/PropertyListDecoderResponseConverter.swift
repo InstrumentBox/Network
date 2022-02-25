@@ -24,11 +24,19 @@
 
 import Foundation
 
+/// A response converter that uses `PropertyListDecoder` to convert response body to some
+/// `Decodable` object.
 public struct PropertyListDecoderResponseConverter<ConvertedResponse: Decodable>: ResponseConverter {
    private let decoder: PropertyListDecoder
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `PropertyListDecoderResponseConverter` with a given
+   /// decoder.
+   ///
+   /// - Parameters:
+   ///   -  decoder: `PropertyListDecoder` that is used to convert response body to some object.
+   ///               Defaults to `PropertyListDecoder()`.
    public init(decoder: PropertyListDecoder = PropertyListDecoder()) {
       self.decoder = decoder
    }

@@ -22,12 +22,21 @@
 //  THE SOFTWARE.
 //
 
+/// Header that will be used to authenticate challenge.
 public struct TwoFactorAuthenticationHeader {
+   /// Name of HTTP header field.
    public let name: String
+
+   /// Value of HTTP header field.
    public let value: String
 
    // MARK: - Init
 
+   /// Creates and returns new authentication header with given name and value.
+   /// 
+   /// - Parameters:
+   ///   - name: Name of HTTP header field.
+   ///   - value: Value of HTTP header field.
    public init(name: String, value: String) {
       self.name = name
       self.value = value

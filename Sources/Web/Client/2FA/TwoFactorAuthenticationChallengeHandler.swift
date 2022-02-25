@@ -22,8 +22,19 @@
 //  THE SOFTWARE.
 //
 
+/// A protocol you need to implement and set to `URLSessionWebClientConfiguration` to handle
+/// authentication challenges.
 public protocol TwoFactorAuthenticationChallengeHandler: AnyObject {
+   /// Checks response and returns flag if 2FA process needs to be started.
+   ///
+   /// - Parameters:
+   ///   - response: Response that needs to be check if 2FA process should be started.
+   /// - Returns: `true` if 2FA handling needs to be started, otherwise `false`.
    func responseRequiresTwoFactorAuthentication(_ response: Response) -> Bool
 
+   /// Starting point of 2FA challenge handling process.
+   ///
+   /// - Parameters:
+   ///   - challenge: 2FA challenge that needs to be authenticated or cancelled.
    func handle(_ challenge: TwoFactorAuthenticationChallenge)
 }

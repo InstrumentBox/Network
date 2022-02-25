@@ -24,11 +24,18 @@
 
 import Foundation
 
+/// A response converter that uses `JSONDecoder` to convert response body to some `Decodable`
+/// object.
 public struct JSONDecoderResponseConverter<ConvertedResponse: Decodable>: ResponseConverter {
    private let decoder: JSONDecoder
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `JSONDecoderResponseConverter` with a given decoder.
+   ///
+   /// - Parameters:
+   ///   -  decoder: `JSONDecoder` that is used to convert response body to some object. Defaults
+   ///               to `JSONDecoder()`.
    public init(decoder: JSONDecoder = JSONDecoder()) {
       self.decoder = decoder
    }

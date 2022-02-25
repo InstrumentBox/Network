@@ -24,11 +24,16 @@
 
 import Foundation
 
+/// A body converter that just returns given data and MIME type of content.
 public struct DataBodyConverter: BodyConverter {
    public let contentType: String
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `DataBodyConverter` with a given MIME type of content.
+   ///
+   /// - Parameters:
+   ///   - contentType: A MIME type of content to set to *Content-Type* header of a request.
    public init(contentType: String) {
       self.contentType = contentType
    }

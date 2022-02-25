@@ -24,11 +24,19 @@
 
 import Foundation
 
+/// A body converter that takes `Encodable` object and uses `PropertyListEncoder` to convert an
+/// object to a body data. The MIME type of a result depends on encoder's `outputFormat` property
+/// and can be either *application/xml* or *application/x-plist*.
 public struct PropertyListEncoderBodyConverter<Body: Encodable>: BodyConverter {
    private let encoder: PropertyListEncoder
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `PropertyListEncoderBodyConverter` with a given encoder.
+   ///
+   /// - Parameters:
+   ///   -  encoder: `PropertyListEncoder` that is used to convert body object to body data.
+   ///               Defaults to `PropertyListEncoder()`.
    public init(encoder: PropertyListEncoder = PropertyListEncoder()) {
       self.encoder = encoder
    }

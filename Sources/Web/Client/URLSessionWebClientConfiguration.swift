@@ -24,6 +24,13 @@
 
 import Foundation
 
+/// A configuration object used to create `URLSessionWebClient`.
+///
+/// Configuration encapsulates configuration of underlying URL session and contains properties
+/// `URSessionWebClient` uses to do its work.
+///
+/// - Note: As `WebClient` is *NOT* intended to work with background URLSessions, it's not possible
+///         to create a background configuration.
 public final class URLSessionWebClientConfiguration {
    /// Base URL that is used by web client.
    ///
@@ -38,8 +45,14 @@ public final class URLSessionWebClientConfiguration {
    /// ```
    public var baseURL: URL?
 
+   /// An object that will be used to authorize each request sent by a web client.
    public var requestAuthorizer: RequestAuthorizer?
+
+   /// The dictionary of policies mapped to a particular host. Map policy to `*` if you want to use
+   /// this policy for each host, for which separate policy is not specified.
    public var serverTrustPolicies: [String: ServerTrustPolicy]?
+
+   /// Handler that will be used to receive 2FA challenges.
    public var twoFactorAuthenticationChallengeHandler: TwoFactorAuthenticationChallengeHandler?
 
    /// Configuration of underlying `URLSession` object.
@@ -53,12 +66,12 @@ public final class URLSessionWebClientConfiguration {
 
    // MARK: - Predefined
 
-   /// A configuration that uses default url session configuration.
+   /// A configuration that uses default URL session configuration.
    public static var `default`: URLSessionWebClientConfiguration {
       URLSessionWebClientConfiguration(sessionConfiguration: .default)
    }
 
-   /// A configuration that uses ephemeral url session configuration.
+   /// A configuration that uses ephemeral URL session configuration.
    public static var ephemeral: URLSessionWebClientConfiguration {
       URLSessionWebClientConfiguration(sessionConfiguration: .ephemeral)
    }

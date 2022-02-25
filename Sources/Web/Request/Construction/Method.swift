@@ -22,24 +22,46 @@
 //  THE SOFTWARE.
 //
 
+/// An HTTP method.
 public struct Method: Equatable {
    let raw: String
 
    // MARK: - Init
 
+   /// Creates and returns a `Method` instance from a raw value.
+   ///
+   /// - Parameters:
+   ///   - raw: Raw value of HTTP method
    public init(_ raw: String) {
       self.raw = raw
    }
 
    // MARK: - Predefined
 
+   /// CONNECT method.
    public static let connect = Method("CONNECT")
+
+   /// DELETE method.
    public static let delete = Method("DELETE")
+
+   /// GET method.
    public static let get = Method("GET")
+
+   /// HEAD method.
    public static let head = Method("HEAD")
+
+   /// OPTIONS method.
    public static let options = Method("OPTIONS")
+
+   /// PATCH method.
    public static let patch = Method("PATCH")
+
+   /// POST method.
    public static let post = Method("POST")
+
+   /// PUT method.
    public static let put = Method("PUT")
+
+   /// TRACE method.
    public static let trace = Method("TRACE")
 }

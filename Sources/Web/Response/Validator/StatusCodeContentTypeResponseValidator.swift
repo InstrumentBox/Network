@@ -22,19 +22,45 @@
 //  THE SOFTWARE.
 //
 
+/// An error that is thrown when response validation is failed.
 public enum StatusCodeContentTypeResponseValidatorError: Error {
+   /// Thrown when MIME type of *Content-Type* header of a response doesn't match one of MIME of
+   /// *Accept* header of request.
+   ///
+   /// - Parameters:
+   ///   - expected: A string that consists of MIME types of a request separated by comma.
+   ///   - received: A MIME type of content of a response.
    case unacceptableContentType(expected: String, received: String)
 }
 
+/// A validator that does the most common validation of a response used by developers.
+///
+/// A response validator takes MIME type from *Content-Type* header of response and all MIME types
+/// from *Accept* header of a request, then looks that response MIME matches one of request's MIMEs.
+/// If one of those headers has no value or both of them have no values, validator considers only
+/// status code of a response. If MIMEs doesn't match, validator returns `.completeWithError`
+/// disposition with `StatusCodeContentTypeResponseValidatorError.unacceptableContentType`error. If
+/// MIME of response matches one of MIME types of request, validator considers status code of a
+/// response. If code has value that `acceptableStatusCodes` contains, validator
+/// returns `.useObjectResponseConverter` disposition, otherwise `.useErrorResponseConverter`.
+///
 public struct StatusCodeContentTypeResponseValidator: ResponseValidator {
    private let acceptableStatusCodes: Set<Int>
 
    // MARK: - Init
 
+   /// Creates and returns an instance of a `StatusCodeContentTypeResponseValidator` with given
+   /// values.
+   ///
+   /// - Parameters:
+   ///   - acceptableStatusCodes: A sequence of status codes that validator should consider as
+   ///                            successful and use `.useObjectResponseConverter` disposition.
    public init<S: Sequence>(acceptableStatusCodes: S) where S.Element == Int {
       self.acceptableStatusCodes = Set(acceptableStatusCodes)
    }
 
+   /// Creates and returns an instance of a `StatusCodeContentTypeResponseValidator` that
+   /// should consider all numbers from 200 through 299 as successful status codes.
    public init() {
       self.init(acceptableStatusCodes: 200...299)
    }

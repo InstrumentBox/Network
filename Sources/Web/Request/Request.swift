@@ -24,18 +24,48 @@
 
 import Foundation
 
+/// A protocol that describes every request sent by a `WebClient`.
 public protocol Request {
+   /// A response converter's type that is used to convert server response in case when response
+   /// validator tells that response is successful (e.g *Content-Type* and *Accept* headers match
+   /// and status code is 2xx). An object of `ObjectResponseConverter.ConverterResponse` type
+   ///  also is returned as a result by a `WebClient`.
    associatedtype ObjectResponseConverter: ResponseConverter
 
+   /// A response converter's type that is used to convert server response in case when response
+   /// validator tells that response is not successful (e.g *Content-Type* and *Accept* headers
+   /// match and status code is not 2xx). An object of `ErrorResponseConverter.ConvertedResponse`
+   /// type also is thrown by a `WebClient`.
    associatedtype ErrorResponseConverter: ResponseConverter
       where ErrorResponseConverter.ConvertedResponse: Error
 
+   /// A response converter that is used to convert server response in case when response
+   /// validator tells that response is successful (e.g *Content-Type* and *Accept* headers match
+   /// and status code is 2xx). An object of `ObjectResponseConverter.ConverterResponse` type also
+   /// is returned as a result by a `WebClient`.
    var objectResponseConverter: ObjectResponseConverter { get }
 
+   /// A response converter that is used to convert server response in case when response
+   /// validator tells that response is not successful (e.g *Content-Type* and *Accept* headers
+   /// match and status code is not 2xx). An object of `ErrorResponseConverter.ConvertedResponse`
+   /// type also is thrown by a `WebClient`.
    var errorResponseConverter: ErrorResponseConverter { get }
 
+   /// A validator that check incoming response for a validity and gives disposition what way a
+   /// `WebClient` should use to complete response processing. Default value this property returns
+   /// is `StatusCodeContentTypeResponseValidator`.
+   ///
+   /// Response validator is an object that tells if `WebClient` should either complete with
+   /// validation error, or parse response and return object, or parse response and throw API error.
    var responseValidator: ResponseValidator { get }
 
+   /// The point where you need to create and return an instance of `URLRequest` with appropriate
+   /// URL, method, headers, and body.
+   ///
+   /// - Parameters:
+   ///   - baseURL: A base URL from a configuration of a `WebClient`.
+   /// - Returns: An instance of `URLRequest`.
+   /// - Throws: An error occurred during `URLRequest` instantiation process.
    func toURLRequest(with baseURL: URL?) throws -> URLRequest
 }
 

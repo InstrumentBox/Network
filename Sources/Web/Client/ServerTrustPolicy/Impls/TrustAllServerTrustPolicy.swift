@@ -24,9 +24,17 @@
 
 import Foundation
 
+/// Policy that always considers server trust as valid.
+///
+/// Instead of using trust all policy, it's a better idea to configure systems to
+/// properly trust test certificates, as outlined in
+/// [this Apple tech note](https://developer.apple.com/library/archive/qa/qa1948/_index.html).
+///
+/// - Important: Don't use this policy in production.
 public final class TrustAllServerTrustPolicy: ServerTrustPolicy {
    // MARK: - Init
 
+   /// Creates and returns an instance of `TrustAllServerTrustPolicy`.
    public init() { }
 
    // MARK: - ServerTrustPolicy

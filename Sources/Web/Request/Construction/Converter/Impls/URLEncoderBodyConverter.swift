@@ -24,6 +24,9 @@
 
 import Foundation
 
+/// A body converter that takes a dictionary of [String: Any] and uses `URLEncoder` to convert
+/// dictionary to a string, then convert string to a body data by using `StringBodyConverter`. The
+/// MIME type of a result is *application/x-www-form-urlencoded*.
 public struct URLEncoderBodyConverter: BodyConverter {
    private let encoder: URLEncoder
    private let encoding: String.Encoding
@@ -31,6 +34,13 @@ public struct URLEncoderBodyConverter: BodyConverter {
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `URLEncoderBodyConverter` with given parameters.
+   /// - Parameters:
+   ///   - encoder: `URLEncoder` that is used to convert body dictionary to a string.
+   ///   - encoding: A string encoding to be used by `StringBodyConverter`. For possible values,
+   ///               see `String.Encoding`
+   ///   - allowLossyConversion: If `true`, then allows characters to be removed or altered in
+   ///                           conversion. Used by underlying `StringBodyConverter`.
    public init(
       encoder: URLEncoder = URLEncoder(),
       encoding: String.Encoding = .utf8,

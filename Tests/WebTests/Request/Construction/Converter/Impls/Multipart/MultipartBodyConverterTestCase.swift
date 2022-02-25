@@ -47,7 +47,11 @@ final class MultipartBodyConverterTestCase: XCTestCase {
    // MARK: - Test Cases
 
    func test_converter_returnsCorrectBody() throws {
-      let converter = MultipartBodyConverter(contentTypeKind: .formData, boundary: outerBoundary)
+      let converter = MultipartBodyConverter(
+         contentTypeKind: .formData,
+         boundary: outerBoundary,
+         addsLineBreaks: true
+      )
       let parts = try makeBodyParts()
       let body = try converter.convert(parts)
       let expectedBody = makeExpectedBody()
@@ -71,7 +75,11 @@ final class MultipartBodyConverterTestCase: XCTestCase {
       let outerPart2 = try BodyPart(
          name: outerName2,
          body: [innerPart1, innerPart2],
-         converter: MultipartBodyConverter(contentTypeKind: .mixed, boundary: innerBoundary)
+         converter: MultipartBodyConverter(
+            contentTypeKind: .mixed,
+            boundary: innerBoundary,
+            addsLineBreaks: false
+         )
       )
 
       return [outerPart1, outerPart2]

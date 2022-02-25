@@ -23,13 +23,17 @@
 //
 
 extension URLEncoder {
+   /// Encoding to use for array keys.
    public enum ArrayKeyEncoding {
+      /// An empty set of brackets is appended the the key for every value.
       case brackets
+
+      /// No brackets are appended to the key and the key is encoded as is.
       case noBrackets
 
       // MARK: - Encoding
 
-      public func encode(_ key: String) -> String {
+      func encode(_ key: String) -> String {
          switch self {
             case .brackets:
                return key + "[]"

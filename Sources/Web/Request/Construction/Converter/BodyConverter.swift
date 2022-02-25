@@ -24,10 +24,20 @@
 
 import Foundation
 
+/// A protocol you need to conform your object to use it as body converter when you create a new
+/// request.
 public protocol BodyConverter {
+   /// A type of object body converter works with.
    associatedtype Body
 
+   /// A MIME type that will be set as value of *Content-Type* header of request.
    var contentType: String { get }
 
+   /// Does the conversion from a body object to a body data.
+   ///
+   /// - Parameters:
+   ///   - body: A body object to convert to a body data.
+   /// - Returns: Body data to set to a request's body.
+   /// - Throws: An error that occurred during body conversion.
    func convert(_ body: Body) throws -> Data
 }

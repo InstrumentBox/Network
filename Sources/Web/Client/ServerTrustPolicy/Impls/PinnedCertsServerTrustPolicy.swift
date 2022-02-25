@@ -24,6 +24,13 @@
 
 import Foundation
 
+/// A policy that uses pinned certificates to evaluate the server trust.
+///
+/// The server trust is considered valid if one of the pinned certificates match one of the server
+/// certificates. By evaluating both the certificate chain and host, certificate pinning provides
+/// a very secure form of server trust evaluation mitigating most, if not all, MITM attacks.
+/// Applications are encouraged to always validate the host and require a valid certificate chain
+/// in production environments.
 public final class PinnedCertsServerTrustPolicy: ServerTrustPolicy {
    private let certs: [SecCertificate]
    private let evaluateHost: Bool
@@ -31,8 +38,18 @@ public final class PinnedCertsServerTrustPolicy: ServerTrustPolicy {
 
    // MARK: - Init
 
+   /// Creates and returns a `PinnedCertsServerTrustPolicy` with provided parameters.
+   ///
+   /// - Parameters:
+   ///   - certs: Array of `SecCertificate`s to use to evaluate the trust. Defaults to all
+   ///            .cer/.CER, .crt/.CRT, .der/.DER certificates included in the main bundle.
+   ///   - evaluateHost: Determines whether or not the policy should evaluate the host, in addition
+   ///                   to performing the default evaluation. Defaults to `true`.
+   ///   - allowSelfSigned: Adds the provided certificates as anchors for the trust evaluation,
+   ///                      allowing self-signed certificates to pass. Defaults to `false`.
+   ///                      **Don't use this setting in production!**
    public init(
-      certs: [SecCertificate],
+      certs: [SecCertificate] = SecCertificate.all(),
       evaluateHost: Bool = true,
       allowSelfSigned: Bool = false
    ) {

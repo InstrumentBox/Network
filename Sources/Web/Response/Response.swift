@@ -24,14 +24,29 @@
 
 import Foundation
 
+/// An object that represent an HTTP response.
 public final class Response: Equatable {
+   /// The request that was sent in order to receive a response.
    public let request: URLRequest
+
+   /// Status code a response.
    public let statusCode: Int
+
+   /// Header fields of a response.
    public let headers: [String: String]
+
+   /// The data that represents body of response.
    public let body: Data
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `Response` with give values.
+   ///
+   /// - Parameters:
+   ///   - request: The request that was sent in order to receive a response.
+   ///   - statusCode: Status code a response.
+   ///   - headers: Header fields of a response.
+   ///   - body: The data that represents body of response.
    public init(request: URLRequest, statusCode: Int, headers: [String: String], body: Data) {
       self.request = request
       self.statusCode = statusCode
@@ -50,8 +65,16 @@ public final class Response: Equatable {
 
    // MARK: - Equatable
 
+   /// Compares two instances of a `Response`.
+   ///
+   /// It uses `statusCode`, `headers`, `body`, and `request.url` properties to compare responses.
+   ///
+   /// - Parameters:
+   ///   - lhs: The first instance of a `Response` to compare.
+   ///   - rhs: The second instance of a `Response` to compare.
+   /// - Returns: `true` if instances are equal, otherwise `false`.
    public static func ==(lhs: Response, rhs: Response) -> Bool {
-      lhs.request == rhs.request &&
+      lhs.request.url == rhs.request.url &&
       lhs.statusCode == rhs.statusCode &&
       lhs.headers == rhs.headers &&
       lhs.body == rhs.body

@@ -24,6 +24,15 @@
 
 import Foundation
 
+/// A protocol you need to conform your object to be used as a body part in multipart request you
+/// create.
 public protocol FormData {
+   /// This method is a place where you need to convert your object to a body part with a given
+   /// boundary.
+   ///
+   /// - Parameters:
+   ///   - boundary: A boundary string that needs to be used to create body part. You are
+   ///               responsible to add dashes before and/or after if needed.
+   /// - Returns: Binary representation of a body part.
    func makeFormData(boundary: String) throws -> Data
 }

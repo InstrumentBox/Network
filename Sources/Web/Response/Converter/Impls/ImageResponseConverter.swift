@@ -26,17 +26,28 @@
 
 import UIKit
 
+/// An error that is thrown when `ImageResponseConverter` failed.
 @available(iOS 13.0, tvOS 13.0, macCatalyst 13.1, watchOS 6.0, *)
 public enum ImageResponseConverterError: Error {
+   /// Thrown if response body can't be converted to an image.
    case cannotConvertToImage
 }
 
+/// A response converter that takes response body and converts it to an image.
+/// - Note: This converter is only available on platforms that support `UIKit`.
 @available(iOS 13.0, tvOS 13.0, macCatalyst 13.1, watchOS 6.0, *)
 public struct ImageResponseConverter: ResponseConverter {
    private let scale: CGFloat
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `ImageResponseConverter` with a given parameter.
+   ///
+   /// - Parameters:
+   ///   -  scale: The scale factor to assume when interpreting the image data. Applying a scale
+   ///             factor of 1.0 results in an image whose size matches the pixel-based dimensions
+   ///             of the image. Applying a different scale factor changes the size of the image
+   ///             as reported by the `size` property.
    public init(scale: CGFloat = 1.0) {
       self.scale = scale
    }

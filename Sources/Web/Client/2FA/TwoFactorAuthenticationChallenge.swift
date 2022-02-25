@@ -24,10 +24,17 @@
 
 import Foundation
 
+/// An error that is thrown when challenge authentication is failed.
 public enum TwoFactorAuthenticationChallengeError: Error {
+   /// Thrown when challenge is cancelled.
    case cancelled
 }
 
+/// An object that is used to manage 2FA challenge.
+///
+/// It is intended to handle challenges when you need to send the same request to send a new
+/// one-time code to a user and authenticate challenge by sending the same request with some HTTP
+/// header.
 public final class TwoFactorAuthenticationChallenge {
    private var continuation: UnsafeContinuation<Response, Error>?
 
@@ -45,10 +52,16 @@ public final class TwoFactorAuthenticationChallenge {
 
    // MARK: - Response Interaction
 
+   /// Status code of current `Response` of authentication challenge.
    public var responseStatusCode: Int {
       response.statusCode
    }
 
+   /// Returns converted current `Response` of authentication challenge. You are responsible to
+   /// handle error if thrown.
+   ///
+   /// - Returns: Converter that will be used to convert response.
+   /// - Throws: An underlying converter's error.
    public func convertedResponse<ResponseConverter: Web.ResponseConverter>(
       using converter: ResponseConverter
    ) throws -> ResponseConverter.ConvertedResponse {
@@ -57,17 +70,31 @@ public final class TwoFactorAuthenticationChallenge {
 
    // MARK: - Challenge Disposition
 
+   /// Cancels authentication challenge.
+   /// `TwoFactorAuthenticationChallengeError.cancelled` error will be thrown by a web client.
    public func cancel() {
       let error: TwoFactorAuthenticationChallengeError = .cancelled
       continuation?.resume(throwing: error)
       continuation = nil
    }
 
+   /// Refreshes authentication challenge and updates current `Response`. Authentication challenge
+   /// uses original request, response to that caused this challenge. You are responsible to handle
+   /// error if thrown.
+   ///
+   /// - Throws: An error that was occurred during refreshing challenge. Usually `URLError`.
    @WebClientActor
    public func refresh() async throws {
       response = try await session.data(for: response.request)
    }
 
+   /// Authenticates challenge with passed header. Authentication challenge uses original request by
+   /// adding passed authentication header, response to that caused this challenge. You are
+   /// responsible to handle error if thrown.
+   ///
+   /// - Parameters:
+   ///   - header: Header that will be used to authenticate challenge.
+   /// - Throws: An error that was occurred during authenticating challenge. Usually `URLError`.
    @WebClientActor
    public func authenticate(with header: TwoFactorAuthenticationHeader) async throws {
       var request = response.request
@@ -75,6 +102,12 @@ public final class TwoFactorAuthenticationChallenge {
       response = try await session.data(for: request)
    }
 
+   /// Completes authentication challenge by either returning current `Response` or throwing
+   /// passed error. You can complete challenge with error occurred when converting, refreshing,
+   /// authenticating challenge, or any other error.
+   ///
+   /// - Parameters:
+   ///   - error: An error that will be thrown by a web client.
    public func complete(with error: Error? = nil) {
       if let error = error {
          continuation?.resume(throwing: error)

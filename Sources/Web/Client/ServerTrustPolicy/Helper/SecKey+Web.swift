@@ -25,6 +25,12 @@
 import Foundation
 
 extension SecKey {
+   /// Finds and returns all public keys from certificates in a given bundle. A certificate is a
+   /// file with one of the following extensions: .cer/.CER, .crt/.CRT, or .der/.DER.
+   ///
+   /// - Parameters:
+   ///   - bundle: Bundle, in which public keys should be found. Defaults to `Bundle.main`.
+   /// - Returns: Array of public keys found in given bundle.
    public static func allPublicKeys(in bundle: Bundle = .main) -> [SecKey] {
       SecCertificate.all(in: bundle).compactMap(\.publicKey)
    }

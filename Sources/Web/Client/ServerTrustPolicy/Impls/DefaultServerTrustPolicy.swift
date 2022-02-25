@@ -24,11 +24,21 @@
 
 import Foundation
 
+/// A policy that uses the default server trust evaluation.
+///
+///  It allows you to control whether to validate the host provided by the challenge. Applications
+///  are encouraged to always validate the host in production environments to guarantee the
+///  validity of the server's certificate chain.
 public final class DefaultServerTrustPolicy: ServerTrustPolicy {
    private let evaluateHost: Bool
 
    // MARK: - Init
 
+   /// Creates and returns a `DefaultServerTrustPolicy` with provided parameters.
+   ///
+   /// - Parameters:
+   ///   - evaluateHost: Determines whether or not the policy should evaluate the host, in addition
+   ///                   to performing the default evaluation. Defaults to `true`.
    public init(evaluateHost: Bool = true) {
       self.evaluateHost = evaluateHost
    }

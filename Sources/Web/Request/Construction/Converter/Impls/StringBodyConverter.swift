@@ -24,16 +24,26 @@
 
 import Foundation
 
+/// An error that is thrown when `StringBodyConverter` is failed.
 public enum StringBodyConverterError: Error {
+   /// Thrown when can't convert string to data.
    case cannotConvertToData(String)
 }
 
+/// A body converter that takes a string and converts it to a body data. The MIME type of a result
+/// is *text/plain*.
 public struct StringBodyConverter: BodyConverter {
    private let encoding: String.Encoding
    private let allowLossyConversion: Bool
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `StringBodyConverter` with given parameters.
+   ///
+   /// - Parameters:
+   ///   - encoding: A string encoding. For possible values, see `String.Encoding`.
+   ///   - allowLossyConversion: If `true`, then allows characters to be removed or altered in
+   ///                           conversion.
    public init(encoding: String.Encoding = .utf8, allowLossyConversion: Bool = false) {
       self.encoding = encoding
       self.allowLossyConversion = allowLossyConversion

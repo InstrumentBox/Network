@@ -23,13 +23,17 @@
 //
 
 extension URLEncoder {
+   /// Encoding to use for boolean values.
    public enum BoolEncoding {
+      /// Encode `true` as true and `false` as false.
       case literal
+
+      /// Encode `true` as 1 and `false` as 0.
       case numeric
 
       // MARK: - Encoding
 
-      public func encode(_ bool: Bool) -> String {
+      func encode(_ bool: Bool) -> String {
          switch self {
             case .literal:
                return bool ? "true" : "false"

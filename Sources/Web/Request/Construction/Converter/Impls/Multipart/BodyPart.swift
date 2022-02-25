@@ -24,14 +24,39 @@
 
 import Foundation
 
+/// An object that represents part of form data.
+///
+/// The body part data will be converted using the following format:
+/// ```
+/// --boundary
+/// Content-Disposition: form-data; name=#{name}; filename=#{fileName} (if presented)
+/// Content-Type: #{mimeType}
+///
+/// Encoded data
+/// ```
 public struct BodyPart: FormData {
+   /// Name of body part. Used as value of *name* in *Content-Disposition*.
    public let name: String
+
+   /// Name of file to upload. Used as value of *filename* in *Content-Disposition*.
    public let fileName: String?
+
+   /// Body part data.
    public let body: Data
+
+   /// MIME type of body part data.
    public let contentType: String
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `BodyPart` with given parameters.
+   ///
+   /// - Parameters:
+   ///   - name: Name of body part.
+   ///   - fileName: Name of file to upload.
+   ///   - body: An object to be used as a data of body part.
+   ///   - converter: A `BodyConverter` to convert body object and set *Content-Type* of body part.
+   /// - Throws: An error occurred during body object conversion.
    public init<BodyConverter: Web.BodyConverter>(
       name: String,
       fileName: String? = nil,

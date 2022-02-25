@@ -24,6 +24,13 @@
 
 import Foundation
 
+/// A protocol you need to implement to perform server trust evaluation.
 public protocol ServerTrustPolicy {
+   /// Evaluates given server trust for given host.
+   ///
+   /// - Parameters:
+   ///   - serverTrust: A `SecTrust` to evaluate.
+   ///   - host: A host, for which `SecTrust` will be evaluated.
+   /// - Returns: `true` if server trust is valid for host, otherwise `false`.
    func evaluate(_ serverTrust: SecTrust, for host: String) -> Bool
 }

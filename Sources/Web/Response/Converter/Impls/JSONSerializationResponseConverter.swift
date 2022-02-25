@@ -24,15 +24,29 @@
 
 import Foundation
 
+/// An error that is thrown when `JSONSerializationResponseConverter` failed.
 public enum JSONSerializationResponseConverterError: Error {
+   /// Thrown if resulting object can't be casted to an expected type.
    case typeMismatch(expected: String, given: String)
 }
 
+/// A response converter that uses `JSONSerialization` to convert response body to some object.
+///
+/// If you use `.fragmentsAllowed` reading option, you can use this converter to parse numbers or
+/// strings.
+///
+/// - Note: String in response must be double-quoted. If not, use `StringResponseConverter`.
 public struct JSONSerializationResponseConverter<ConvertedResponse>: ResponseConverter {
    private let options: JSONSerialization.ReadingOptions
 
    // MARK: - Init
 
+   /// Creates and returns an instance of `JSONSerializationResponseConverter` with a given option.
+   ///
+   /// - Parameters:
+   ///   -  options: Options for reading the JSON data and creating the Foundation objects. For
+   ///               possible values, see `JSONSerialization.ReadingOptions`.
+   ///               Defaults to `.fragmentsAllowed`.
    public init(options: JSONSerialization.ReadingOptions = [.fragmentsAllowed]) {
       self.options = options
    }
