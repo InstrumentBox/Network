@@ -1,5 +1,5 @@
 //
-//  WebTestsRequestAuthorizer.swift
+//  WithoutAuthorizationRequest.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -22,12 +22,6 @@
 //  THE SOFTWARE.
 //
 
-import Web
-
-final class WebTestsRequestAuthorizer: RequestAuthorizer {
-   func authorizationHeader<Request: Web.Request>(
-      for request: Request
-   ) async throws -> AuthorizationHeader? {
-      AuthorizationHeader(name: "Authorization", value: "Basic 123")
-   }
-}
+/// A protocol-marker you can use to differentiate requests that need authorization from requests
+/// that don't.
+public protocol WithoutAuthorizationRequest { }

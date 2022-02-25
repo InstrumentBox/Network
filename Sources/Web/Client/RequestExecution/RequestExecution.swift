@@ -49,8 +49,10 @@ final class RequestExecution<Request: Web.Request> {
 
    private func executeRequest() async throws -> Response {
       var urlRequest = try request.toURLRequest(with: configuration.baseURL)
-      if let requestAuthorizer = configuration.requestAuthorizer {
+      if
+         let requestAuthorizer = configuration.requestAuthorizer,
          let header = try await requestAuthorizer.authorizationHeader(for: request)
+      {
          urlRequest.addValue(header.value, forHTTPHeaderField: header.name)
       }
 
