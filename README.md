@@ -5,14 +5,17 @@
 [![SPM: Compatible](https://img.shields.io/badge/SPM-Compatible-4BC51D.svg?style=flat)](https://swift.org/package-manager/)
 [![License: MIT](http://img.shields.io/badge/License-MIT-lightgray.svg?style=flat)](https://github.com/InstrumentBox/Network/blob/main/LICENSE)
 
-Network is a library that provides you with a full-featured web client built on top of new concurrency 
-model available in Swift 5.5.
+*Network* is a Swift package that provides you with set of network libraries built on top of new 
+concurrency model available in Swift 5.5.
 
-## Features
+## Web
+
+*Web* is a library that provides a full-featured web client.
+
+### Features
 
 - [x] Well documented
 - [x] No dependencies
-- [x] Swift concurrency support
 - [x] Customizable
 - [x] Response validation
 - [x] Multipart requests
@@ -20,7 +23,7 @@ model available in Swift 5.5.
 - [x] Certificate and public key pinning
 - [x] 2FA support
 
-## Documentation
+### Documentation
 
 - [Installation](https://github.com/InstrumentBox/Network/blob/main/Sources/Web/Web.docc/GettingStarted/Installation.md)
 - [Make Your First Request](https://github.com/InstrumentBox/Network/blob/main/Sources/Web/Web.docc/GettingStarted/FirstRequest.md)
