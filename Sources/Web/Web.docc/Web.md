@@ -23,6 +23,7 @@ concurrency model available in Swift 5.5.
 - <doc:AuthorizeRequest>
 
 - ``Method``
+- ``Header``
 - ``URLConstructionError``
 - ``URLEncoder``
 - ``URLEncoderError``
@@ -45,7 +46,6 @@ concurrency model available in Swift 5.5.
 - ``BodyPart``
 
 - ``RequestAuthorizer``
-- ``AuthorizationHeader``
 - ``WithoutAuthorizationRequest``
 
 ### Response
@@ -89,5 +89,4 @@ concurrency model available in Swift 5.5.
 
 - ``TwoFactorAuthenticationHandler``
 - ``TwoFactorAuthenticationChallenge``
-- ``TwoFactorAuthenticationHeader``
 - ``TwoFactorAuthenticationChallengeError``

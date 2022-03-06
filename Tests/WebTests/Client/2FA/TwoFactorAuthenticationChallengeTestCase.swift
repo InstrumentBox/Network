@@ -104,7 +104,7 @@ final class TwoFactorAuthenticationChallengeTestCase: XCTestCase {
       let response = try await makeChallengeAndRun { c in
          Task {
             do {
-               let header = TwoFactorAuthenticationHeader(name: "X-2FA", value: "1234")
+               let header = Header(name: "X-2FA", value: "1234")
                try await c.authenticate(with: header)
                c.complete()
             } catch {

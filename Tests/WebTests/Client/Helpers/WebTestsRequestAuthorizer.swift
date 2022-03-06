@@ -25,9 +25,7 @@
 import Web
 
 final class WebTestsRequestAuthorizer: RequestAuthorizer {
-   func authorizationHeader<Request: Web.Request>(
-      for request: Request
-   ) async throws -> AuthorizationHeader? {
-      AuthorizationHeader(name: "Authorization", value: "Basic 123")
+   func authorizationHeader<Request: Web.Request>(for request: Request) async throws -> Header? {
+      .basicAuthorization(with: "123")
    }
 }

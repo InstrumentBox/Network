@@ -1,5 +1,5 @@
 //
-//  AuthorizationHeader.swift
+//  Header.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -22,8 +22,8 @@
 //  THE SOFTWARE.
 //
 
-/// An authorization header that will be used to authorize request.
-public struct AuthorizationHeader: Hashable {
+/// An HTTP header.
+public struct Header: Hashable {
    /// Name of HTTP header field.
    public let name: String
 
@@ -32,13 +32,29 @@ public struct AuthorizationHeader: Hashable {
 
    // MARK: - Init
 
-   /// Creates and returns new authorization header with given name and value.
-   /// 
+   /// Creates and returns new header with given name and value.
+   ///
    /// - Parameters:
    ///   - name: Name of HTTP header field.
    ///   - value: Value of HTTP header field.
    public init(name: String, value: String) {
       self.name = name
       self.value = value
+   }
+
+   // MARK: - Predefined
+
+   /// Creates and returns the following header: `Authorization: Bearer <token>`.
+   /// - Parameter token: Token to be set as header value.
+   /// - Returns: Authorization header.
+   public static func bearerAuthorization(with token: String) -> Header {
+      Header(name: "Authorization", value: "Bearer \(token)")
+   }
+
+   /// Creates and returns the following header: `Authorization: Basic <base64 login + password>`.
+   /// - Parameter token: Token to be set as header value.
+   /// - Returns: Authorization header.
+   public static func basicAuthorization(with base64: String) -> Header {
+      Header(name: "Authorization", value: "Basic \(base64)")
    }
 }

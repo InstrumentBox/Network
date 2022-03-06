@@ -72,7 +72,6 @@ public final class TwoFactorAuthenticationChallenge {
 
    /// Cancels authentication challenge.
    /// `TwoFactorAuthenticationChallengeError.cancelled` error will be thrown by a web client.
-   @WebClientActor
    public func cancel() {
       let error: TwoFactorAuthenticationChallengeError = .cancelled
       continuation?.resume(throwing: error)
@@ -84,20 +83,18 @@ public final class TwoFactorAuthenticationChallenge {
    /// error if thrown.
    ///
    /// - Throws: An error that was occurred during refreshing challenge. Usually `URLError`.
-   @WebClientActor
    public func refresh() async throws {
       response = try await session.data(for: response.request)
    }
 
-   /// Authenticates challenge with passed header. Authentication challenge uses original request by
-   /// adding passed authentication header, response to that caused this challenge. You are
-   /// responsible to handle error if thrown.
+   /// Authenticates challenge with passed header. Authentication challenge adds passed header to
+   /// the original request response to that caused this challenge. You are responsible to handle
+   /// error if thrown.
    ///
    /// - Parameters:
-   ///   - header: Header that will be used to authenticate challenge.
+   ///   - header: A header that will be used to authenticate challenge.
    /// - Throws: An error that was occurred during authenticating challenge. Usually `URLError`.
-   @WebClientActor
-   public func authenticate(with header: TwoFactorAuthenticationHeader) async throws {
+   public func authenticate(with header: Header) async throws {
       var request = response.request
       request.addValue(header.value, forHTTPHeaderField: header.name)
       response = try await session.data(for: request)
@@ -109,7 +106,6 @@ public final class TwoFactorAuthenticationChallenge {
    ///
    /// - Parameters:
    ///   - error: An error that will be thrown by a web client.
-   @WebClientActor
    public func complete(with error: Error? = nil) {
       if let error = error {
          continuation?.resume(throwing: error)

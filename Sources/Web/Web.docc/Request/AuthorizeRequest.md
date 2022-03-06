@@ -13,11 +13,9 @@ token.
 final class MyAppRequestAuthorizer: RequestAuthorizer {
    ...
 
-   func authorizationHeader<Request: Web.Request>(
-      for request: Request
-   ) async throws -> AuthorizationHeader? {
+   func authorizationHeader<Request: Web.Request>(for request: Request) async throws -> Header? {
       let token = try keychain.fetchToken()
-      return AuthorizationHeader(name: "Authorization", value: "Bearer \(token))
+      return .bearerAuthorization(with: token)
    }
 }
 ```
@@ -43,9 +41,7 @@ struct SomeObjectRequest: MyAppRequest, WithoutAuthorizationRequest {
 final class MyAppRequestAuthorizer: RequestAuthorizer {
    ...
 
-   func authorizationHeader<Request: Web.Request>(
-      for request: Request
-   ) async throws -> AuthorizationHeader? {
+   func authorizationHeader<Request: Web.Request>(for request: Request) async throws -> Header? {
       if request is WithoutAuthorizationRequest {
          return nil
       }
