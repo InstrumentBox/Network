@@ -6,7 +6,7 @@ Read how to use authorize requests using `RequestAuthorizer`.
 
 The *Web* library provides a `RequestAuthorizer` protocol that allows you to authorize all
 requests you send using a web client. `RequestAuthorizer` is a good place where you can fetch an
-authorization token in the keychain or suspend all request and refresh all tokens using refresh 
+authorization token in the keychain or suspend all requests and refresh all tokens using refresh 
 token. 
 
 ```swift
@@ -29,24 +29,12 @@ configuration.requestAuthorizer = MyAppRequestAuthorizer(keychain: keychain)
 
 ## Skip Authorization for Requests
 
-If you need some requests to not to be authorized, you can either use different web client 
-instances or use protocol-marker to mark needed request. The *Web* library provides protocol-marker
-called `WithoutAuthorizationRequest`.
+If you need some requests to not to be authorized, you can either use a different web client 
+instance whose configuration doesn't have request authorizer, or use protocol-marker to mark 
+needed request. The *Web* library provides protocol-marker called `WithoutAuthorizationRequest`.
 
 ```swift
 struct SomeObjectRequest: MyAppRequest, WithoutAuthorizationRequest {
    ...
-}
-
-final class MyAppRequestAuthorizer: RequestAuthorizer {
-   ...
-
-   func authorizationHeader<Request: Web.Request>(for request: Request) async throws -> Header? {
-      if request is WithoutAuthorizationRequest {
-         return nil
-      }
-
-      ...
-   }
 }
 ```

@@ -19,7 +19,7 @@ struct UploadImageRequest: MyAppRequest {
          BodyPart(name: "my_image", body: image, converter: JPEGImageBodyConverter())
       ]
       ...
-      return URLRequest(..., body: bodyParts, converter: MultipartBodyConverter())
+      return try URLRequest(..., body: bodyParts, converter: MultipartBodyConverter())
    }
 }
 ```
