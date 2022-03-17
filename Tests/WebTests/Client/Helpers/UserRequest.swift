@@ -25,7 +25,7 @@
 import Foundation
 import Web
 
-struct UserRequest: Request {
+class UserRequest: Request {
    var objectResponseConverter: JSONDecoderResponseConverter<User> {
       JSONDecoderResponseConverter()
    }

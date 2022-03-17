@@ -45,16 +45,18 @@ public struct Header: Hashable {
    // MARK: - Predefined
 
    /// Creates and returns the following header: `Authorization: Bearer <token>`.
-   /// - Parameter token: Token to be set as header value.
+   /// - Parameters:
+   ///   - token: Token to be set as header value.
    /// - Returns: Authorization header.
-   public static func bearerAuthorization(with token: String) -> Header {
+   public static func bearerAuthorization(_ token: String) -> Header {
       Header(name: "Authorization", value: "Bearer \(token)")
    }
 
    /// Creates and returns the following header: `Authorization: Basic <base64 login + password>`.
-   /// - Parameter token: Token to be set as header value.
+   /// - Parameters:
+   ///   - token: Token to be set as header value.
    /// - Returns: Authorization header.
-   public static func basicAuthorization(with base64: String) -> Header {
+   public static func basicAuthorization(_ base64: String) -> Header {
       Header(name: "Authorization", value: "Basic \(base64)")
    }
 }

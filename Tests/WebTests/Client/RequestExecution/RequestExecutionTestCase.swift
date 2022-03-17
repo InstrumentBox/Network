@@ -45,6 +45,24 @@ final class RequestExecutionTestCase: XCTestCase {
       XCTAssertEqual(user, .johnAppleseed)
    }
 
+   func test_requestExecution_skipsAuthorization_ifRequestMarkedToNotToBeAuthorized() async throws {
+      class NotAuthorizedUserRequest: UserRequest, WithoutAuthorizationRequest { }
+      let execution = makeExecution(
+         protocolClass: AuthorizedWebTestsURLProtocol.self,
+         requestAuthorizer: WebTestsRequestAuthorizer(),
+         request: NotAuthorizedUserRequest()
+      )
+
+      do {
+         _ = try await execution.execute()
+         XCTFail("Unexpected successful result")
+      } catch let error as APIError {
+         XCTAssertEqual(error, .notAuthorized)
+      } catch {
+         XCTFail("Unexpected error thrown: \(error)")
+      }
+   }
+
    func test_requestExecution_throwsAPIError_ifRequestNotAuthorized() async throws {
       let execution = makeExecution(protocolClass: AuthorizedWebTestsURLProtocol.self)
       do {
@@ -109,6 +127,7 @@ final class RequestExecutionTestCase: XCTestCase {
    private func makeExecution(
       protocolClass: URLProtocol.Type,
       requestAuthorizer: RequestAuthorizer? = nil,
+      request: UserRequest? = nil,
       handle2FA: ((TwoFactorAuthenticationChallenge) -> Void)? = nil
    ) -> RequestExecution<UserRequest> {
       let configuration: URLSessionWebClientConfiguration = .ephemeral
@@ -120,7 +139,7 @@ final class RequestExecutionTestCase: XCTestCase {
          return handler
       }
       let session = URLSession(configuration: configuration.sessionConfiguration)
-      let request = UserRequest()
+      let request = request ?? UserRequest()
       return RequestExecution(request: request, session: session, configuration: configuration)
    }
 }

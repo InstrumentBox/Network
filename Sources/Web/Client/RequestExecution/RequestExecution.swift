@@ -41,22 +41,25 @@ final class RequestExecution<Request: Web.Request> {
 
    @WebClientActor
    func execute() async throws -> Request.ObjectResponseConverter.ConvertedResponse {
-      var response = try await executeRequest()
+      let urlRequest = try await makeURLRequest(request: request)
+      var response = try await session.data(for: urlRequest)
       response = try await handleTwoFactorAuthenticationChallengeIfNeeded(response)
       let object = try processResponse(response)
       return object
    }
 
-   private func executeRequest() async throws -> Response {
+   private func makeURLRequest(request: Request) async throws -> URLRequest {
       var urlRequest = try request.toURLRequest(with: configuration.baseURL)
-      if
-         let requestAuthorizer = configuration.requestAuthorizer,
-         let header = try await requestAuthorizer.authorizationHeader(for: request)
-      {
+      if request is WithoutAuthorizationRequest {
+         return urlRequest
+      }
+
+      if let authorizer = configuration.requestAuthorizer {
+         let header = try await authorizer.authorizationHeader(for: request)
          urlRequest.addValue(header.value, forHTTPHeaderField: header.name)
       }
 
-      return try await session.data(for: urlRequest)
+      return urlRequest
    }
 
    private func handleTwoFactorAuthenticationChallengeIfNeeded(
