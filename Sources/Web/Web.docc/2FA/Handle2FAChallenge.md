@@ -72,7 +72,7 @@ func handle(_ challenge: TwoFactorAuthenticationChallenge) {
          try await challenge.refresh()
       },
       onAuthenticate: { [weak self] code in
-         let header = TwoFactorAuthenticationHeader(name: "X-2FA-HEADER", value: code)
+         let header = Header(name: "X-2FA-HEADER", value: code)
          do {
             try await challenge.authenticate(with: header)
             self?.complete(challenge, with: nil)
