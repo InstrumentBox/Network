@@ -5,7 +5,7 @@ Read how to handle and interact with 2FA challenges.
 ## Overview
 
 Two factor authentication is an authentication method that allows to improve security of your 
-app. In our apps we usually use one-time passwords sent to a user via test messages or e-mails. The
+app. In our apps we usually use one-time passwords sent to a user via text messages or e-mails. The
 *Web* library provides you with functionality to handle these challenges in one place.
 
 ##### Note:
@@ -23,7 +23,7 @@ protocol you need to implement.
 final class My2FAHandler: TwoFactorAuthenticationHandler { }
 ```
 
-This protocol two required methods you need to implement. The first one responds for checking a
+This protocol has two required methods you need to implement. The first one responds for checking a
 response if it requires 2FA. Let's say your server returns status code if 600 2FA is required.
 
 ```swift
@@ -47,7 +47,7 @@ final class My2FAHandler: TwoFactorAuthenticationHandler {
 A server may return you some data about 2FA challenge so you need to get this data.
 
 ```swift
-@NainActor
+@MainActor
 func handle(_ challenge: TwoFactorAuthenticationChallenge) {
    do {
       let props = try challenge.convertedResponse(using: JSONDecoderResponseConverter<TwoFAProps>()) 
