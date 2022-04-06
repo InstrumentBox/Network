@@ -1,7 +1,7 @@
 # ``Web``
 
 *Web* is a network library that provides you with a full-featured web client built on top of new
-concurrency model available in Swift 5.6.
+concurrency model introduced in Swift 5.5.
 
 ## Topics
 

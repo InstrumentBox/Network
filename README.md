@@ -6,7 +6,7 @@
 [![License: MIT](http://img.shields.io/badge/License-MIT-lightgray.svg?style=flat)](https://github.com/InstrumentBox/Network/blob/main/LICENSE)
 
 *Network* is a Swift package that provides you with set of network libraries built on top of new 
-concurrency model available in Swift 5.6.
+concurrency model introduced in Swift 5.5.
 
 ## Web
 
