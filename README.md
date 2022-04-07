@@ -14,7 +14,7 @@ concurrency model introduced in Swift 5.5.
 
 ### Features
 
-- [x] Well documented
+- [x] [Well documented](https://instrumentbox.github.io/Network/documentation/web/)
 - [x] No dependencies
 - [x] Customizable
 - [x] Response validation
@@ -22,16 +22,3 @@ concurrency model introduced in Swift 5.5.
 - [x] Request authorization
 - [x] Certificate and public key pinning
 - [x] 2FA support
-
-### Documentation
-
-- [Installation](https://github.com/InstrumentBox/Network/blob/main/Sources/Web/Web.docc/GettingStarted/Installation.md)
-- [Make Your First Request](https://github.com/InstrumentBox/Network/blob/main/Sources/Web/Web.docc/GettingStarted/FirstRequest.md)
-- [Create URL and URLRequest](https://github.com/InstrumentBox/Network/blob/main/Sources/Web/Web.docc/Request/CreateURLRequest.md)
-- [Convert Body](https://github.com/InstrumentBox/Network/blob/main/Sources/Web/Web.docc/Request/ConvertBody.md)
-- [Multipart](https://github.com/InstrumentBox/Network/blob/main/Sources/Web/Web.docc/Request/Multipart.md)
-- [Authorize Request](https://github.com/InstrumentBox/Network/blob/main/Sources/Web/Web.docc/Request/AuthorizeRequest.md)
-- [Validate Response](https://github.com/InstrumentBox/Network/blob/main/Sources/Web/Web.docc/Response/ValidateResponse.md)
-- [Convert Response](https://github.com/InstrumentBox/Network/blob/main/Sources/Web/Web.docc/Response/ConvertResponse.md)
-- [Evaluate Server Trust](https://github.com/InstrumentBox/Network/blob/main/Sources/Web/Web.docc/Security/EvaluateServerTrust.md)
-- [Handle 2FA Challenge](https://github.com/InstrumentBox/Network/blob/main/Sources/Web/Web.docc/2FA/Handle2FAChallenge.md)
