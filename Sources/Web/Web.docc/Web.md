@@ -30,10 +30,10 @@ concurrency model introduced in Swift 5.5.
 
 - ``BodyConverter``
 - ``DataBodyConverter``
-<!-- - ``JPEGImageBodyConverter`` -->
-<!-- - ``JPEGImageBodyConverterError`` -->
-<!-- - ``PNGImageBodyConverter`` -->
-<!-- - ``PNGImageBodyConverterError`` -->
+ - ``JPEGImageBodyConverter`` 
+ - ``JPEGImageBodyConverterError`` 
+ - ``PNGImageBodyConverter`` 
+ - ``PNGImageBodyConverterError`` 
 - ``JSONEncoderBodyConverter``
 - ``JSONSerializationBodyConverter``
 - ``PropertyListEncoderBodyConverter``
@@ -64,8 +64,8 @@ concurrency model introduced in Swift 5.5.
 - ``AsIsResponseConverter``
 - ``DataResponseConverter``
 - ``EmptyResponseConverter``
-<!-- - ``ImageResponseConverter`` -->
-<!-- - ``ImageResponseConverterError`` -->
+ - ``ImageResponseConverter`` 
+ - ``ImageResponseConverterError`` 
 - ``JSONDecoderResponseConverter``
 - ``JSONSerializationResponseConverter``
 - ``JSONSerializationResponseConverterError``
