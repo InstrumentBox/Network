@@ -80,6 +80,16 @@ final class MIMETestCase: XCTestCase {
       XCTAssertNil(mime)
    }
 
+   func test_mime_isNotCreatedFromMIMEString_ifTypeEndsWithSymbol() {
+      let mime = MIME.make(mimeString: "application-/json")
+      XCTAssertNil(mime)
+   }
+
+   func test_mime_isNotCreatedFromMIMEString_ifSubtypeEndsWithSymbol() {
+      let mime = MIME.make(mimeString: "application/json-")
+      XCTAssertNil(mime)
+   }
+
    func test_mime_isNotCreatedFromMIMEString_ifTypeBeginsWithSymbol() {
       let mime = MIME.make(mimeString: "-application/json")
       XCTAssertNil(mime)

@@ -41,7 +41,7 @@ struct MIME: Hashable, CustomStringConvertible {
       let typeCaptureGroupName = "type"
       let subtypeCaptureGroupName = "subtype"
       let pattern = String(
-         format: #"^(?<%@>(\w+[-.+\w]*)|(\*))\/(?<%@>(\w+[-.+\w]*)|(\*))(;\s?q=\d(.\d)?)?$"#,
+         format: #"^(?<%@>(\w+([-.+\w]*\w)?)|(\*))\/(?<%@>(\w+([-.+\w]*\w)?)|(\*))(;\s?q=\d(.\d)?)?$"#,
          typeCaptureGroupName, subtypeCaptureGroupName
       )
       guard let regex = try? NSRegularExpression(pattern: pattern) else {
