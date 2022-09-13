@@ -23,7 +23,7 @@
 //
 
 @globalActor
-final actor WebClientActor {
+actor WebClientActor {
    static let shared = WebClientActor()
 
    // MARK: - Init

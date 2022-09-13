@@ -26,11 +26,11 @@
 public enum ResponseValidationDisposition {
    /// Tells to use an object response converter of a `Request` (e.g. status code of a response is
    /// 2xx).
-   case useObjectResponseConverter
+   case useSuccessObjectResponseConverter
 
    /// Tells to use an error response converter of a `Request` (e.g status code of a response is
    /// not 2xx).
-   case useErrorResponseConverter
+   case useErrorObjectResponseConverter
 
    /// Tells to complete with an error occurred during response validation (e.g. *Content-Type* and
    /// *Accept* headers don't match).

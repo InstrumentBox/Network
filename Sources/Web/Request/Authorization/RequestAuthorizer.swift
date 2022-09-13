@@ -37,5 +37,5 @@ public protocol RequestAuthorizer {
    /// - Parameters:
    ///   - request: A request that is needed to be authorized.
    /// - Returns: A header that will be used to authorize request.
-   func authorizationHeader<Request: Web.Request>(for request: Request) async throws -> Header
+   func authorizationHeader(for request: some Request) async throws -> Header
 }

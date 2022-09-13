@@ -31,7 +31,7 @@ public enum URLEncoderError: Error {
 }
 
 /// An object that encodes instances of `[String: Any]` into URL-encoded query strings.
-public final class URLEncoder {
+public class URLEncoder {
    /// Global setting for array key encoding. Defaults to `.brackets`.
    public static var arrayKeyEncoding: ArrayKeyEncoding = .brackets
 

@@ -24,7 +24,7 @@
 
 import Foundation
 
-final class TwoFactorAuthenticationWebTestsURLProtocol: WebTestsURLProtocol {
+class TwoFactorAuthenticationWebTestsURLProtocol: WebTestsURLProtocol {
    override var statusCode: Int {
       isAuthenticated ? 200 : 600
    }

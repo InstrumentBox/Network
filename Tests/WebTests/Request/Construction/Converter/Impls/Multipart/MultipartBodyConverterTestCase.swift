@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class MultipartBodyConverterTestCase: XCTestCase {
+class MultipartBodyConverterTestCase: XCTestCase {
    private let outerBoundary = "123456"
    private let innerBoundary = "abcdef"
 

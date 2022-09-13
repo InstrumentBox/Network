@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class ResponseTestCase: XCTestCase {
+class ResponseTestCase: XCTestCase {
    // MARK: - Test Cases
 
    func test_response_isInitedFromHTTPURLResponseCorrectly() throws {

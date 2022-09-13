@@ -26,11 +26,11 @@ import Foundation
 import Web
 
 class UserRequest: Request {
-   var objectResponseConverter: JSONDecoderResponseConverter<User> {
+   var successObjectResponseConverter: any ResponseConverter<User> {
       JSONDecoderResponseConverter()
    }
 
-   var errorResponseConverter: JSONDecoderResponseConverter<APIError> {
+   var errorObjectResponseConverter: any ResponseConverter<APIError> {
       JSONDecoderResponseConverter()
    }
 

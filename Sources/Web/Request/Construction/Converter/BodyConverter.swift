@@ -26,7 +26,7 @@ import Foundation
 
 /// A protocol you need to conform your object to use it as body converter when you create a new
 /// request.
-public protocol BodyConverter {
+public protocol BodyConverter<Body> {
    /// A type of object body converter works with.
    associatedtype Body
 

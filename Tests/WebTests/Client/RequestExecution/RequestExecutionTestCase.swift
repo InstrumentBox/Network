@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class RequestExecutionTestCase: XCTestCase {
+class RequestExecutionTestCase: XCTestCase {
    // MARK: - Test Cases
 
    func test_requestExecution_returnsObject() async throws {

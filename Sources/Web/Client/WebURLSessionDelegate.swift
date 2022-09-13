@@ -24,7 +24,7 @@
 
 import Foundation
 
-final class WebURLSessionDelegate: NSObject, URLSessionDelegate {
+class WebURLSessionDelegate: NSObject, URLSessionDelegate {
    private let configuration: URLSessionWebClientConfiguration
 
    // MARK: - Init

@@ -24,7 +24,7 @@
 
 import Foundation
 
-final class NotHTTPResponseWebTestsURLProtocol: WebTestsURLProtocol {
+class NotHTTPResponseWebTestsURLProtocol: WebTestsURLProtocol {
    override var response: URLResponse {
       URLResponse(
          url: request.url!,

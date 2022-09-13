@@ -35,7 +35,7 @@ public enum TwoFactorAuthenticationChallengeError: Error {
 /// It is intended to handle challenges when you need to send the same request to send a new
 /// one-time code to a user and authenticate challenge by sending the same request with some HTTP
 /// header.
-public final class TwoFactorAuthenticationChallenge {
+public class TwoFactorAuthenticationChallenge {
    private var continuation: UnsafeContinuation<Response, Error>?
 
    private var response: Response

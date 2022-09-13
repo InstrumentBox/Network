@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class URLSessionWebClientTestCase: XCTestCase {
+class URLSessionWebClientTestCase: XCTestCase {
    // MARK: - Test Cases
 
    func test_webClient_executesRequest() async throws {

@@ -10,7 +10,7 @@ authorization token in the keychain or suspend all requests and refresh all toke
 token. 
 
 ```swift
-final class MyAppRequestAuthorizer: RequestAuthorizer {
+class MyAppRequestAuthorizer: RequestAuthorizer {
    ...
 
    func authorizationHeader<Request: Web.Request>(for request: Request) async throws -> Header? {

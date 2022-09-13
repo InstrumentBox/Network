@@ -24,7 +24,7 @@
 
 import Foundation
 
-final class AuthorizedWebTestsURLProtocol: WebTestsURLProtocol {
+class AuthorizedWebTestsURLProtocol: WebTestsURLProtocol {
    override var statusCode: Int {
       isAuthorized ? 200 : 401
    }

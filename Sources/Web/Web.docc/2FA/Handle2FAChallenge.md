@@ -20,14 +20,14 @@ To handle 2FA challenges, *Web* library provides you with a `TwoFactorAuthentica
 protocol you need to implement.
 
 ```swift
-final class My2FAHandler: TwoFactorAuthenticationHandler { }
+class My2FAHandler: TwoFactorAuthenticationHandler { }
 ```
 
 This protocol has two required methods you need to implement. The first one responds for checking a
 response if it requires 2FA. Let's say your server returns status code if 600 2FA is required.
 
 ```swift
-final class My2FAHandler: TwoFactorAuthenticationHandler { 
+class My2FAHandler: TwoFactorAuthenticationHandler { 
    func responseRequiresTwoFactorAuthentication(_ response: Response) -> Bool {
       response.statusCode == 600
    }
@@ -37,7 +37,7 @@ final class My2FAHandler: TwoFactorAuthenticationHandler {
 The second method is the point where you can present UI to a user.
 
 ```swift
-final class My2FAHandler: TwoFactorAuthenticationHandler {
+class My2FAHandler: TwoFactorAuthenticationHandler {
    ...
 
    func handle(_ challenge: TwoFactorAuthenticationChallenge) { }

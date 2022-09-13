@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class URLRequestAcceptTestCase: XCTestCase {
+class URLRequestAcceptTestCase: XCTestCase {
    // MARK: - Test Cases
 
    func test_request_returnsEmptyMIMEsArray_ifNoAccept() throws {

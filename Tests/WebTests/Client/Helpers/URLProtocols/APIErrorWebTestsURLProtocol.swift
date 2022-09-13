@@ -24,7 +24,7 @@
 
 import Foundation
 
-final class APIErrorWebTestsURLProtocol: WebTestsURLProtocol {
+class APIErrorWebTestsURLProtocol: WebTestsURLProtocol {
    override var statusCode: Int { 404 }
 
    override var headers: [String : String] {

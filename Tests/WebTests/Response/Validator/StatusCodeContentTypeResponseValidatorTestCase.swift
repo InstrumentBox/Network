@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class StatusCodeContentTypeResponseValidatorTestCase: XCTestCase {
+class StatusCodeContentTypeResponseValidatorTestCase: XCTestCase {
    private let validator = StatusCodeContentTypeResponseValidator()
 
    // MARK: - Test Cases
@@ -39,7 +39,7 @@ final class StatusCodeContentTypeResponseValidatorTestCase: XCTestCase {
          contentType: "application/json"
       )
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useObjectResponseConverter)
+      XCTAssertEqual(disposition, .useSuccessObjectResponseConverter)
    }
 
    func test_validator_disposesToUseErrorConverter_ifFailureStatusCode_andHeadersMatches() throws {
@@ -49,43 +49,43 @@ final class StatusCodeContentTypeResponseValidatorTestCase: XCTestCase {
          contentType: "application/json"
       )
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useErrorResponseConverter)
+      XCTAssertEqual(disposition, .useErrorObjectResponseConverter)
    }
 
    func test_validator_disposesToUseObjectConverter_ifSuccessStatusCode_andNoAcceptHeader() throws {
       let response = try makeResponse(statusCode: 200, accept: nil, contentType: "application/json")
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useObjectResponseConverter)
+      XCTAssertEqual(disposition, .useSuccessObjectResponseConverter)
    }
 
    func test_validator_disposesToUseObjectConverter_ifSuccessStatusCode_andNoContentTypeHeader() throws {
       let response = try makeResponse(statusCode: 200, accept: "application/json", contentType: nil)
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useObjectResponseConverter)
+      XCTAssertEqual(disposition, .useSuccessObjectResponseConverter)
    }
 
    func test_validator_disposesToUseErrorConverter_ifFailureStatusCode_andNoAcceptHeader() throws {
       let response = try makeResponse(statusCode: 404, accept: nil, contentType: "application/json")
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useErrorResponseConverter)
+      XCTAssertEqual(disposition, .useErrorObjectResponseConverter)
    }
 
    func test_validator_disposesToUseErrorConverter_ifFailureStatusCode_andNoContentTypeHeader() throws {
       let response = try makeResponse(statusCode: 404, accept: "application/json", contentType: nil)
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useErrorResponseConverter)
+      XCTAssertEqual(disposition, .useErrorObjectResponseConverter)
    }
 
    func test_validator_disposesToUseObjectConverter_ifSuccessStatusCode_andNoHeaders() throws {
       let response = try makeResponse(statusCode: 200, accept: nil, contentType: nil)
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useObjectResponseConverter)
+      XCTAssertEqual(disposition, .useSuccessObjectResponseConverter)
    }
 
    func test_validator_disposesToUseErrorConverter_ifFailureStatusCode_andNoHeaders() throws {
       let response = try makeResponse(statusCode: 404, accept: nil, contentType: nil)
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useErrorResponseConverter)
+      XCTAssertEqual(disposition, .useErrorObjectResponseConverter)
    }
 
    func test_validator_disposesToCompleteWithErrorRegardlessStatusCode_ifMIMEsNotMatches() throws {
@@ -138,8 +138,8 @@ extension ResponseValidationDisposition: Equatable {
       rhs: ResponseValidationDisposition
    ) -> Bool {
       switch (lhs, rhs) {
-         case (.useObjectResponseConverter, .useObjectResponseConverter),
-              (.useErrorResponseConverter, .useErrorResponseConverter),
+         case (.useSuccessObjectResponseConverter, .useSuccessObjectResponseConverter),
+              (.useErrorObjectResponseConverter, .useErrorObjectResponseConverter),
               (.completeWithError, .completeWithError):
             return true
          default:

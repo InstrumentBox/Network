@@ -29,7 +29,7 @@
 /// 2FA challenges handling.
 ///
 /// - Note: A web client is *NOT* intended to work with a background URL session.
-public protocol WebClient: AnyObject {
+public protocol WebClient {
    /// Executes `Request` asynchronously.
    ///
    /// - Parameters:
@@ -38,7 +38,5 @@ public protocol WebClient: AnyObject {
    /// - Returns: An object received from a server.
    /// - Throws: An error that occurred during request. It may be API error in case of 4xx or 5xx,
    ///           `URLError`, response converter error, or any other error.
-   func execute<Request: Web.Request>(
-      _ request: Request
-   ) async throws -> Request.ObjectResponseConverter.ConvertedResponse
+   func execute<SuccessObject>(_ request: some Request<SuccessObject>) async throws -> SuccessObject
 }

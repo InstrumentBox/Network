@@ -55,13 +55,13 @@ public struct BodyPart: FormData {
    ///   - name: Name of body part.
    ///   - fileName: Name of file to upload.
    ///   - body: An object to be used as a data of body part.
-   ///   - converter: A `BodyConverter` to convert body object and set *Content-Type* of body part.
+   ///   - converter: A ``BodyConverter`` to convert body object and set *Content-Type* of body part.
    /// - Throws: An error occurred during body object conversion.
-   public init<BodyConverter: Web.BodyConverter>(
+   public init<Body>(
       name: String,
       fileName: String? = nil,
-      body: BodyConverter.Body,
-      converter: BodyConverter
+      body: Body,
+      converter: some BodyConverter<Body>
    ) throws {
       self.name = name
       self.fileName = fileName

@@ -53,12 +53,12 @@ extension URLRequest {
    ///   - body: An object that will be converted to `Data` and set a body of a request.
    ///   - converter: A `BodyConverter` that is used to convert body and from which content type
    ///                value will be taken to set *Content-Type* header.
-   public init<BodyConverter: Web.BodyConverter>(
+   public init<Body>(
       url: URL,
       method: Method,
       headers: [String: String]? = nil,
-      body: BodyConverter.Body,
-      converter: BodyConverter
+      body: Body,
+      converter: some BodyConverter<Body>
    ) throws {
       self.init(url: url, method: method, headers: headers)
 

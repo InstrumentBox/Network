@@ -33,7 +33,7 @@ the evaluation process:
 ## Create Your Own Policy
 
 ```swift
-final class MyServerTrustPolicy: ServerTrustPolicy {
+class MyServerTrustPolicy: ServerTrustPolicy {
    func evaluate(_ serverTrust: SecTrust, for host: String) -> Bool {
       // Do evaluation here
    }

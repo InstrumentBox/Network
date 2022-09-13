@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class MIMETestCase: XCTestCase {
+class MIMETestCase: XCTestCase {
    func test_mime_isConvertedToStringCorrectly() {
       let mime = MIME(type: "application", subtype: "json")
       XCTAssertEqual(mime.description, "application/json")

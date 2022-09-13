@@ -31,7 +31,7 @@ import Foundation
 /// a very secure form of server trust evaluation mitigating most, if not all, MITM attacks.
 /// Applications are encouraged to always validate the host and require a valid certificate chain
 /// in production environments.
-public final class PinnedCertsServerTrustPolicy: ServerTrustPolicy {
+public class PinnedCertsServerTrustPolicy: ServerTrustPolicy {
    private let certs: [SecCertificate]
    private let evaluateHost: Bool
    private let allowSelfSigned: Bool

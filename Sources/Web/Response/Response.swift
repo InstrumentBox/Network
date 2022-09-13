@@ -25,7 +25,7 @@
 import Foundation
 
 /// An object that represent an HTTP response.
-public final class Response: Equatable {
+public class Response: Equatable {
    /// The request that was sent in order to receive a response.
    public let request: URLRequest
 

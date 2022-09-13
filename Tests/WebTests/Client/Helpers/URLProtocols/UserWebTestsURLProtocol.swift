@@ -24,7 +24,7 @@
 
 import Foundation
 
-final class UserWebTestsURLProtocol: WebTestsURLProtocol {
+class UserWebTestsURLProtocol: WebTestsURLProtocol {
    override var headers: [String : String] {
       ["Content-Type": "application/json; charset=utf8"]
    }

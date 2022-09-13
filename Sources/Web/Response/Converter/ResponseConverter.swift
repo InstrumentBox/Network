@@ -23,7 +23,7 @@
 //
 
 /// A protocol you need to conform an object to make this object to convert a received response.
-public protocol ResponseConverter {
+public protocol ResponseConverter<ConvertedResponse> {
    /// A type of object converter results in.
    associatedtype ConvertedResponse
 

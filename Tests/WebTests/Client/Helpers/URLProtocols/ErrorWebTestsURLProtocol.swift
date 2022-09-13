@@ -22,6 +22,6 @@
 //  THE SOFTWARE.
 //
 
-final class ErrorWebTestsURLProtocol: WebTestsURLProtocol {
+class ErrorWebTestsURLProtocol: WebTestsURLProtocol {
    override var returnsError: Bool { true }
 }

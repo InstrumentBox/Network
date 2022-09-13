@@ -31,7 +31,7 @@ import Foundation
 ///
 /// - Note: As `WebClient` is *NOT* intended to work with background URLSessions, it's not possible
 ///         to create a background configuration.
-public final class URLSessionWebClientConfiguration {
+public class URLSessionWebClientConfiguration {
    /// Base URL that is used by web client.
    ///
    /// If you use `URL(path:baseURL) throws` initializer provided by this library and your base

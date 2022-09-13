@@ -31,7 +31,7 @@ import Foundation
 /// [this Apple tech note](https://developer.apple.com/library/archive/qa/qa1948/_index.html).
 ///
 /// - Important: Don't use this policy in production.
-public final class TrustAllServerTrustPolicy: ServerTrustPolicy {
+public class TrustAllServerTrustPolicy: ServerTrustPolicy {
    // MARK: - Init
 
    /// Creates and returns an instance of `TrustAllServerTrustPolicy`.

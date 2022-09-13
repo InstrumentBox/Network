@@ -25,7 +25,7 @@
 import Foundation
 
 /// An implementation of a `WebClient` based on `URLSession`.
-public final class URLSessionWebClient: WebClient {
+public class URLSessionWebClient: WebClient {
    private let configuration: URLSessionWebClientConfiguration
    private let session: URLSession
 
@@ -51,9 +51,9 @@ public final class URLSessionWebClient: WebClient {
 
    // MARK: - WebClient
 
-   public func execute<Request: Web.Request>(
-      _ request: Request
-   ) async throws -> Request.ObjectResponseConverter.ConvertedResponse {
+   public func execute<SuccessObject>(
+      _ request: some Request<SuccessObject>
+   ) async throws -> SuccessObject {
       let execution = RequestExecution(
          request: request,
          session: session,

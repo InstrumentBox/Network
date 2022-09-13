@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class URLConstructionTestCase: XCTestCase {
+class URLConstructionTestCase: XCTestCase {
    private let baseURL = URL(string: "https://api.service.com/v1/")
 
    // MARK: - Test Cases

@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class DataAppendStringTestCase: XCTestCase {
+class DataAppendStringTestCase: XCTestCase {
    func test_data_appendsString() {
       let expectedData = Data([0x30])
       var data = Data()

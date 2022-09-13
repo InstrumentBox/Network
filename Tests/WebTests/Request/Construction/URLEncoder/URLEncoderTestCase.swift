@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class URLEncoderTestCase: XCTestCase {
+class URLEncoderTestCase: XCTestCase {
    func test_urlEncoder_encodesBool_usingLiteralEncoding() throws {
       let encoder = URLEncoder(boolEncoding: .literal)
       let value = try encoder.encode(["bool": true])

@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class TwoFactorAuthenticationChallengeTestCase: XCTestCase {
+class TwoFactorAuthenticationChallengeTestCase: XCTestCase {
    // MARK: - Test Cases
 
    func test_challenge_doesNotDelegateWorkToHandler() async throws {

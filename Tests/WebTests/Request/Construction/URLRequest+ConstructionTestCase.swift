@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class URLRequestConstructionTestCase: XCTestCase {
+class URLRequestConstructionTestCase: XCTestCase {
    private let url = try! URL(
       path: "test/endpoint",
       baseURL: URL(string: "https://api.service.com/v1/")

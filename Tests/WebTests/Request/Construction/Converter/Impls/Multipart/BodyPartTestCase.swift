@@ -27,7 +27,7 @@ import Web
 
 import XCTest
 
-final class BodyPartTestCase: XCTestCase {
+class BodyPartTestCase: XCTestCase {
    private let partName = "some_data"
    private let fileName = "some_file"
    private let contentType = "application/octet-stream"

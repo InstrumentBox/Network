@@ -24,7 +24,7 @@
 
 import Foundation
 
-final class RequestExecution<Request: Web.Request> {
+class RequestExecution<Request: Web.Request> {
    private let request: Request
    private let session: URLSession
    private let configuration: URLSessionWebClientConfiguration
@@ -40,7 +40,7 @@ final class RequestExecution<Request: Web.Request> {
    // MARK: - Execution
 
    @WebClientActor
-   func execute() async throws -> Request.ObjectResponseConverter.ConvertedResponse {
+   func execute() async throws -> Request.SuccessObject {
       let urlRequest = try await makeURLRequest(request: request)
       var response = try await session.data(for: urlRequest)
       response = try await handleTwoFactorAuthenticationChallengeIfNeeded(response)
@@ -79,14 +79,14 @@ final class RequestExecution<Request: Web.Request> {
 
    private func processResponse(
       _ response: Response
-   ) throws -> Request.ObjectResponseConverter.ConvertedResponse {
+   ) throws -> Request.SuccessObject {
       let disposition = request.responseValidator.validate(response)
       switch disposition {
-         case .useObjectResponseConverter:
-            let object = try request.objectResponseConverter.convert(response)
+         case .useSuccessObjectResponseConverter:
+            let object = try request.successObjectResponseConverter.convert(response)
             return object
-         case .useErrorResponseConverter:
-            let error = try request.errorResponseConverter.convert(response)
+         case .useErrorObjectResponseConverter:
+            let error = try request.errorObjectResponseConverter.convert(response)
             throw error
          case let .completeWithError(error):
             throw error
