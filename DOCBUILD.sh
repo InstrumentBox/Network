@@ -34,7 +34,7 @@ WEB_DOC_NAME="Web"
 xcodebuild docbuild \
 -scheme $PACKAGE_NAME \
 -derivedDataPath .docbuild \
--destination 'platform=iOS Simulator,name=iPhone 13 mini'
+-destination 'platform=iOS Simulator,name=iPhone 14 Pro'
 
 DOC_PATH=$(find .docbuild -type d -name "$WEB_DOC_NAME.doccarchive")
 

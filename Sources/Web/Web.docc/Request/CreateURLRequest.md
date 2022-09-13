@@ -47,12 +47,12 @@ extension Method {
 The second `URLRequest`'s initializer is
 
 ```swift
-URLRequest<BodyConverter: Web.BodyConverter>(
+URLRequest<Body>(
    url: URL, 
    method: Method, 
    headers: [String: String]? = nil, 
-   body: BodyConverter.Body,
-   converter: BodyConverter
+   body: Body,
+   converter: some BodyConverter<Body>
 ) throws
 ```
 

@@ -13,7 +13,7 @@ token.
 class MyAppRequestAuthorizer: RequestAuthorizer {
    ...
 
-   func authorizationHeader<Request: Web.Request>(for request: Request) async throws -> Header? {
+   func authorizationHeader(for request: some Request) async throws -> Header? {
       let token = try keychain.fetchToken()
       return .bearerAuthorization(with: token)
    }

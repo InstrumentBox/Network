@@ -21,11 +21,11 @@ web client.
 struct SomeObjectRequest: Request { 
    ...
 
-   var objectResponseConverter: JSONDecoderResponseConverter<SomeObject> {
+   var successObjectResponseConverter: any ResponseConverter<SomeObject> {
       JSONDecoderResponseConverter()
    }
 
-   var errorResponseConverter: JSONDecoderResponseConverter<APIError> {
+   var errorObjectResponseConverter: any ResponseConverter<APIError> {
       JSONDecoderResponseConverter()
    }
 }
@@ -50,16 +50,20 @@ If you use `JSONDecoder` or any other converter for each request, you can simpli
 description by declaring request protocol in your app.
 
 ```swift
-protocol MyAppRequest: Request {
-   associatedtype Object: Decodable
+protocol MyAppRequest: Request where SuccessObject: Decodable {
+   var decoder: JSONDecoder { get }
 }
 
 extension MyAppRequest {
-   var objectResponseConverter: JSONDecoderResponseConverter<Object> {
-      JSONDecoderResponseConverter()
+   var decoder: JSONDecoder {
+      JSONDecoder()
+   }
+
+   var successObjectResponseConverter: any ResponseConverter<SuccessObject> {
+      JSONDecoderResponseConverter(decoder: JSONDecoder())
    }
    
-   var errorResponseConverter: JSONDecoderResponseConverter<APIError> {
+   var errorObjectResponseConverter: any ResponseConverter<APIError> {
       JSONDecoderResponseConverter()
    }
 }
@@ -69,7 +73,7 @@ Then `SomeObjectRequest` can be described as following:
 
 ```swift
 struct SomeObjectRequest: MyAppRequest {
-   typealias Object = SomeObject
+   typealias SuccessObject = SomeObject
 
    let id: String
    

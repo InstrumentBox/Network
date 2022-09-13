@@ -30,8 +30,8 @@ Properties of response you may want to use to validate response
 - `body` contains response's body
 
 Response validator returns disposition which can be one of the following values:
-- `.useObjectResponseConverter` to convert and return object as expected result of a request
-- `.useErrorResponseConverter` to convert and throw object as error (e.g. `APIError` in case of 4xx)
+- `.useSuccessObjectResponseConverter` to convert and return object as expected result of a request
+- `.useErrorObjectResponseConverter` to convert and throw object as error (e.g. `APIError` in case of 4xx)
 - `.completeWithError(Error)` and throw passed validation error (e.g. content types don't match)
 
 Then you can use response validator for every request in you app

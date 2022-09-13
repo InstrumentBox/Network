@@ -22,7 +22,7 @@ let package = Package(
    ...,
    dependencies: [
       ...,
-      .package(name: "Network", url: "https://github.com/InstrumentBox/Network", .upToNextMajor(from: "1.0.1")
+      .package(name: "Network", url: "https://github.com/InstrumentBox/Network", .upToNextMajor(from: "2.0.0")
    ],
    targets: [
       .target(..., dependencies: [.product(name: "Web", package: "Network"])
