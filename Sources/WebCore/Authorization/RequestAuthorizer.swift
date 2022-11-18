@@ -1,7 +1,5 @@
-// swift-tools-version:5.7
-
 //
-//  Package.swift
+//  RequestAuthorizer.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,28 +22,22 @@
 //  THE SOFTWARE.
 //
 
-import PackageDescription
+import Web
 
-let package = Package(
-   name: "Network",
-   platforms: [
-      .iOS(.v13),
-      .macOS(.v10_15),
-      .macCatalyst(.v13),
-      .tvOS(.v13),
-      .watchOS(.v6)
-   ],
-   products: [
-      .library(name: "Web", targets: ["Web"]),
-      .library(name: "WebCore", targets: ["WebCore"])
-   ],
-   targets: [
-      .target(name: "Web"),
-      .testTarget(name: "WebTests", dependencies: ["Web", "NetworkTestUtils"]),
-
-      .target(name: "WebCore", dependencies: ["Web"]),
-      .testTarget(name: "WebCoreTests", dependencies: ["Web", "WebCore", "NetworkTestUtils"]),
-
-      .target(name: "NetworkTestUtils", dependencies: ["Web"], path: "Tests/NetworkTestUtils")
-   ]
-)
+/// A protocol you need to implement and set to `URLSessionWebClientConfiguration` to allow
+/// `WebClient` to authorize all sent requests.
+///
+/// Request authorizer is a good place where you can ask your authorization token from a keychain
+/// or pause requests and refresh an authorization token using a refresh token and store new token
+/// in keychain.
+///
+/// - Note: Request authorizer is intended to be used if you authorize your requests with HTTP
+///         header.
+public protocol RequestAuthorizer {
+   /// Asks authorizer for an authorization header.
+   ///
+   /// - Parameters:
+   ///   - request: A request that is needed to be authorized.
+   /// - Returns: A header that will be used to authorize request.
+   func authorizationHeader(for request: some Request) async throws -> AuthorizationHeader
+}

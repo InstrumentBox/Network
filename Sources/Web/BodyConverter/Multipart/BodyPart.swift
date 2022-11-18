@@ -1,7 +1,5 @@
-// swift-tools-version:5.7
-
 //
-//  Package.swift
+//  BodyPart.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,28 +22,17 @@
 //  THE SOFTWARE.
 //
 
-import PackageDescription
+import Foundation
 
-let package = Package(
-   name: "Network",
-   platforms: [
-      .iOS(.v13),
-      .macOS(.v10_15),
-      .macCatalyst(.v13),
-      .tvOS(.v13),
-      .watchOS(.v6)
-   ],
-   products: [
-      .library(name: "Web", targets: ["Web"]),
-      .library(name: "WebCore", targets: ["WebCore"])
-   ],
-   targets: [
-      .target(name: "Web"),
-      .testTarget(name: "WebTests", dependencies: ["Web", "NetworkTestUtils"]),
-
-      .target(name: "WebCore", dependencies: ["Web"]),
-      .testTarget(name: "WebCoreTests", dependencies: ["Web", "WebCore", "NetworkTestUtils"]),
-
-      .target(name: "NetworkTestUtils", dependencies: ["Web"], path: "Tests/NetworkTestUtils")
-   ]
-)
+/// A protocol you need to conform your object to be used as a body part in multipart request you
+/// create.
+public protocol BodyPart {
+   /// This method is a place where you need to convert your object to a body part. You need to add
+   /// boundary string in the beginning of body part and add line break in the end of body part.
+   ///
+   /// - Parameters:
+   ///   - boundary: A boundary string that needs to be used if the beginning of body part. You are
+   ///               responsible to add dashes before and/or after if needed.
+   /// - Returns: Binary representation of a body part.
+   func toBodyPartData(with boundary: String) throws -> Data
+}

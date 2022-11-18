@@ -1,7 +1,5 @@
-// swift-tools-version:5.7
-
 //
-//  Package.swift
+//  TwoFactorAuthenticationHandler.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,28 +22,21 @@
 //  THE SOFTWARE.
 //
 
-import PackageDescription
+import Web
 
-let package = Package(
-   name: "Network",
-   platforms: [
-      .iOS(.v13),
-      .macOS(.v10_15),
-      .macCatalyst(.v13),
-      .tvOS(.v13),
-      .watchOS(.v6)
-   ],
-   products: [
-      .library(name: "Web", targets: ["Web"]),
-      .library(name: "WebCore", targets: ["WebCore"])
-   ],
-   targets: [
-      .target(name: "Web"),
-      .testTarget(name: "WebTests", dependencies: ["Web", "NetworkTestUtils"]),
+/// A protocol you need to implement and set to `URLSessionWebClientConfiguration` to handle
+/// authentication challenges.
+public protocol TwoFactorAuthenticationHandler: AnyObject {
+   /// Checks response and returns flag if 2FA process needs to be started.
+   ///
+   /// - Parameters:
+   ///   - response: Response that needs to be check if 2FA process should be started.
+   /// - Returns: `true` if 2FA handling needs to be started, otherwise `false`.
+   func responseRequiresTwoFactorAuthentication(_ response: Response) -> Bool
 
-      .target(name: "WebCore", dependencies: ["Web"]),
-      .testTarget(name: "WebCoreTests", dependencies: ["Web", "WebCore", "NetworkTestUtils"]),
-
-      .target(name: "NetworkTestUtils", dependencies: ["Web"], path: "Tests/NetworkTestUtils")
-   ]
-)
+   /// Starting point of 2FA challenge handling process.
+   ///
+   /// - Parameters:
+   ///   - challenge: 2FA challenge that needs to be authenticated or cancelled.
+   func handle(_ challenge: TwoFactorAuthenticationChallenge)
+}

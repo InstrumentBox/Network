@@ -1,7 +1,5 @@
-// swift-tools-version:5.7
-
 //
-//  Package.swift
+//  Data+MultipartTestCase.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,28 +22,16 @@
 //  THE SOFTWARE.
 //
 
-import PackageDescription
+@testable
+import Web
 
-let package = Package(
-   name: "Network",
-   platforms: [
-      .iOS(.v13),
-      .macOS(.v10_15),
-      .macCatalyst(.v13),
-      .tvOS(.v13),
-      .watchOS(.v6)
-   ],
-   products: [
-      .library(name: "Web", targets: ["Web"]),
-      .library(name: "WebCore", targets: ["WebCore"])
-   ],
-   targets: [
-      .target(name: "Web"),
-      .testTarget(name: "WebTests", dependencies: ["Web", "NetworkTestUtils"]),
+import XCTest
 
-      .target(name: "WebCore", dependencies: ["Web"]),
-      .testTarget(name: "WebCoreTests", dependencies: ["Web", "WebCore", "NetworkTestUtils"]),
-
-      .target(name: "NetworkTestUtils", dependencies: ["Web"], path: "Tests/NetworkTestUtils")
-   ]
-)
+class DataAppendStringTestCase: XCTestCase {
+   func test_data_appendsString() {
+      let expectedData = Data([0x30])
+      var data = Data()
+      data.append("0")
+      XCTAssertEqual(data, expectedData)
+   }
+}

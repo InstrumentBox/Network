@@ -1,7 +1,5 @@
-// swift-tools-version:5.7
-
 //
-//  Package.swift
+//  APIErrorWebTestsURLProtocol.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,28 +22,16 @@
 //  THE SOFTWARE.
 //
 
-import PackageDescription
+import Foundation
 
-let package = Package(
-   name: "Network",
-   platforms: [
-      .iOS(.v13),
-      .macOS(.v10_15),
-      .macCatalyst(.v13),
-      .tvOS(.v13),
-      .watchOS(.v6)
-   ],
-   products: [
-      .library(name: "Web", targets: ["Web"]),
-      .library(name: "WebCore", targets: ["WebCore"])
-   ],
-   targets: [
-      .target(name: "Web"),
-      .testTarget(name: "WebTests", dependencies: ["Web", "NetworkTestUtils"]),
+class APIErrorWebTestsURLProtocol: WebTestsURLProtocol {
+   override var statusCode: Int { 404 }
 
-      .target(name: "WebCore", dependencies: ["Web"]),
-      .testTarget(name: "WebCoreTests", dependencies: ["Web", "WebCore", "NetworkTestUtils"]),
+   override var headers: [String : String] {
+      ["Content-Type": "application/json; charset=utf8"]
+   }
 
-      .target(name: "NetworkTestUtils", dependencies: ["Web"], path: "Tests/NetworkTestUtils")
-   ]
-)
+   override var body: Data {
+      APIError.testObjectNotFound.toJSONData()
+   }
+}

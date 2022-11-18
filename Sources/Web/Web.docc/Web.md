@@ -1,7 +1,7 @@
 # ``Web``
 
-*Web* is a network library that provides you with a full-featured web client built on top of new
-concurrency model introduced in Swift 5.5.
+*Web* is a network library that provides abstractions to build service layer, e.g. Request, WebClient, 
+Converters, etc. Built on top of new concurrency model introduced in Swift 5.5.
 
 ## Topics
 
@@ -12,18 +12,14 @@ concurrency model introduced in Swift 5.5.
 
 - ``Request``
 - ``WebClient``
-- ``URLSessionWebClient``
-- ``URLSessionWebClientConfiguration``
 
 ### Request
 
 - <doc:CreateURLRequest>
 - <doc:ConvertBody>
 - <doc:Multipart>
-- <doc:AuthorizeRequest>
 
 - ``Method``
-- ``Header``
 - ``URLConstructionError``
 - ``URLEncoder``
 - ``URLEncoderError``
@@ -45,20 +41,18 @@ concurrency model introduced in Swift 5.5.
 - ``FormData``
 - ``BodyPart``
 
-- ``RequestAuthorizer``
-- ``WithoutAuthorizationRequest``
-
 ### Response
 
-- <doc:ValidateResponse>
-- <doc:ConvertResponse>
-
 - ``Response``
+
+- <doc:ValidateResponse>
 
 - ``ResponseValidator``
 - ``ResponseValidationDisposition``
 - ``StatusCodeContentTypeResponseValidator``
 - ``StatusCodeContentTypeResponseValidatorError``
+
+- <doc:ConvertResponse>
 
 - ``ResponseConverter``
 - ``AsIsResponseConverter``
@@ -72,21 +66,3 @@ concurrency model introduced in Swift 5.5.
 - ``PropertyListDecoderResponseConverter``
 - ``StringResponseConverter``
 - ``StringResponseConverterError``
-
-### Security
-
-- <doc:EvaluateServerTrust>
-
-- ``ServerTrustPolicy``
-- ``TrustAllServerTrustPolicy``
-- ``DefaultServerTrustPolicy``
-- ``PinnedCertsServerTrustPolicy``
-- ``PublicKeysServerTrustPolicy``
-
-### 2FA
-
-- <doc:Handle2FAChallenge>
-
-- ``TwoFactorAuthenticationHandler``
-- ``TwoFactorAuthenticationChallenge``
-- ``TwoFactorAuthenticationChallengeError``

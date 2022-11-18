@@ -1,7 +1,5 @@
-// swift-tools-version:5.7
-
 //
-//  Package.swift
+//  APIError.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,28 +22,20 @@
 //  THE SOFTWARE.
 //
 
-import PackageDescription
+import Foundation
 
-let package = Package(
-   name: "Network",
-   platforms: [
-      .iOS(.v13),
-      .macOS(.v10_15),
-      .macCatalyst(.v13),
-      .tvOS(.v13),
-      .watchOS(.v6)
-   ],
-   products: [
-      .library(name: "Web", targets: ["Web"]),
-      .library(name: "WebCore", targets: ["WebCore"])
-   ],
-   targets: [
-      .target(name: "Web"),
-      .testTarget(name: "WebTests", dependencies: ["Web", "NetworkTestUtils"]),
+struct APIError: Error, Decodable, Equatable {
+   static let testObjectNotFound = APIError(code: 404, message: "Test Object Not Found")
+   static let notAuthorized = APIError(code: 401, message: "Not Authorized")
+   static let twoFactorAuthChallengeFailed = APIError(code: 401, message: "2FA Challenge Failed")
 
-      .target(name: "WebCore", dependencies: ["Web"]),
-      .testTarget(name: "WebCoreTests", dependencies: ["Web", "WebCore", "NetworkTestUtils"]),
+   let code: Int
+   let message: String
 
-      .target(name: "NetworkTestUtils", dependencies: ["Web"], path: "Tests/NetworkTestUtils")
-   ]
-)
+   // MARK: - Stuff
+
+   func toJSONData() -> Data {
+      let rawJSON = #"{"code": \#(self.code), "message": "\#(self.message)"}"#
+      return rawJSON.data(using: .utf8)!
+   }
+}

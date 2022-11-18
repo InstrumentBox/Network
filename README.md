@@ -10,15 +10,24 @@ concurrency model introduced in Swift 5.5.
 
 ## Web
 
-*Web* is a library that provides a full-featured web client.
+*Web* is a library that provides abstractions to build service layer, e.g. Request, WebClient, 
+Converters, etc.
 
 ### Features
 
 - [x] [Well documented](https://instrumentbox.github.io/Network/documentation/web/)
-- [x] No dependencies
 - [x] Customizable
 - [x] Response validation
 - [x] Multipart requests
+
+## WebCore
+
+*WebCore* is a library that provides full-featured implementation of *WebClient*.
+
+### Feartures
+
+- [x] [Well documented](https://instrumentbox.github.io/Network/documentation/webcore/)
+- [x] Customizable
 - [x] Request authorization
 - [x] Certificate and public key pinning
 - [x] 2FA support

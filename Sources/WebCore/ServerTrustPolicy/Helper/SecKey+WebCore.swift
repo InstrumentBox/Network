@@ -1,7 +1,5 @@
-// swift-tools-version:5.7
-
 //
-//  Package.swift
+//  SecKey+WebCore.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,28 +22,22 @@
 //  THE SOFTWARE.
 //
 
-import PackageDescription
+import Foundation
 
-let package = Package(
-   name: "Network",
-   platforms: [
-      .iOS(.v13),
-      .macOS(.v10_15),
-      .macCatalyst(.v13),
-      .tvOS(.v13),
-      .watchOS(.v6)
-   ],
-   products: [
-      .library(name: "Web", targets: ["Web"]),
-      .library(name: "WebCore", targets: ["WebCore"])
-   ],
-   targets: [
-      .target(name: "Web"),
-      .testTarget(name: "WebTests", dependencies: ["Web", "NetworkTestUtils"]),
+extension SecKey {
+   /// Finds and returns all public keys from certificates in a given bundle. A certificate is a
+   /// file with one of the following extensions: .cer/.CER, .crt/.CRT, or .der/.DER.
+   ///
+   /// - Parameters:
+   ///   - bundle: Bundle, in which public keys should be found. Defaults to `Bundle.main`.
+   /// - Returns: Array of public keys found in given bundle.
+   public static func allPublicKeys(in bundle: Bundle = .main) -> [SecKey] {
+      SecCertificate.all(in: bundle).compactMap(\.publicKey)
+   }
 
-      .target(name: "WebCore", dependencies: ["Web"]),
-      .testTarget(name: "WebCoreTests", dependencies: ["Web", "WebCore", "NetworkTestUtils"]),
-
-      .target(name: "NetworkTestUtils", dependencies: ["Web"], path: "Tests/NetworkTestUtils")
-   ]
-)
+   func equals(to key: SecKey) -> Bool {
+      let this = self as AnyObject
+      let that = key as AnyObject
+      return this.isEqual(that)
+   }
+}

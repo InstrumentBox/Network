@@ -29,14 +29,14 @@ if [ -d ".docbuild" ]; then
 fi
 
 PACKAGE_NAME="Network"
-WEB_DOC_NAME="Web"
+SCHEME_NAME="Network-Package"
 
 xcodebuild docbuild \
--scheme $PACKAGE_NAME \
+-scheme $SCHEME_NAME \
 -derivedDataPath .docbuild \
 -destination 'platform=iOS Simulator,name=iPhone 14 Pro'
 
-DOC_PATH=$(find .docbuild -type d -name "$WEB_DOC_NAME.doccarchive")
+DOC_PATH=$(find .docbuild -type d -name "$PACKAGE_NAME.doccarchive")
 
 echo "Processing documentation archive to host on GitHub Pages..."
 
@@ -47,5 +47,5 @@ if [ -d $DOC_PATH ]; then
    --hosting-base-path $PACKAGE_NAME
    echo "$(tput setaf 2)** PROCESSING DOCUMENTATION SUCCEEDED **\n"
 else
-   echo "$(tput setaf 1)** CAN'T FIND ${WEB_DOC_NAME^^} DOCUMENTATION ARCHIVE **\n"
+   echo "$(tput setaf 1)** CAN'T FIND ${PACKAGE_NAME^^} DOCUMENTATION ARCHIVE **\n"
 fi

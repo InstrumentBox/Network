@@ -1,7 +1,5 @@
-// swift-tools-version:5.7
-
 //
-//  Package.swift
+//  TestObjectRequest.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,28 +22,23 @@
 //  THE SOFTWARE.
 //
 
-import PackageDescription
+import Foundation
+import Web
 
-let package = Package(
-   name: "Network",
-   platforms: [
-      .iOS(.v13),
-      .macOS(.v10_15),
-      .macCatalyst(.v13),
-      .tvOS(.v13),
-      .watchOS(.v6)
-   ],
-   products: [
-      .library(name: "Web", targets: ["Web"]),
-      .library(name: "WebCore", targets: ["WebCore"])
-   ],
-   targets: [
-      .target(name: "Web"),
-      .testTarget(name: "WebTests", dependencies: ["Web", "NetworkTestUtils"]),
+class TestObjectRequest: Request {
+   var successObjectResponseConverter: any ResponseConverter<TestObject> {
+      JSONDecoderResponseConverter()
+   }
 
-      .target(name: "WebCore", dependencies: ["Web"]),
-      .testTarget(name: "WebCoreTests", dependencies: ["Web", "WebCore", "NetworkTestUtils"]),
+   var errorObjectResponseConverter: any ResponseConverter<APIError> {
+      JSONDecoderResponseConverter()
+   }
 
-      .target(name: "NetworkTestUtils", dependencies: ["Web"], path: "Tests/NetworkTestUtils")
-   ]
-)
+   func toURLRequest(with baseURL: URL?) throws -> URLRequest {
+      try URLRequest(
+         url: URL(path: "test_object/42", baseURL: baseURL),
+         method: .get,
+         headers: ["Accept": "application/json"]
+      )
+   }
+}

@@ -89,6 +89,8 @@ struct SomeObjectRequest: MyAppRequest {
 To send a request you need to create an instance of web client.
 
 ```swift
+import WebCore
+
 let configuration: URLSessionWebClientConfiguration = .default
 configuration.baseURL = URL(string: "https://api.myservice.com/v1/")
 let webClient: WebClient = URLSessionWebClient(configuration: configuration)
