@@ -10,6 +10,10 @@ Carthage/
 # CocoaPods
 Pods/
 
+# DOCBUILD.sh
+.docbuild
+*.doccarchive
+
 # Git
 *.orig
 
@@ -19,11 +23,9 @@ Pods/
 # SPM
 .build/
 
-# BUILD.sh
+# XCFRAMEWORKBUILD.sh
 *.xcframework
-
-# DOCBUILD.sh
-.docbuild
+.xcframeworkbuild
 
 # Xcode
 xcuserdata/
