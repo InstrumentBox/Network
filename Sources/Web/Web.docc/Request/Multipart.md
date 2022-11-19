@@ -15,11 +15,11 @@ struct UploadImageRequest: MyAppRequest {
    let image: UIImage
 
    func toURLRequest(with baseURL: URL?) throws -> URLRequest {
-      let bodyParts = try [
-         BodyPart(name: "my_image", body: image, converter: JPEGImageBodyConverter())
+      let formDatas = try [
+         FormData(name: "my_image", body: image, converter: JPEGImageBodyConverter())
       ]
       ...
-      return try URLRequest(..., body: bodyParts, converter: MultipartBodyConverter())
+      return try URLRequest(..., body: formDatas, converter: MultipartBodyConverter())
    }
 }
 ```
@@ -37,8 +37,8 @@ The *Web* library provides you with the `FormData` protocol so it allows you to 
 form data. In this case you are responsible to add boundary, headers, and all needed line breaks.  
 
 ```swift
-struct MyFormData: FormData {
-   func makeFormData(boundary: String) throws -> Data {
+struct MyFormData: BodyPart {
+   func toBodyPartData(with boundary: String) throws -> Data {
       // Make form data here
    }
 }

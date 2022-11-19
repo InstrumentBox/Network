@@ -28,7 +28,7 @@ If you need to convert some object that can't be converted by provided converter
 your own body converter. Here's the example how you can do this:
 
 ```swift
-struct MyOwnBodyConverter: ResponseConverter {
+struct MyOwnBodyConverter: BodyConverter {
    var contentType: String {
       // Return appropriate content type here
    }

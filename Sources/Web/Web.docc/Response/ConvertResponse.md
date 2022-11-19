@@ -32,4 +32,4 @@ struct MyOwnResponseConverter<ConvertedResponse>: ResponseConverter {
 }
 ```
 
-The data to be converted can be accessed via `response.body`
+The data to be converted can be accessed via `response.body`.

@@ -11,7 +11,7 @@ The *Web* library is available via [Swift Package Manager](https://swift.org/pac
 - Go to `File` -> `Add Packages...` 
 - Type package URL [https://github.com/InstrumentBox/Network](https://github.com/InstrumentBox/Network)
 - Select `Network` package, specify dependency rule, and click `Add Package`
-- Select `Web` target and click `Add Package`
+- Select `Web` and `WebCore` targets and click `Add Package`
 
 ##### Linking to a Swift package
 
@@ -22,10 +22,13 @@ let package = Package(
    ...,
    dependencies: [
       ...,
-      .package(name: "Network", url: "https://github.com/InstrumentBox/Network", .upToNextMajor(from: "2.0.0"))
+      .package(name: "Network", url: "https://github.com/InstrumentBox/Network", from: "3.0.0")
    ],
    targets: [
-      .target(..., dependencies: [.product(name: "Web", package: "Network")]
+      .target(..., dependencies: [
+         .product(name: "Web", package: "Network"),
+         .product(name: "WebCore", package: "Network")
+      ]
    ]
    ...
 )
@@ -47,10 +50,10 @@ $ git submodule add https://github.com/InstrumentBox/Network.git
 - Select `Network` directory
 - Next, select your application project in the Project Navigator (blue project icon) to navigate 
   to the target configuration window and select the application target under the "Targets" heading 
-  in the sidebar.
+  in the sidebar
 - In the tab bar at the top of that window open the "General" panel.
-- Click on the `+` button under the "Frameworks, Libraries, and Embedded Content" section.
-- Select *Web* library
+- Click on the `+` button under the "Frameworks, Libraries, and Embedded Content" section
+- Select `Web` and `WebCore` libraries
 
 ## Manual Installation
 

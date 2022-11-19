@@ -15,7 +15,7 @@ Converters, etc.
 
 ### Features
 
-- [x] [Well documented](https://instrumentbox.github.io/Network/documentation/web/)
+- [x] [Well documented](https://instrument-box-network-web-docs.netlify.app/documentation/web/)
 - [x] Customizable
 - [x] Response validation
 - [x] Multipart requests
@@ -26,7 +26,7 @@ Converters, etc.
 
 ### Feartures
 
-- [x] [Well documented](https://instrumentbox.github.io/Network/documentation/webcore/)
+- [x] [Well documented](https://instrument-box-network-web-core-docs.netlify.app/documentation/webcore/)
 - [x] Customizable
 - [x] Request authorization
 - [x] Certificate and public key pinning
