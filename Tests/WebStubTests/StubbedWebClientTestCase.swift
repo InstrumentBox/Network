@@ -1,9 +1,7 @@
-// swift-tools-version:5.7
-
 //
-//  Package.swift
+//  StubbedWebClientTestCase.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2023 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,32 +22,6 @@
 //  THE SOFTWARE.
 //
 
-import PackageDescription
+import XCTest
 
-let package = Package(
-   name: "Network",
-   platforms: [
-      .iOS(.v13),
-      .macOS(.v10_15),
-      .macCatalyst(.v13),
-      .tvOS(.v13),
-      .watchOS(.v6)
-   ],
-   products: [
-      .library(name: "Web", targets: ["Web"]),
-      .library(name: "WebCore", targets: ["WebCore"]),
-      .library(name: "WebStub", targets: ["WebStub"])
-   ],
-   targets: [
-      .target(name: "Web"),
-      .testTarget(name: "WebTests", dependencies: ["Web", "NetworkTestUtils"]),
-
-      .target(name: "WebCore", dependencies: ["Web"]),
-      .testTarget(name: "WebCoreTests", dependencies: ["Web", "WebCore", "NetworkTestUtils"]),
-
-      .target(name: "WebStub", dependencies: ["Web"]),
-      .testTarget(name: "WebStubTests", dependencies: ["Web", "WebStub", "NetworkTestUtils"]),
-
-      .target(name: "NetworkTestUtils", dependencies: ["Web", "WebCore"], path: "Tests/NetworkTestUtils")
-   ]
-)
+class StubbedWebClientTestCase: XCTestCase { }
