@@ -48,7 +48,20 @@ let package = Package(
       .testTarget(name: "WebCoreTests", dependencies: ["Web", "WebCore", "NetworkTestUtils"]),
 
       .target(name: "WebStub", dependencies: ["Web"]),
-      .testTarget(name: "WebStubTests", dependencies: ["Web", "WebStub", "NetworkTestUtils"]),
+      .testTarget(
+         name: "WebStubTests",
+         dependencies: ["Web", "WebStub", "NetworkTestUtils"],
+         resources: [
+            .process("Reader/Resources/Data.txt"),
+            .process("ResponseParser/Resources/Full.response"),
+            .process("ResponseParser/Resources/EmptyBody.response"),
+            .process("ResponseParser/Resources/NoHeaders.response"),
+            .process("ResponseParser/Resources/NoStatusCode.response"),
+            .process("ResponseParser/Resources/IncorrectHeader.response"),
+            .process("ResponseParser/Resources/HeadersAsBody.response"),
+            .process("ResponseParser/Resources/JustStatusCode.response")
+         ]
+      ),
 
       .target(name: "NetworkTestUtils", dependencies: ["Web", "WebCore"], path: "Tests/NetworkTestUtils")
    ]

@@ -1,7 +1,7 @@
 //
-//  StringResponseConverter.swift
+//  ResponseBuilderTestCase.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,35 +22,34 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
+@testable
+import WebStub
 
-/// An error that is thrown when `StringResponseConverter` failed.
-public enum StringResponseConverterError: Error {
-   /// Thrown if response body can't be converted to a string.
-   case cannotConvertToString
-}
+import XCTest
 
-/// A response converter that takes response body and converts it to a string.
-public struct StringResponseConverter: ResponseConverter {
-   private let encoding: String.Encoding
+class ResponseBuilderTestCase: XCTestCase {
+   func test_responseBuilder_returnsResponse() throws {
+      let request = try URLRequest(url: XCTUnwrap(URL(string: "https://api.myservice.com/")))
+      let builder = ResponseBuilder(request: request)
+      builder.setStatusCode(200)
+      let response = try builder.response
 
-   // MARK: - Init
-
-   /// Creates and returns an instance of `StringResponseConverter` with a given parameter.
-   ///
-   /// - Parameters:
-   ///   -  encoding: The encoding used by data. For possible values, see `String.Encoding`.
-   public init(encoding: String.Encoding = .utf8) {
-      self.encoding = encoding
+      XCTAssertEqual(response.request, request)
+      XCTAssertEqual(response.statusCode, 200)
+      XCTAssertTrue(response.headers.isEmpty)
+      XCTAssertTrue(response.body.isEmpty)
    }
 
-   // MARK: - ResponseConverter
-
-   public func convert(_ response: Response) throws -> String {
-      guard let string = String(data: response.body, encoding: encoding) else {
-         throw StringResponseConverterError.cannotConvertToString
+   func test_responseBuilder_throwsError_ifNoStatusCodeSet() throws {
+      let request = try URLRequest(url: XCTUnwrap(URL(string: "https://api.myservice.com/")))
+      let builder = ResponseBuilder(request: request)
+      do {
+         _ = try builder.response
+         XCTFail("Unexpected response returned")
+      } catch let error as ResponseParserError {
+         XCTAssertEqual(error, .statusCodeMissed)
+      } catch {
+         XCTFail("Unexpected error thrown")
       }
-
-      return string
    }
 }

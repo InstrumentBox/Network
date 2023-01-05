@@ -24,16 +24,6 @@
 
 import Foundation
 
-protocol WBResponseConverter<ConvertedBody> {
-   associatedtype ConvertedBody
-
-   func convert(_ body: Data, of response: HTTPURLResponse) throws -> ConvertedBody
-}
-
-protocol ResponseChecker {
-   func checkResponse(_ response: HTTPURLResponse, with body: Data, causedBy request: URLRequest) -> Bool
-}
-
 /// An object that represent an HTTP response.
 public class Response: Equatable {
    /// The request that was sent in order to receive a response.

@@ -1,7 +1,7 @@
 //
-//  StringResponseConverter.swift
+//  ResponseBuilder.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,34 +23,44 @@
 //
 
 import Foundation
+import Web
 
-/// An error that is thrown when `StringResponseConverter` failed.
-public enum StringResponseConverterError: Error {
-   /// Thrown if response body can't be converted to a string.
-   case cannotConvertToString
-}
+class ResponseBuilder {
+   private var statusCode: Int?
+   private var headers: [String: String] = [:]
+   private var body = Data()
 
-/// A response converter that takes response body and converts it to a string.
-public struct StringResponseConverter: ResponseConverter {
-   private let encoding: String.Encoding
+   private let request: URLRequest
 
    // MARK: - Init
 
-   /// Creates and returns an instance of `StringResponseConverter` with a given parameter.
-   ///
-   /// - Parameters:
-   ///   -  encoding: The encoding used by data. For possible values, see `String.Encoding`.
-   public init(encoding: String.Encoding = .utf8) {
-      self.encoding = encoding
+   init(request: URLRequest) {
+      self.request = request
    }
 
-   // MARK: - ResponseConverter
+   // MARK: - Result
 
-   public func convert(_ response: Response) throws -> String {
-      guard let string = String(data: response.body, encoding: encoding) else {
-         throw StringResponseConverterError.cannotConvertToString
+   var response: Response {
+      get throws {
+         guard let statusCode else {
+            throw ResponseParserError.statusCodeMissed
+         }
+
+         return Response(request: request, statusCode: statusCode, headers: headers, body: body)
       }
+   }
 
-      return string
+   // MARK: - Configuration
+
+   func setStatusCode(_ statusCode: Int) {
+      self.statusCode = statusCode
+   }
+
+   func setHeaderValue(_ headerValue: String, forHeaderName headerName: String) {
+      headers[headerName] = headerValue
+   }
+
+   func appendBodyDataChunk(_ chunk: Data) {
+      body.append(chunk)
    }
 }

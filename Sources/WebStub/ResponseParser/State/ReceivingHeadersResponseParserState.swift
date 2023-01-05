@@ -1,7 +1,7 @@
 //
-//  StringResponseConverter.swift
+//  ReceivingHeadersResponseParserState.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,33 +24,25 @@
 
 import Foundation
 
-/// An error that is thrown when `StringResponseConverter` failed.
-public enum StringResponseConverterError: Error {
-   /// Thrown if response body can't be converted to a string.
-   case cannotConvertToString
-}
-
-/// A response converter that takes response body and converts it to a string.
-public struct StringResponseConverter: ResponseConverter {
-   private let encoding: String.Encoding
-
-   // MARK: - Init
-
-   /// Creates and returns an instance of `StringResponseConverter` with a given parameter.
-   ///
-   /// - Parameters:
-   ///   -  encoding: The encoding used by data. For possible values, see `String.Encoding`.
-   public init(encoding: String.Encoding = .utf8) {
-      self.encoding = encoding
-   }
-
-   // MARK: - ResponseConverter
-
-   public func convert(_ response: Response) throws -> String {
-      guard let string = String(data: response.body, encoding: encoding) else {
-         throw StringResponseConverterError.cannotConvertToString
+class ReceivingHeadersResponseParserState: ResponseParserStateBase, ResponseParserState {
+   func process(_ responseChunk: Data) throws {
+      if responseChunk.isEmpty {
+         parser.state = ReceivingBodyResponseParserState(parser: parser, builder: builder)
+         return
       }
 
-      return string
+      guard let header = String(data: responseChunk, encoding: .utf8) else {
+         throw ResponseParserError.incorrectHeaderData
+      }
+
+      let headerComps = header
+         .components(separatedBy: ":")
+         .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+
+      guard headerComps.count == 2 else {
+         throw ResponseParserError.incorrectHeader(header)
+      }
+
+      builder.setHeaderValue(headerComps[1], forHeaderName: headerComps[0])
    }
 }
