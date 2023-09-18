@@ -6,7 +6,7 @@ Read how to handle and interact with 2FA challenges.
 
 Two factor authentication is an authentication method that allows to improve security of your 
 app. In our apps we usually use one-time passwords sent to a user via text messages or e-mails. The
-*Web* library provides you with functionality to handle these challenges in one place.
+*WebCore* library provides you with functionality to handle these challenges in one place.
 
 ##### Note:
 
@@ -16,7 +16,7 @@ challenge.
 
 ### Implement Handler
 
-To handle 2FA challenges, *Web* library provides you with a `TwoFactorAuthenticationHandler` 
+To handle 2FA challenges, *WebCore* library provides you with a `TwoFactorAuthenticationHandler` 
 protocol you need to implement.
 
 ```swift

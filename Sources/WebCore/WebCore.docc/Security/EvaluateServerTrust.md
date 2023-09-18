@@ -5,17 +5,17 @@ Read how to send requests and receive response in a secure way.
 ## Overview
 
 Using a secure HTTPS connection when communicating with servers and web services is an important 
-step in securing sensitive data. By default, the *Web* library receives the same automatic TLS 
+step in securing sensitive data. By default, the *WebCore* library receives the same automatic TLS 
 certificate and certificate chain evaluation as URLSession. While this guarantees the certificate 
 chain is valid, it does not prevent man-in-the-middle (MITM) attacks or other potential 
 vulnerabilities. In order to mitigate MITM attacks, applications dealing with sensitive customer 
-data or financial information should use certificate or public key pinning provided by the *Web* 
+data or financial information should use certificate or public key pinning provided by the *WebCore* 
 library.
 
 ## Server Trust Policy
 
 The `ServerTrustPolicy` protocol provides a way to perform any sort of server trust evaluation. The 
-*Web* library includes many different types of trust policies, providing composable control over 
+*WebCore* library includes many different types of trust policies, providing composable control over 
 the evaluation process:
 
 - `DefaultServerTrustPolicy` that uses the default server trust evaluation while allowing you to 

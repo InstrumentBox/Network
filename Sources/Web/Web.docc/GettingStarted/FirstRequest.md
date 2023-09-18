@@ -37,7 +37,7 @@ Next, you need to describe how `SomeObjectRequest` is converted to `URLRequest`.
 struct SomeObjectRequest: Request { 
    ...
 
-   func toURLRequest(with baseURL: URL?) throws {
+   func toURLRequest(with baseURL: URL?) throws -> URLRequest {
       let url = try URL(path: "some-objects/\(id)", baseURL: baseURL)
       return URLRequest(url: url, method: .get)
    }
@@ -77,7 +77,7 @@ struct SomeObjectRequest: MyAppRequest {
 
    let id: String
    
-   func toURLRequest(with baseURL: URL?) throws {
+   func toURLRequest(with baseURL: URL?) throws -> URLRequest {
       let url = try URL(path: "some-objects/\(id)", baseURL: baseURL)
       return URLRequest(url: url, method: .get)
    }
