@@ -31,3 +31,15 @@ Converters, etc.
 - [x] Request authorization
 - [x] Certificate and public key pinning
 - [x] 2FA support
+
+## WebStub
+
+*WebStub* is a library that provides an implementation of web client that allows you to stub responses.
+
+### Features
+
+- [x] [Well documented](https://instrument-box-network-web-stub-docs.netlify.app/documentation/webstub/)
+- [x] Customizable
+- [x] Chain of responses
+- [x] Stubbed and server responses combination
+- [x] Latency simulation
