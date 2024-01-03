@@ -24,19 +24,33 @@
 
 import Web
 
+/// An implementation of `WebClient` that returns stubbed responses or falls requests back to other
+/// given web client.
 public class StubbedWebClient: WebClient {
    private var stubChainRegistry: [String: StubChain] = [:]
 
    private let configuration: StubbedWebClientConfiguration
 
    // MARK: - Init
-
+   
+   /// Returns a newly created instance of `StubbedWebClient` with given configuration.
+   ///
+   /// - Parameters:
+   ///   - configuration: Configuration that will be used to create web client. Configuration with
+   ///                    default values by default.
    public init(configuration: StubbedWebClientConfiguration = StubbedWebClientConfiguration()) {
       self.configuration = configuration
    }
 
    // MARK: - Registry
-
+   
+   /// Creates and returns a chain for a given request type to be used to record responses for
+   /// requests of this type. It creates a new chain at first call and then returns it every time
+   /// this method called.
+   ///
+   /// - Parameters:
+   ///   - request: A request type for which chain should be created.
+   /// - Returns: A newly created or existing chain for a given request type.
    public func stubChain(for request: (some Request).Type) -> StubChain {
       let key = key(for: request)
       if let chain = stubChainRegistry[key] {

@@ -24,12 +24,22 @@
 
 import Web
 
+/// A configuration of ``StubbedWebClient``.
 public class StubbedWebClientConfiguration {
+   /// A `WebClient` to use to send requests that have no prepared local responses. Defaults to `nil`.
    public var fallbackWebClient: WebClient?
+   
+   /// It provides value to simulate latency when returning response from a prepared `.response`
+   /// file. Defaults to `nil`.
    public var latency: Latency?
+   
+   /// Value that controls if requests should be sent to a fallback web client if no chain or
+   /// records in the chain was found. Requires `fallbackWebClient` property to be set. `False` by
+   /// default.
    public var fallbackRequestsIfNoResponsesRegistered = false
 
    // MARK: - Init
-
+   
+   /// Creates and returns a new instance of `StubbedWebClientConfiguration`.
    public init() { }
 }

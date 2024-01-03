@@ -25,6 +25,13 @@
 import Foundation
 import Web
 
+/// A protocol that describes latency that's used when reading responses from files.
 public protocol Latency {
+   /// Returns latency value for `Request`.
+   ///
+   /// - Parameters:
+   ///   - request: A request in response to which latency will be used before returning resulting
+   ///              object or throwing error.
+   /// - Returns: Value of latency in seconds.
    func value(for request: some Request) -> TimeInterval
 }

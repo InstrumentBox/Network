@@ -25,10 +25,15 @@
 import Foundation
 import Web
 
+/// An error that is thrown when ``StubChain`` fails.
 public enum StubChainError: Error, Equatable {
+   /// Thrown when trying to register fallback response when fallback web client is not provided
+   /// in ``StubbedWebClientConfiguration``.
    case cannotRegisterFallbackExecution
 }
 
+/// A chain response records that will be used in a response to a concrete request. It uses
+/// responses in FIFO order and then continuously uses last record in the chain.
 public class StubChain {
    private var records: [StubChain.Record] = []
 
@@ -41,13 +46,27 @@ public class StubChain {
    }
 
    // MARK: - Registrations
-
+   
+   /// Adds a response record that returns object or throws error from `.response` file at given URL.
+   ///
+   /// - Parameters:
+   ///   - responseURL: URL of file with a response.
+   ///   - usageCount: Number of consecutive usages of the same record before going to next one.
+   ///                 Defaults to 1.
    public func registerResponse(at responseURL: URL, usageCount: Int = 1) {
       let execution = FilenameRequestExecution(responseURL: responseURL, latency: configuration.latency)
       let record = StubChain.Record(execution: execution, usageCount: usageCount)
       records.append(record)
    }
-
+   
+   /// Add a response record that uses fallback web client provided by
+   /// ``StubbedWebClientConfiguration``. If fallback web client is not provided, error will be
+   /// thrown.
+   ///
+   /// - Parameters:
+   ///   - usageCount: Number of consecutive usages of the same record before going to next one.
+   ///                 Defaults to 1.
+   /// - Throws: A ``StubChainError`` if fallback web client is not provided.
    public func registerFallbackResponse(usageCount: Int = 1) throws {
       guard let fallbackWebClient = configuration.fallbackWebClient else {
          throw StubChainError.cannotRegisterFallbackExecution
@@ -57,7 +76,8 @@ public class StubChain {
       let record = StubChain.Record(execution: execution, usageCount: usageCount)
       records.append(record)
    }
-
+   
+   /// Clears chain of response records.
    public func reset() {
       records = []
    }

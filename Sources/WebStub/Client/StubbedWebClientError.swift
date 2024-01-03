@@ -24,8 +24,12 @@
 
 import Foundation
 
+/// An error that is thrown by ``StubbedWebClient``.
 public enum StubbedWebClientError: Error, Equatable {
+   /// Thrown when chain for request not found. Contains type name of request.
    case cannotFindResponseChain(String)
+
+   /// Thrown when response record in the chain for request not found. Contains type name of request.
    case cannotFindRequestExecution(String)
 
    // MARK: - Equatable

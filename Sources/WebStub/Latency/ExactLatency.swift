@@ -25,11 +25,16 @@
 import Foundation
 import Web
 
+/// Latency that uses constant value for every request.
 public class ExactLatency: Latency {
    private let value: TimeInterval
 
    // MARK: - Init
-
+   
+   /// Returns a newly created instance of `ExactLatency` with given value.
+   ///
+   /// - Parameters:
+   ///   - value: Value of latency in seconds.
    public init(value: TimeInterval) {
       self.value = value
    }

@@ -25,11 +25,16 @@
 import Foundation
 import Web
 
+/// Latency that uses random value in some range every time request is executed.
 public class RandomLatency: Latency {
    private let range: ClosedRange<TimeInterval>
 
    // MARK: - Init
-
+   
+   /// Creates and returns an instance of `RandomLatency` with given range.
+   ///
+   /// - Parameters:
+   ///   - range: Minimum and maximum values between which latency's value should be.
    public init(range: ClosedRange<TimeInterval>) {
       self.range = range
    }

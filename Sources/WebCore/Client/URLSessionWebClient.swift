@@ -26,6 +26,9 @@ import Foundation
 import Web
 
 /// An implementation of a `WebClient` based on `URLSession`.
+///
+/// ``URLSessionWebClient`` also provides `Request`s authorization, server trust evaluation, and
+/// 2FA challenges handling.
 public class URLSessionWebClient: WebClient {
    private let configuration: URLSessionWebClientConfiguration
    private let session: URLSession

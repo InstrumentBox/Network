@@ -22,10 +22,18 @@
 //  THE SOFTWARE.
 //
 
+/// An error that is thrown when ``StubbedWebClient`` can't parse response from file.
 public enum ResponseParserError: Error, Equatable {
+   /// Thrown when status code is not a number.
    case incorrectStatusCodeData
+
+   /// Thrown when status code is not set for a `Response`.
    case statusCodeMissed
+
+   /// Thrown when header can't be read as string.
    case incorrectHeaderData
+
+   /// Thrown when header string can't be parsed into name and value divided by colon.
    case incorrectHeader(String)
 
    // MARK: - Equatable
