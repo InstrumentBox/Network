@@ -32,8 +32,6 @@ import Web
 import XCTest
 
 class URLSessionWebClientTestCase: XCTestCase {
-   // MARK: - Test Cases
-
    func test_webClient_returnsObject() async throws {
       let webClient = makeWebClient(protocolClass: TestObjectWebTestsURLProtocol.self)
       let object = try await webClient.execute(TestObjectRequest())
@@ -161,23 +159,23 @@ class URLSessionWebClientTestCase: XCTestCase {
          XCTFail("Unexpected error thrown: \(error)")
       }
    }
+}
 
-   // MARK: - Factory
+// MARK: -
 
-   private func makeWebClient(
-      protocolClass: URLProtocol.Type,
-      requestAuthorizer: RequestAuthorizer? = nil,
-      request: TestObjectRequest? = nil,
-      handle2FA: ((TwoFactorAuthenticationChallenge) -> Void)? = nil
-   ) -> URLSessionWebClient {
-      let configuration: URLSessionWebClientConfiguration = .ephemeral
-      configuration.sessionConfiguration.protocolClasses = [protocolClass]
-      configuration.requestAuthorizer = requestAuthorizer
-      configuration.twoFactorAuthenticationHandler = handle2FA.map { handle in
-         let handler = WebTests2FAChallengeHandler()
-         handler.handleStub = handle
-         return handler
-      }
-      return URLSessionWebClient(configuration: configuration)
+private func makeWebClient(
+   protocolClass: URLProtocol.Type,
+   requestAuthorizer: RequestAuthorizer? = nil,
+   request: TestObjectRequest? = nil,
+   handle2FA: ((TwoFactorAuthenticationChallenge) -> Void)? = nil
+) -> URLSessionWebClient {
+   let configuration: URLSessionWebClientConfiguration = .ephemeral
+   configuration.sessionConfiguration.protocolClasses = [protocolClass]
+   configuration.requestAuthorizer = requestAuthorizer
+   configuration.twoFactorAuthenticationHandler = handle2FA.map { handle in
+      let handler = WebTests2FAChallengeHandler()
+      handler.handleStub = handle
+      return handler
    }
+   return URLSessionWebClient(configuration: configuration)
 }

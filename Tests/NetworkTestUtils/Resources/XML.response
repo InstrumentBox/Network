@@ -1,0 +1,7 @@
+200
+Content-Type: text/xml
+
+<test-object>
+   <this>Value</this>
+   <that>42</that>
+</test-object>

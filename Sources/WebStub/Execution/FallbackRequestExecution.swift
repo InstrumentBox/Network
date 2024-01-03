@@ -1,7 +1,7 @@
 //
-//  StubbedWebClient.swift
+//  FallbackRequestExecution.swift
 //
-//  Copyright © 2023 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -21,3 +21,22 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
+
+import Foundation
+import Web
+
+class FallbackRequestExecution: RequestExecution {
+   private let webClient: WebClient
+
+   // MARK: - Init
+
+   init(webClient: WebClient) {
+      self.webClient = webClient
+   }
+
+   // MARK: - ResponseRecord
+
+   func execute<SuccessObject>(_ request: some Request<SuccessObject>) async throws -> SuccessObject {
+      return try await webClient.execute(request)
+   }
+}

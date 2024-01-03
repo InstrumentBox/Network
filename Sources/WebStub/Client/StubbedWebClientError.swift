@@ -1,7 +1,7 @@
 //
-//  WebClientActor.swift
+//  StubbedWebClientError.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,22 @@
 //  THE SOFTWARE.
 //
 
-@globalActor
-actor WebClientActor {
-   static let shared = WebClientActor()
+import Foundation
 
-   // MARK: - Init
+public enum StubbedWebClientError: Error, Equatable {
+   case cannotFindResponseChain(String)
+   case cannotFindRequestExecution(String)
 
-   private init() { }
+   // MARK: - Equatable
+
+   public static func ==(lhs: StubbedWebClientError, rhs: StubbedWebClientError) -> Bool {
+      switch (lhs, rhs) {
+         case let (.cannotFindResponseChain(lhsType), .cannotFindResponseChain(rhsType)):
+            return lhsType == rhsType
+         case let (.cannotFindRequestExecution(lhsType), .cannotFindRequestExecution(rhsType)):
+            return lhsType == rhsType
+         default:
+            return false
+      }
+   }
 }

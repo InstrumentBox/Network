@@ -1,7 +1,7 @@
 //
-//  StubbedWebClientTestCase.swift
+//  Responses.swift
 //
-//  Copyright © 2023 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,16 @@
 //  THE SOFTWARE.
 //
 
-import XCTest
+import Foundation
 
-class StubbedWebClientTestCase: XCTestCase { }
+enum Responses {
+   static let apiError = named("APIError")
+   static let testObject = named("TestObject")
+   static let xml = named("XML")
+
+   // MARK: -
+
+   private static func named(_ responseName: String) -> URL? {
+      Bundle.module.url(forResource: responseName, withExtension: "response")
+   }
+}

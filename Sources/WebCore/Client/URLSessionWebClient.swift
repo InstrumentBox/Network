@@ -52,7 +52,7 @@ public class URLSessionWebClient: WebClient {
 
    // MARK: - WebClient
 
-   @WebClientActor
+   @URLSessionWebClientActor
    public func execute<SuccessObject>(
       _ request: some Request<SuccessObject>
    ) async throws -> SuccessObject {

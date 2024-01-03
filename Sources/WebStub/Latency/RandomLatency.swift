@@ -1,7 +1,7 @@
 //
-//  APIError.swift
+//  RandomLatency.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,20 @@
 //
 
 import Foundation
+import Web
 
-struct APIError: Error, Decodable, Equatable {
-   static let testObjectNotFound = APIError(code: 404, message: "Test object not found")
-   static let notAuthorized = APIError(code: 401, message: "Not authorized")
-   static let twoFactorAuthChallengeFailed = APIError(code: 401, message: "2FA challenge failed")
+public class RandomLatency: Latency {
+   private let range: ClosedRange<TimeInterval>
 
-   let code: Int
-   let message: String
+   // MARK: - Init
 
-   // MARK: - Stuff
+   public init(range: ClosedRange<TimeInterval>) {
+      self.range = range
+   }
 
-   func toJSONData() -> Data {
-      let rawJSON = #"{"code": \#(self.code), "message": "\#(self.message)"}"#
-      return rawJSON.data(using: .utf8)!
+   // MARK: - Latency
+
+   public func value(for request: some Request) -> TimeInterval {
+      .random(in: range)
    }
 }

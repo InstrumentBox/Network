@@ -50,7 +50,7 @@ let package = Package(
       .target(name: "WebStub", dependencies: ["Web"]),
       .testTarget(
          name: "WebStubTests",
-         dependencies: ["Web", "WebStub", "NetworkTestUtils"],
+         dependencies: ["Web", "WebCore", "WebStub", "NetworkTestUtils"],
          resources: [
             .process("Reader/Resources/Data.txt"),
             .process("ResponseParser/Resources/Full.response"),
@@ -63,6 +63,18 @@ let package = Package(
          ]
       ),
 
-      .target(name: "NetworkTestUtils", dependencies: ["Web", "WebCore"], path: "Tests/NetworkTestUtils")
+      .target(
+         name: "NetworkTestUtils",
+         dependencies: [
+            "Web",
+            "WebCore"
+         ],
+         path: "Tests/NetworkTestUtils",
+         resources: [
+            .process("Resources/APIError.response"),
+            .process("Resources/TestObject.response"),
+            .process("Resources/XML.response")
+         ]
+      ),
    ]
 )

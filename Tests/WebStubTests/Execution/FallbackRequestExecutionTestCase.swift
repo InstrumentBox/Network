@@ -1,7 +1,7 @@
 //
-//  APIError.swift
+//  FallbackRequestExecutionTestCase.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,24 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
+@testable 
+import NetworkTestUtils
 
-struct APIError: Error, Decodable, Equatable {
-   static let testObjectNotFound = APIError(code: 404, message: "Test object not found")
-   static let notAuthorized = APIError(code: 401, message: "Not authorized")
-   static let twoFactorAuthChallengeFailed = APIError(code: 401, message: "2FA challenge failed")
+@testable
+import WebStub
 
-   let code: Int
-   let message: String
+import Web
+import WebCore
+import XCTest
 
-   // MARK: - Stuff
+class FallbackRequestExecutionTestCase: XCTestCase {
+   func test_fallbackRequestExecution_forwardsRequestToWebClient() async throws {
+      let configuration: URLSessionWebClientConfiguration = .ephemeral
+      configuration.sessionConfiguration.protocolClasses = [TestObjectWebTestsURLProtocol.self]
+      let fallbackWebClient = URLSessionWebClient(configuration: configuration)
 
-   func toJSONData() -> Data {
-      let rawJSON = #"{"code": \#(self.code), "message": "\#(self.message)"}"#
-      return rawJSON.data(using: .utf8)!
+      let execution = FallbackRequestExecution(webClient: fallbackWebClient)
+      let object = try await execution.execute(TestObjectRequest())
+      XCTAssertEqual(object, .some)
    }
 }

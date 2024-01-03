@@ -1,0 +1,7 @@
+404
+Content-Type: application/json; charset=utf-8
+
+{
+   "code": 404,
+   "message": "Test object not found"
+}

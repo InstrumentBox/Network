@@ -1,7 +1,7 @@
 //
-//  APIError.swift
+//  RequestExecution.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,8 @@
 //  THE SOFTWARE.
 //
 
-import Foundation
+import Web
 
-struct APIError: Error, Decodable, Equatable {
-   static let testObjectNotFound = APIError(code: 404, message: "Test object not found")
-   static let notAuthorized = APIError(code: 401, message: "Not authorized")
-   static let twoFactorAuthChallengeFailed = APIError(code: 401, message: "2FA challenge failed")
-
-   let code: Int
-   let message: String
-
-   // MARK: - Stuff
-
-   func toJSONData() -> Data {
-      let rawJSON = #"{"code": \#(self.code), "message": "\#(self.message)"}"#
-      return rawJSON.data(using: .utf8)!
-   }
+protocol RequestExecution: AnyObject {
+   func execute<SuccessObject>(_ request: some Request<SuccessObject>) async throws -> SuccessObject
 }
