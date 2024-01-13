@@ -33,7 +33,7 @@ class WebTestsURLProtocol: URLProtocol {
 
    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
 
-   override final func startLoading() {
+   override func startLoading() {
       let timer = Timer(timeInterval: 0.1, repeats: false) { [unowned self] _ in
          if returnsError {
             let error = URLError(.cancelled)
@@ -48,7 +48,7 @@ class WebTestsURLProtocol: URLProtocol {
       self.timer = timer
    }
 
-   override final func stopLoading() {
+   override func stopLoading() {
       timer?.invalidate()
       timer = nil
       let error = URLError(.cancelled)
