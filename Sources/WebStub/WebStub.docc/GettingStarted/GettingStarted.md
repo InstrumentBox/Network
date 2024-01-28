@@ -18,7 +18,7 @@ let webClient = StubbedWebClient(configuration: configuration)
 
 For now, if you will try to send request, web client throws error that is has no registered 
 responses.  To solve this, you need to register a response. Let's say you need to do it for 
-`TestObjectRequest`
+`SomeObjectRequest`
 
 ```swift
 let chain = client.stubChain(for: SomeObjectRequest.self)
@@ -37,10 +37,10 @@ Content-Type: application/json; charset=utf-8
 }
 ```
 
-As you can see, this format is very similar to an HTTP message. First line MUST contain status code.
-Next lines MAY contains headers. Each header MUST be on a separate line. Response body MUST be 
-preceded by empty line. If empty line is right after status code, next headers will be considered as
-response's body.
+As you can see, this format is very similar to an HTTP message. The first line MUST contain status 
+code. The next lines MAY contains headers. Each header MUST be on a separate line. Response body 
+MUST be preceded by empty line. If empty line is right after status code, next headers will be 
+considered as response's body.
 
 Now you can send request and receive stubbed response
 
