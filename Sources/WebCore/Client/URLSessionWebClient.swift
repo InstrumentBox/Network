@@ -71,7 +71,7 @@ public class URLSessionWebClient: WebClient {
 
    private func makeURLRequest(request: some Request) async throws -> URLRequest {
       var urlRequest = try request.toURLRequest(with: configuration.baseURL)
-      if request is WithoutAuthorizationRequest {
+      if request is NonAuthorizableRequest {
          return urlRequest
       }
 

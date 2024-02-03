@@ -16,7 +16,7 @@ request authorization, SSL pinning. Built on top of new concurrency model introd
 
 - ``AuthorizationHeader``
 - ``RequestAuthorizer``
-- ``WithoutAuthorizationRequest``
+- ``NonAuthorizableRequest``
 
 ### Security
 

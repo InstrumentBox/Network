@@ -31,10 +31,10 @@ configuration.requestAuthorizer = MyAppRequestAuthorizer(keychain: keychain)
 
 If you need some requests to not to be authorized, you can either use a different web client 
 instance whose configuration doesn't have request authorizer, or use protocol-marker to mark 
-needed request. The *WebCore* library provides protocol-marker called `WithoutAuthorizationRequest`.
+needed request. The *WebCore* library provides protocol-marker called `NonAuthorizableRequest`.
 
 ```swift
-struct SomeObjectRequest: MyAppRequest, WithoutAuthorizationRequest {
+struct SomeObjectRequest: MyAppRequest, NonAuthorizableRequest {
    ...
 }
 ```

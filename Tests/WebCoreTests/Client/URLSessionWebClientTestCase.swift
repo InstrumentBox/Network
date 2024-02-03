@@ -48,7 +48,7 @@ class URLSessionWebClientTestCase: XCTestCase {
    }
 
    func test_webClient_skipsAuthorization_ifRequestMarkedToNotToBeAuthorized() async throws {
-      class NotAuthorizedTestObjectRequest: TestObjectRequest, WithoutAuthorizationRequest { }
+      class NotAuthorizedTestObjectRequest: TestObjectRequest, NonAuthorizableRequest { }
       let webClient = makeWebClient(
          protocolClass: AuthorizedWebTestsURLProtocol.self,
          requestAuthorizer: WebTestsRequestAuthorizer()

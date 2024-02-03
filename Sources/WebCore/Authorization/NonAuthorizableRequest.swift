@@ -1,5 +1,5 @@
 //
-//  WithoutAuthorizationRequest.swift
+//  NonAuthorizableRequest.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -22,6 +22,9 @@
 //  THE SOFTWARE.
 //
 
+@available(*, deprecated, renamed: "NonAuthorizableRequest")
+public typealias WithoutAuthorizationRequest = NonAuthorizableRequest
+
 /// A protocol-marker you can use to differentiate requests that need authorization from requests
 /// that don't.
-public protocol WithoutAuthorizationRequest { }
+public protocol NonAuthorizableRequest { }
