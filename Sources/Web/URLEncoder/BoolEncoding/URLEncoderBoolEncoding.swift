@@ -1,5 +1,5 @@
 //
-//  URLEncoder+ArrayKeyEncoding.swift
+//  URLEncoder+BoolEncoding.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -22,24 +22,12 @@
 //  THE SOFTWARE.
 //
 
-extension URLEncoder {
-   /// Encoding to use for array keys.
-   public enum ArrayKeyEncoding {
-      /// An empty set of brackets is appended the the key for every value.
-      case brackets
-
-      /// No brackets are appended to the key and the key is encoded as is.
-      case noBrackets
-
-      // MARK: - Encoding
-
-      func encode(_ key: String) -> String {
-         switch self {
-            case .brackets:
-               return key + "[]"
-            case .noBrackets:
-               return key
-         }
-      }
-   }
+/// Encoding to apply to bool values.
+public protocol URLEncoderBoolEncoding {
+   /// Encodes and returns a given value.
+   ///
+   /// - Parameters:
+   ///   - bool: Value to be encoded.
+   /// - Returns: Encoded value.
+   func encode(_ bool: Bool) -> String
 }

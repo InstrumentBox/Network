@@ -29,37 +29,37 @@ import XCTest
 
 class URLEncoderTestCase: XCTestCase {
    func test_urlEncoder_encodesBool_usingLiteralEncoding() throws {
-      let encoder = URLEncoder(boolEncoding: .literal)
+      let encoder = URLEncoder(boolEncoding: LiteralURLEncoderBoolEncoding())
       let value = try encoder.encode(["bool": true])
       XCTAssertEqual(value, "bool=true")
    }
 
    func test_urlEncoder_encodesBool_usingNumericEncoding() throws {
-      let encoder = URLEncoder(boolEncoding: .numeric)
+      let encoder = URLEncoder(boolEncoding: NumericURLEncoderBoolEncoding())
       let value = try encoder.encode(["bool": true])
       XCTAssertEqual(value, "bool=1")
    }
 
    func test_urlEncoder_encodesNumberWithBool_usingLiteralEncoding() throws {
-      let encoder = URLEncoder(boolEncoding: .literal)
+      let encoder = URLEncoder(boolEncoding: LiteralURLEncoderBoolEncoding())
       let value = try encoder.encode(["bool": NSNumber(value: true)])
       XCTAssertEqual(value, "bool=true")
    }
 
    func test_urlEncoder_encodesNumberWithBool_usingNumericEncoding() throws {
-      let encoder = URLEncoder(boolEncoding: .numeric)
+      let encoder = URLEncoder(boolEncoding: NumericURLEncoderBoolEncoding())
       let value = try encoder.encode(["bool": NSNumber(value: true)])
       XCTAssertEqual(value, "bool=1")
    }
 
    func test_urlEncoder_encodesArrayKey_usingBracketsEncoding() throws {
-      let encoder = URLEncoder(arrayKeyEncoding: .brackets)
+      let encoder = URLEncoder(arrayKeyEncoding: BracketsURLEncoderArrayKeyEncoding())
       let value = try encoder.encode(["array": [42]])
       XCTAssertEqual(value, "array%5B%5D=42")
    }
 
    func test_urlEncoder_encodesArrayKey_usingNoBracketsEncoding() throws {
-      let encoder = URLEncoder(arrayKeyEncoding: .noBrackets)
+      let encoder = URLEncoder(arrayKeyEncoding: NoBracketsURLEncoderArrayKeyEncoding())
       let value = try encoder.encode(["array": [42]])
       XCTAssertEqual(value, "array=42")
    }
