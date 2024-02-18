@@ -71,11 +71,9 @@ public class URLSessionWebClient: WebClient {
 
    private func makeURLRequest(request: some Request) async throws -> URLRequest {
       var urlRequest = try request.toURLRequest(with: configuration.baseURL)
-      if request is NonAuthorizableRequest {
-         return urlRequest
-      }
-
-      if let authorizer = configuration.requestAuthorizer {
+      if let authorizer = configuration.requestAuthorizer, 
+         authorizer.needsAuthorization(for: request)
+      {
          let header = try await authorizer.authorizationHeader(for: request)
          urlRequest.addValue(header.value, forHTTPHeaderField: header.name)
       }

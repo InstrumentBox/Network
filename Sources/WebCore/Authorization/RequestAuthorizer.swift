@@ -34,6 +34,13 @@ import Web
 /// - Note: Request authorizer is intended to be used if you authorize your requests with HTTP
 ///         header.
 public protocol RequestAuthorizer {
+   /// Asks authorizer if request should be authorized by setting them authorization header.
+   ///
+   /// - Parameters:
+   ///   - request: A request that's probably needed to by authorized.
+   /// - Returns: A boolean value that tells if request should be authorized.
+   func needsAuthorization(for request: some Request) -> Bool
+
    /// Asks authorizer for an authorization header.
    ///
    /// - Parameters:

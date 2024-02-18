@@ -26,6 +26,20 @@ import Web
 import WebCore
 
 class WebTestsRequestAuthorizer: RequestAuthorizer {
+   let needsAuthorization: Bool
+
+   // MARK: - Init
+
+   init(needsAuthorization: Bool) {
+      self.needsAuthorization = needsAuthorization
+   }
+
+   // MARK: - RequestAuthorizer
+
+   func needsAuthorization(for request: some Request) -> Bool {
+      needsAuthorization
+   }
+
    func authorizationHeader(for request: some Request) async throws -> AuthorizationHeader {
       .basicAuthorization("123")
    }

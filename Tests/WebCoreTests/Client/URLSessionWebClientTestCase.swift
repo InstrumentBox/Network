@@ -41,21 +41,20 @@ class URLSessionWebClientTestCase: XCTestCase {
    func test_webClient_returnsObject_ifRequestAuthorized() async throws {
       let webClient = makeWebClient(
          protocolClass: AuthorizedWebTestsURLProtocol.self,
-         requestAuthorizer: WebTestsRequestAuthorizer()
+         requestAuthorizer: WebTestsRequestAuthorizer(needsAuthorization: true)
       )
       let object = try await webClient.execute(TestObjectRequest())
       XCTAssertEqual(object, .some)
    }
 
-   func test_webClient_skipsAuthorization_ifRequestMarkedToNotToBeAuthorized() async throws {
-      class NotAuthorizedTestObjectRequest: TestObjectRequest, NonAuthorizableRequest { }
+   func test_webClient_skipsAuthorization_ifAuthorizerTellsThatRequestShouldNoBeAuthorized() async throws {
       let webClient = makeWebClient(
          protocolClass: AuthorizedWebTestsURLProtocol.self,
-         requestAuthorizer: WebTestsRequestAuthorizer()
+         requestAuthorizer: WebTestsRequestAuthorizer(needsAuthorization: false)
       )
 
       do {
-         _ = try await webClient.execute(NotAuthorizedTestObjectRequest())
+         _ = try await webClient.execute(TestObjectRequest())
          XCTFail("Unexpected successful result")
       } catch let error as APIError {
          XCTAssertEqual(error, .notAuthorized)
