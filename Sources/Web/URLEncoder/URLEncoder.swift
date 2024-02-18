@@ -74,7 +74,15 @@ public class URLEncoder {
    /// - Returns: A URL-encoded string.
    /// - Throws:  `URLEncoderError` if encoding failed.
    public func encode(_ dict: [String: Any]) throws -> String {
-      try dict.flatMap(encode).joined(separator: "&")
+      let keys = dict.keys.sorted()
+      var encoded: [String] = []
+      for key in keys {
+         if let value = dict[key] {
+            try encoded.append(contentsOf: encode(key: key, value: value))
+         }
+      }
+
+      return encoded.joined(separator: "&")
    }
 
    private func encode(key: String, value: Any) throws -> [String] {

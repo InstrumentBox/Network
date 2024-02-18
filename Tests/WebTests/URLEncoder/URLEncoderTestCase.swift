@@ -76,4 +76,11 @@ class URLEncoderTestCase: XCTestCase {
 
       XCTAssertEqual(value, "dict%5Bvalue%5D=42")
    }
+
+   func test_urlEncoder_encodesParametersInTheSameOrder() throws {
+      let encoder = URLEncoder()
+      let firstValue = try encoder.encode(["foo": "bar", "baz": 42])
+      let secondValue = try encoder.encode(["baz": 42, "foo": "bar"])
+      XCTAssertEqual(firstValue, secondValue)
+   }
 }
