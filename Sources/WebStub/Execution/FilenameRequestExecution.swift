@@ -61,16 +61,8 @@ class FilenameRequestExecution: RequestExecution {
          try await Task.sleep(nanoseconds: value)
       }
 
-      switch request.responseValidator.validate(response) {
-         case .useSuccessObjectResponseConverter:
-            let object = try request.successObjectResponseConverter.convert(response)
-            return object
-         case .useErrorObjectResponseConverter:
-            let error = try request.errorObjectResponseConverter.convert(response)
-            throw error
-         case let .completeWithError(error):
-            throw error
-      }
+      let disposition = request.responseValidator.validate(response)
+      return try disposition.processResponse(response, for: request)
    }
 
    private func response(for request: some Request) async throws -> Response {

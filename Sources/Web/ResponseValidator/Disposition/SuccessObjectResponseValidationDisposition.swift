@@ -1,7 +1,7 @@
 //
-//  ResponseValidator.swift
+//  SuccessObjectResponseValidationDisposition.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,19 @@
 //  THE SOFTWARE.
 //
 
-/// A protocol you need to conform an object to use it a response validator.
-public protocol ResponseValidator {
-   /// Validate a response and dispose what way a `WebClient` should go further.
-   ///
-   /// - Parameters:
-   ///   - response: A response that needs to be validated.
-   /// - Returns: A disposition of what way go further. See `ResponseValidationDisposition`
-   ///            for more information.
-   func validate(_ response: Response) -> ResponseValidationDisposition
+/// Response validation disposition that uses `successObjectResponseConverter` provided by a request object.
+public struct SuccessObjectResponseValidationDisposition: ResponseValidationDisposition {
+   // MARK: - Init
+   
+   /// Creates and returns a new instance of `SuccessObjectResponseValidationDisposition`.
+   public init() { }
+
+   // MARK: - ResponseValidationDisposition
+
+   public func processResponse<SuccessObject>(
+      _ response: Response,
+      for request: some Request<SuccessObject>
+   ) throws -> SuccessObject {
+      try request.successObjectResponseConverter.convert(response)
+   }
 }

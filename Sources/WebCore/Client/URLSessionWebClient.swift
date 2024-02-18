@@ -103,15 +103,6 @@ public class URLSessionWebClient: WebClient {
       for request: some Request<SuccessObject>
    ) throws -> SuccessObject {
       let disposition = request.responseValidator.validate(response)
-      switch disposition {
-         case .useSuccessObjectResponseConverter:
-            let object = try request.successObjectResponseConverter.convert(response)
-            return object
-         case .useErrorObjectResponseConverter:
-            let error = try request.errorObjectResponseConverter.convert(response)
-            throw error
-         case let .completeWithError(error):
-            throw error
-      }
+      return try disposition.processResponse(response, for: request)
    }
 }

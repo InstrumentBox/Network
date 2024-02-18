@@ -1,7 +1,7 @@
 //
-//  ResponseValidator.swift
+//  ValidationErrorResponseValidationDisposition.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,27 @@
 //  THE SOFTWARE.
 //
 
-/// A protocol you need to conform an object to use it a response validator.
-public protocol ResponseValidator {
-   /// Validate a response and dispose what way a `WebClient` should go further.
+/// Response validation disposition that throws error validation process resulted in.
+public struct ValidationErrorResponseValidationDisposition: ResponseValidationDisposition {
+   let error: Error
+
+   // MARK: - Init
+
+   /// /// Creates and returns a new instance of `ValidationErrorResponseValidationDisposition` with
+   /// given error.
    ///
    /// - Parameters:
-   ///   - response: A response that needs to be validated.
-   /// - Returns: A disposition of what way go further. See `ResponseValidationDisposition`
-   ///            for more information.
-   func validate(_ response: Response) -> ResponseValidationDisposition
+   ///   - error: An error that's should be thrown by `processResponse(_:for:)` method.
+   public init(error: Error) {
+      self.error = error
+   }
+
+   // MARK: - ResponseValidationDisposition
+
+   public func processResponse<SuccessObject>(
+      _ response: Response,
+      for request: some Request<SuccessObject>
+   ) throws -> SuccessObject {
+      throw error
+   }
 }

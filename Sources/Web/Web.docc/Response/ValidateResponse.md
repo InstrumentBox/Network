@@ -29,10 +29,11 @@ Properties of response you may want to use to validate response
 - `headers` are dictionary with HTTP headers
 - `body` contains response's body
 
-Response validator returns disposition which can be one of the following values:
-- `.useSuccessObjectResponseConverter` to convert and return object as expected result of a request
-- `.useErrorObjectResponseConverter` to convert and throw object as error (e.g. `APIError` in case of 4xx)
-- `.completeWithError(Error)` and throw passed validation error (e.g. content types don't match)
+Response validator returns disposition which can be one of the following:
+- `SuccessObjectResponseValidationDisposition` to convert and return object as expected result of a request
+- `ErrorObjectResponseValidationDisposition` to convert and throw object as error (e.g. `APIError` in case of 4xx)
+- `ValidationErrorResponseValidationDisposition` and throw passed validation error (e.g. content types don't match)
+- Any other validation disposition you may want to create
 
 Then you can use response validator for every request in you app
 

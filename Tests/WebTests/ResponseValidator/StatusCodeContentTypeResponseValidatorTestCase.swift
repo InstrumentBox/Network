@@ -39,7 +39,7 @@ class StatusCodeContentTypeResponseValidatorTestCase: XCTestCase {
          contentType: "application/json"
       )
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useSuccessObjectResponseConverter)
+      XCTAssertTrue(disposition is SuccessObjectResponseValidationDisposition)
    }
 
    func test_validator_disposesToUseErrorConverter_ifFailureStatusCode_andHeadersMatches() throws {
@@ -49,43 +49,43 @@ class StatusCodeContentTypeResponseValidatorTestCase: XCTestCase {
          contentType: "application/json"
       )
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useErrorObjectResponseConverter)
+      XCTAssertTrue(disposition is ErrorObjectResponseValidationDisposition)
    }
 
    func test_validator_disposesToUseObjectConverter_ifSuccessStatusCode_andNoAcceptHeader() throws {
       let response = try makeResponse(statusCode: 200, accept: nil, contentType: "application/json")
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useSuccessObjectResponseConverter)
+      XCTAssertTrue(disposition is SuccessObjectResponseValidationDisposition)
    }
 
    func test_validator_disposesToUseObjectConverter_ifSuccessStatusCode_andNoContentTypeHeader() throws {
       let response = try makeResponse(statusCode: 200, accept: "application/json", contentType: nil)
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useSuccessObjectResponseConverter)
+      XCTAssertTrue(disposition is SuccessObjectResponseValidationDisposition)
    }
 
    func test_validator_disposesToUseErrorConverter_ifFailureStatusCode_andNoAcceptHeader() throws {
       let response = try makeResponse(statusCode: 404, accept: nil, contentType: "application/json")
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useErrorObjectResponseConverter)
+      XCTAssertTrue(disposition is ErrorObjectResponseValidationDisposition)
    }
 
    func test_validator_disposesToUseErrorConverter_ifFailureStatusCode_andNoContentTypeHeader() throws {
       let response = try makeResponse(statusCode: 404, accept: "application/json", contentType: nil)
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useErrorObjectResponseConverter)
+      XCTAssertTrue(disposition is ErrorObjectResponseValidationDisposition)
    }
 
    func test_validator_disposesToUseObjectConverter_ifSuccessStatusCode_andNoHeaders() throws {
       let response = try makeResponse(statusCode: 200, accept: nil, contentType: nil)
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useSuccessObjectResponseConverter)
+      XCTAssertTrue(disposition is SuccessObjectResponseValidationDisposition)
    }
 
    func test_validator_disposesToUseErrorConverter_ifFailureStatusCode_andNoHeaders() throws {
       let response = try makeResponse(statusCode: 404, accept: nil, contentType: nil)
       let disposition = validator.validate(response)
-      XCTAssertEqual(disposition, .useErrorObjectResponseConverter)
+      XCTAssertTrue(disposition is ErrorObjectResponseValidationDisposition)
    }
 
    func test_validator_disposesToCompleteWithErrorRegardlessStatusCode_ifMIMEsNotMatches() throws {
@@ -96,15 +96,12 @@ class StatusCodeContentTypeResponseValidatorTestCase: XCTestCase {
          accept: accept,
          contentType: contentType
       )
-      let disposition = validator.validate(response)
-      switch disposition {
-      case let .completeWithError(
-         StatusCodeContentTypeResponseValidatorError.unacceptableContentType(expected, received)
-      ):
+      let disposition = try XCTUnwrap(validator.validate(response) as? ValidationErrorResponseValidationDisposition)
+      if case let StatusCodeContentTypeResponseValidatorError.unacceptableContentType(expected, received) = disposition.error {
          XCTAssertEqual(expected, accept)
          XCTAssertEqual(received, contentType)
-      default:
-         XCTFail("Unexpected dispositions returned: \(disposition)")
+      } else {
+         XCTFail("Unexpected disposition returned: \(disposition)")
       }
    }
 
@@ -129,21 +126,5 @@ class StatusCodeContentTypeResponseValidatorTestCase: XCTestCase {
          } ?? [:],
          body: Data()
       )
-   }
-}
-
-extension ResponseValidationDisposition: Equatable {
-   public static func ==(
-      lhs: ResponseValidationDisposition,
-      rhs: ResponseValidationDisposition
-   ) -> Bool {
-      switch (lhs, rhs) {
-         case (.useSuccessObjectResponseConverter, .useSuccessObjectResponseConverter),
-              (.useErrorObjectResponseConverter, .useErrorObjectResponseConverter),
-              (.completeWithError, .completeWithError):
-            return true
-         default:
-            return false
-      }
    }
 }

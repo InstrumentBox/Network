@@ -50,12 +50,13 @@ public enum StatusCodeContentTypeResponseValidatorError: Error, Equatable {
 /// A response validator takes MIME type from *Content-Type* header of a response and all MIME types
 /// from *Accept* header of a request, then looks that response MIME matches one of request's MIMEs.
 /// If one of those headers has no value or both of them have no values, validator considers only
-/// status code of a response. If MIMEs doesn't match, validator returns `.completeWithError`
-/// disposition with `StatusCodeContentTypeResponseValidatorError.unacceptableContentType`error. If
-/// MIME of response matches one of MIME types of request, validator considers status code of a
-/// response. If code has value that `acceptableStatusCodes` contains, validator
-/// returns `.useSuccessObjectResponseConverter` disposition, otherwise `.useErrorObjectResponseConverter`.
-///
+/// status code of a response. If MIMEs doesn't match, validator returns
+/// ``ValidationErrorResponseValidationDisposition`` disposition with
+/// `StatusCodeContentTypeResponseValidatorError.unacceptableContentType`error. If MIME of response
+/// matches one of MIME types of request, validator considers status code of a response. If code has
+/// value that `acceptableStatusCodes` contains, validator returns
+/// ``SuccessObjectResponseValidationDisposition`` disposition, otherwise
+/// ``ErrorObjectResponseValidationDisposition``.
 public struct StatusCodeContentTypeResponseValidator: ResponseValidator {
    private let acceptableStatusCodes: Set<Int>
 
@@ -66,7 +67,8 @@ public struct StatusCodeContentTypeResponseValidator: ResponseValidator {
    ///
    /// - Parameters:
    ///   - acceptableStatusCodes: A sequence of status codes that validator should consider as
-   ///                            successful and use `.useSuccessObjectResponseConverter` disposition.
+   ///                            successful and use ``SuccessObjectResponseValidationDisposition``
+   ///                            disposition.
    public init<S: Sequence>(acceptableStatusCodes: S) where S.Element == Int {
       self.acceptableStatusCodes = Set(acceptableStatusCodes)
    }
@@ -82,9 +84,9 @@ public struct StatusCodeContentTypeResponseValidator: ResponseValidator {
    public func validate(_ response: Response) -> ResponseValidationDisposition {
       let statusCodeDisposition: ResponseValidationDisposition
       if acceptableStatusCodes.contains(response.statusCode) {
-         statusCodeDisposition = .useSuccessObjectResponseConverter
+         statusCodeDisposition = SuccessObjectResponseValidationDisposition()
       } else {
-         statusCodeDisposition = .useErrorObjectResponseConverter
+         statusCodeDisposition = ErrorObjectResponseValidationDisposition()
       }
 
       let requestMIMEs = response.request.acceptMIMEs()
@@ -99,7 +101,7 @@ public struct StatusCodeContentTypeResponseValidator: ResponseValidator {
             expected: requestMIMEs.map(\.description).joined(separator: ", "),
             received: responseMIME.description
          )
-         return .completeWithError(error)
+         return ValidationErrorResponseValidationDisposition(error: error)
       }
 
       return statusCodeDisposition
