@@ -1,7 +1,7 @@
 //
-//  URLEncoder+ArrayKeyEncoding.swift
+//  LiteralURLEncoderBoolEncoding.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,18 @@
 //  THE SOFTWARE.
 //
 
-/// Encoding to apply to array keys.
-public protocol URLEncoderArrayKeyEncoding {
-   /// Encodes and returns a given key.
-   ///
-   /// - Parameters:
-   ///   - key: A key to be encoded.
-   /// - Returns: Encoded key.
-   func encode(_ key: String) -> String
+extension URLEncoder {
+   /// Encoding that encodes bool value as `true` or `false` literal.
+   public struct LiteralBoolEncoding: BoolEncoding {
+      // MARK: - Init
+
+      /// Creates and returns new instance of `LiteralURLEncoderBoolEncoding`.
+      public init() { }
+
+      // MARK: - URLEncoderBoolEncoding
+
+      public func encode(_ bool: Bool) -> String {
+         return bool ? "true" : "false"
+      }
+   }
 }

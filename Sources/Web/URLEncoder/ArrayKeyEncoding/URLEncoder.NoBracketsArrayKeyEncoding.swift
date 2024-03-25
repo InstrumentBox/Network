@@ -1,5 +1,5 @@
 //
-//  NumericURLEncoderBoolEncoding.swift
+//  NoBracketsURLEncoderArrayKeyEncoding.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -22,16 +22,18 @@
 //  THE SOFTWARE.
 //
 
-/// Encoding that encodes bool value as `1` or `0` number.
-public struct NumericURLEncoderBoolEncoding: URLEncoderBoolEncoding {
-   // MARK: - Init
+extension URLEncoder {
+   /// Encoding that encodes array key by leaving it as is.
+   public struct NoBracketsArrayKeyEncoding: ArrayKeyEncoding {
+      // MARK: - Init
 
-   /// Creates and returns new instance of `NumericURLEncoderBoolEncoding`.
-   public init() { }
+      /// Creates and returns new instance of `NoBracketsURLEncoderArrayKeyEncoding`.
+      public init() { }
 
-   // MARK: - URLEncoderBoolEncoding
+      // MARK: - URLEncoderArrayKeyEncoding
 
-   public func encode(_ bool: Bool) -> String {
-      return bool ? "1" : "0"
+      public func encode(_ key: String) -> String {
+         return key
+      }
    }
 }

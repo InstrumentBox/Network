@@ -1,7 +1,7 @@
 //
-//  NoBracketsURLEncoderArrayKeyEncoding.swift
+//  URLEncoder+BoolEncoding.swift
 //
-//  Copyright © 2024 Aleksei Zaikin.
+//  Copyright © 2022 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,16 +22,14 @@
 //  THE SOFTWARE.
 //
 
-/// Encoding that encodes array key by leaving it as is.
-public struct NoBracketsURLEncoderArrayKeyEncoding: URLEncoderArrayKeyEncoding {
-   // MARK: - Init
-
-   /// Creates and returns new instance of `NoBracketsURLEncoderArrayKeyEncoding`.
-   public init() { }
-
-   // MARK: - URLEncoderArrayKeyEncoding
-
-   public func encode(_ key: String) -> String {
-      return key
+extension URLEncoder {
+   /// Encoding to apply to bool values.
+   public protocol BoolEncoding {
+      /// Encodes and returns a given value.
+      ///
+      /// - Parameters:
+      ///   - bool: Value to be encoded.
+      /// - Returns: Encoded value.
+      func encode(_ bool: Bool) -> String
    }
 }

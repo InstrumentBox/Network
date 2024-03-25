@@ -1,5 +1,5 @@
 //
-//  LiteralURLEncoderBoolEncoding.swift
+//  BracketsURLEncoderArrayKeyEncoding.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -22,16 +22,18 @@
 //  THE SOFTWARE.
 //
 
-/// Encoding that encodes bool value as `true` or `false` literal.
-public struct LiteralURLEncoderBoolEncoding: URLEncoderBoolEncoding {
-   // MARK: - Init
+extension URLEncoder {
+   /// Encoding that encodes array key by appending an empty set of brackets to the key for every value.
+   public struct BracketsArrayKeyEncoding: ArrayKeyEncoding {
+      // MARK: - Init
 
-   /// Creates and returns new instance of `LiteralURLEncoderBoolEncoding`.
-   public init() { }
+      /// Creates and returns new instance of `BracketsURLEncoderArrayKeyEncoding`.
+      public init() { }
 
-   // MARK: - URLEncoderBoolEncoding
+      // MARK: - URLEncoderArrayKeyEncoding
 
-   public func encode(_ bool: Bool) -> String {
-      return bool ? "true" : "false"
+      public func encode(_ key: String) -> String {
+         return key + "[]"
+      }
    }
 }

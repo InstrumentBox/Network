@@ -1,7 +1,7 @@
 //
-//  BracketsURLEncoderArrayKeyEncoding.swift
+//  URLEncoder+ArrayKeyEncoding.swift
 //
-//  Copyright © 2024 Aleksei Zaikin.
+//  Copyright © 2022 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,16 +22,14 @@
 //  THE SOFTWARE.
 //
 
-/// Encoding that encodes array key by appending an empty set of brackets to the key for every value.
-public struct BracketsURLEncoderArrayKeyEncoding: URLEncoderArrayKeyEncoding {
-   // MARK: - Init
-
-   /// Creates and returns new instance of `BracketsURLEncoderArrayKeyEncoding`.
-   public init() { }
-
-   // MARK: - URLEncoderArrayKeyEncoding
-
-   public func encode(_ key: String) -> String {
-      return key + "[]"
+extension URLEncoder {
+   /// Encoding to apply to array keys.
+   public protocol ArrayKeyEncoding {
+      /// Encodes and returns a given key.
+      ///
+      /// - Parameters:
+      ///   - key: A key to be encoded.
+      /// - Returns: Encoded key.
+      func encode(_ key: String) -> String
    }
 }

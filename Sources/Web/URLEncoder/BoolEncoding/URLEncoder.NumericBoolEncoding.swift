@@ -1,7 +1,7 @@
 //
-//  URLEncoder+BoolEncoding.swift
+//  NumericURLEncoderBoolEncoding.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,18 @@
 //  THE SOFTWARE.
 //
 
-/// Encoding to apply to bool values.
-public protocol URLEncoderBoolEncoding {
-   /// Encodes and returns a given value.
-   ///
-   /// - Parameters:
-   ///   - bool: Value to be encoded.
-   /// - Returns: Encoded value.
-   func encode(_ bool: Bool) -> String
+extension URLEncoder {
+   /// Encoding that encodes bool value as `1` or `0` number.
+   public struct NumericBoolEncoding: BoolEncoding {
+      // MARK: - Init
+
+      /// Creates and returns new instance of `NumericURLEncoderBoolEncoding`.
+      public init() { }
+
+      // MARK: - URLEncoderBoolEncoding
+
+      public func encode(_ bool: Bool) -> String {
+         return bool ? "1" : "0"
+      }
+   }
 }

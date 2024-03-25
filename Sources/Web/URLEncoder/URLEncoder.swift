@@ -32,11 +32,11 @@ public enum URLEncoderError: Error {
 
 /// An object that encodes instances of `[String: Any]` into URL-encoded query strings.
 public class URLEncoder {
-   /// Global setting for array key encoding. Defaults to ``BracketsURLEncoderArrayKeyEncoding``.
-   public static var arrayKeyEncoding: URLEncoderArrayKeyEncoding = BracketsURLEncoderArrayKeyEncoding()
+   /// Global setting for array key encoding. Defaults to ``BracketsArrayKeyEncoding``.
+   public static var arrayKeyEncoding: ArrayKeyEncoding = BracketsArrayKeyEncoding()
 
-   /// Global setting for bool encoding. Defaults to ``LiteralURLEncoderBoolEncoding``.
-   public static var boolEncoding: URLEncoderBoolEncoding = LiteralURLEncoderBoolEncoding()
+   /// Global setting for bool encoding. Defaults to ``LiteralBoolEncoding``.
+   public static var boolEncoding: BoolEncoding = LiteralBoolEncoding()
 
    /// A character set of allowed (non-escaped) characters.
    public static let allowedCharacterSet: CharacterSet = {
@@ -46,8 +46,8 @@ public class URLEncoder {
       return CharacterSet.urlQueryAllowed.subtracting(encodableCharacterSet)
    }()
 
-   private let arrayKeyEncoding: URLEncoderArrayKeyEncoding
-   private let boolEncoding: URLEncoderBoolEncoding
+   private let arrayKeyEncoding: ArrayKeyEncoding
+   private let boolEncoding: BoolEncoding
 
    // MARK: - Init
 
@@ -58,8 +58,8 @@ public class URLEncoder {
    ///                       `URLEncoder.arrayKeyEncoding`.
    ///   - boolEncoding: Encoding to apply to boolean values. Defaults to `URLEncoder.boolEncoding`.
    public init(
-      arrayKeyEncoding: URLEncoderArrayKeyEncoding = URLEncoder.arrayKeyEncoding,
-      boolEncoding: URLEncoderBoolEncoding = URLEncoder.boolEncoding
+      arrayKeyEncoding: ArrayKeyEncoding = URLEncoder.arrayKeyEncoding,
+      boolEncoding: BoolEncoding = URLEncoder.boolEncoding
    ) {
       self.arrayKeyEncoding = arrayKeyEncoding
       self.boolEncoding = boolEncoding
