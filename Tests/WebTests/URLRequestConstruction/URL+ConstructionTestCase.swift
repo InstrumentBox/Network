@@ -57,13 +57,8 @@ class URLConstructionTestCase: XCTestCase {
    }
 
    func test_urlInitializer_throwsError() throws {
-      var isXcode14OrLater = false
-      if #available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, *) {
-         isXcode14OrLater = true
-      }
-      try XCTSkipIf(isXcode14OrLater, "URL initializer uses percent encoding for most characters and I didn't find any, which causes nil")
-      XCTAssertThrowsError(try URL(path: " test/endpoint", baseURL: baseURL)) { error in
-         guard case URLConstructionError.cannotConstructURL(" test/endpoint", baseURL) = error else {
+      XCTAssertThrowsError(try URL(path: "https:// test endpoint", baseURL: baseURL)) { error in
+         guard case URLConstructionError.cannotConstructURL("https:// test endpoint", baseURL) = error else {
             XCTFail("URL successfully constructed unexpectedly")
             return
          }
