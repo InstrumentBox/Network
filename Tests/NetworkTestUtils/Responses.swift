@@ -24,10 +24,10 @@
 
 import Foundation
 
-enum Responses {
-   static let apiError = named("APIError")
-   static let testObject = named("TestObject")
-   static let xml = named("XML")
+package enum Responses {
+   package static let apiError = named("APIError")
+   package static let testObject = named("TestObject")
+   package static let xml = named("XML")
 
    // MARK: -
 

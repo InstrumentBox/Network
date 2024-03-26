@@ -24,7 +24,7 @@
 
 import Foundation
 
-class TestObjectWebTestsURLProtocol: WebTestsURLProtocol {
+package class TestObjectWebTestsURLProtocol: WebTestsURLProtocol {
    override var headers: [String : String] {
       ["Content-Type": "application/json; charset=utf8"]
    }

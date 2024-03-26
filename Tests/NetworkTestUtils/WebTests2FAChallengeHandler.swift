@@ -25,13 +25,19 @@
 import Web
 import WebCore
 
-class WebTests2FAChallengeHandler: TwoFactorAuthenticationHandler {
-   func responseRequiresTwoFactorAuthentication(_ response: Response) -> Bool {
+package class WebTests2FAChallengeHandler: TwoFactorAuthenticationHandler {
+   // MARK: - Init
+
+   package init() { }
+
+   // MARK: - TwoFactorAuthenticationHandler
+
+   package func responseRequiresTwoFactorAuthentication(_ response: Response) -> Bool {
       response.statusCode == 600
    }
 
-   var handleStub: (TwoFactorAuthenticationChallenge) -> Void = { _ in }
-   func handle(_ challenge: TwoFactorAuthenticationChallenge) {
+   package var handleStub: (TwoFactorAuthenticationChallenge) -> Void = { _ in }
+   package func handle(_ challenge: TwoFactorAuthenticationChallenge) {
       handleStub(challenge)
    }
 }

@@ -24,16 +24,16 @@
 
 import Foundation
 
-class WebTestsURLProtocol: URLProtocol {
+package class WebTestsURLProtocol: URLProtocol {
    private var timer: Timer?
 
    // MARK: - URLProtocol
 
-   override class func canInit(with request: URLRequest) -> Bool { true }
+   package override class func canInit(with request: URLRequest) -> Bool { true }
 
-   override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+   package override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
 
-   override func startLoading() {
+   package override func startLoading() {
       let timer = Timer(timeInterval: 0.1, repeats: false) { [unowned self] _ in
          if returnsError {
             let error = URLError(.cancelled)
@@ -48,7 +48,7 @@ class WebTestsURLProtocol: URLProtocol {
       self.timer = timer
    }
 
-   override func stopLoading() {
+   package override func stopLoading() {
       timer?.invalidate()
       timer = nil
       let error = URLError(.cancelled)

@@ -25,22 +25,22 @@
 import Web
 import WebCore
 
-class WebTestsRequestAuthorizer: RequestAuthorizer {
+package class WebTestsRequestAuthorizer: RequestAuthorizer {
    let needsAuthorization: Bool
 
    // MARK: - Init
 
-   init(needsAuthorization: Bool) {
+   package init(needsAuthorization: Bool) {
       self.needsAuthorization = needsAuthorization
    }
 
    // MARK: - RequestAuthorizer
 
-   func needsAuthorization(for request: some Request) -> Bool {
+   package func needsAuthorization(for request: some Request) -> Bool {
       needsAuthorization
    }
 
-   func authorizationHeader(for request: some Request) async throws -> AuthorizationHeader {
+   package func authorizationHeader(for request: some Request) async throws -> AuthorizationHeader {
       .basicAuthorization("123")
    }
 }

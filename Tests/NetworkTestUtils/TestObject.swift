@@ -24,8 +24,8 @@
 
 import Foundation
 
-struct TestObject: Equatable, Decodable {
-   static let some = TestObject(this: "Value", that: 42)
+package struct TestObject: Equatable, Decodable {
+   package static let some = TestObject(this: "Value", that: 42)
 
    // MARK: -
 
@@ -34,14 +34,14 @@ struct TestObject: Equatable, Decodable {
 
    // MARK: - Init
 
-   init(this: String, that: Int) {
+   package init(this: String, that: Int) {
       self.this = this
       self.that = that
    }
 
    // MARK: - Work
 
-   func toJSONData() -> Data {
+   package func toJSONData() -> Data {
       let rawJSON = #"{"this": "\#(this)", "that": \#(that)}"#
       guard let jsonData = rawJSON.data(using: .utf8) else {
          return Data()

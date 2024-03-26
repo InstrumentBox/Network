@@ -74,7 +74,8 @@ let package = Package(
             .process("Resources/APIError.response"),
             .process("Resources/TestObject.response"),
             .process("Resources/XML.response")
-         ]
-      ),
+         ],
+         packageAccess: true
+      )
    ]
 )

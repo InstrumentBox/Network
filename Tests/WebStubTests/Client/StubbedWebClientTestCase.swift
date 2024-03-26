@@ -22,9 +22,7 @@
 //  THE SOFTWARE.
 //
 
-@testable
 import NetworkTestUtils
-
 import WebCore
 import WebStub
 import XCTest

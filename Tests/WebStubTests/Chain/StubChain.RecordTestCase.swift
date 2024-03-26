@@ -23,11 +23,9 @@
 //
 
 @testable
-import NetworkTestUtils
-
-@testable
 import WebStub
 
+import NetworkTestUtils
 import XCTest
 
 class StubChainRecordTestCase: XCTestCase {

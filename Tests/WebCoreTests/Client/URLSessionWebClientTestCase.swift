@@ -25,9 +25,7 @@
 @testable
 import WebCore
 
-@testable
 import NetworkTestUtils
-
 import Web
 import XCTest
 

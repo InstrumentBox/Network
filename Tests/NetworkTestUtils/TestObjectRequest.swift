@@ -25,16 +25,22 @@
 import Foundation
 import Web
 
-class TestObjectRequest: Request {
-   var successObjectResponseConverter: any ResponseConverter<TestObject> {
+package class TestObjectRequest: Request {
+   // MARK: - Init
+
+   package init() { }
+
+   // MARK: - Request
+
+   package var successObjectResponseConverter: any ResponseConverter<TestObject> {
       JSONDecoderResponseConverter()
    }
 
-   var errorObjectResponseConverter: any ResponseConverter<APIError> {
+   package var errorObjectResponseConverter: any ResponseConverter<APIError> {
       JSONDecoderResponseConverter()
    }
 
-   func toURLRequest(with baseURL: URL?) throws -> URLRequest {
+   package func toURLRequest(with baseURL: URL?) throws -> URLRequest {
       try URLRequest(
          url: URL(path: "test_object/42", baseURL: baseURL),
          method: .get,
