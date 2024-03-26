@@ -50,6 +50,12 @@ class URLConstructionTestCase: XCTestCase {
       XCTAssertEqual(url.absoluteString, expectedURL?.absoluteString)
    }
 
+   func test_url_isConstructed_ifQueryIsInPath() throws {
+      let expectedURL = URL(string: "https://api.service.com/v1/test/endpoint?query=value")
+      let url = try URL(path: "test/endpoint?query=value", baseURL: baseURL)
+      XCTAssertEqual(url.absoluteString, expectedURL?.absoluteString)
+   }
+
    func test_urlInitializer_throwsError() throws {
       var isXcode14OrLater = false
       if #available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, *) {
