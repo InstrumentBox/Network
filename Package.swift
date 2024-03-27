@@ -24,6 +24,7 @@
 //  THE SOFTWARE.
 //
 
+import CompilerPluginSupport
 import PackageDescription
 
 let package = Package(
@@ -40,9 +41,27 @@ let package = Package(
       .library(name: "WebCore", targets: ["WebCore"]),
       .library(name: "WebStub", targets: ["WebStub"])
    ],
+   dependencies: [
+      .package(url: "https://github.com/apple/swift-syntax.git", from: "510.0.0")
+   ],
    targets: [
-      .target(name: "Web"),
-      .testTarget(name: "WebTests", dependencies: ["Web", "NetworkTestUtils"]),
+      .target(name: "Web", dependencies: ["WebMacros"]),
+      .macro(
+         name: "WebMacros",
+         dependencies: [
+            .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+            .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+         ]
+      ),
+      .testTarget(
+         name: "WebTests",
+         dependencies: [
+            "Web",
+            "WebMacros",
+            "NetworkTestUtils",
+            .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
+         ]
+      ),
 
       .target(name: "WebCore", dependencies: ["Web"]),
       .testTarget(name: "WebCoreTests", dependencies: ["Web", "WebCore", "NetworkTestUtils"]),
