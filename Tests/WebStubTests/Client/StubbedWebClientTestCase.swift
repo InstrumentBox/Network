@@ -55,7 +55,7 @@ class StubbedWebClientTestCase: XCTestCase {
       } catch let error as APIError {
          XCTAssertEqual(error, .testObjectNotFound)
       } catch {
-         XCTFail("Unexpected error thrown")
+         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 
@@ -74,7 +74,7 @@ class StubbedWebClientTestCase: XCTestCase {
       } catch let error as StubbedWebClientError {
          XCTAssertEqual(error, .cannotFindResponseChain("\(TestObjectRequest.self)"))
       } catch {
-         XCTFail("Unexpected error thrown")
+         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 
@@ -87,7 +87,7 @@ class StubbedWebClientTestCase: XCTestCase {
       } catch let error as StubbedWebClientError {
          XCTAssertEqual(error, .cannotFindRequestExecution("\(TestObjectRequest.self)"))
       } catch {
-         XCTFail("Unexpected error thrown")
+         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 

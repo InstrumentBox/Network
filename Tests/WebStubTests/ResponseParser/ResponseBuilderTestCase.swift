@@ -49,7 +49,7 @@ class ResponseBuilderTestCase: XCTestCase {
       } catch let error as ResponseParserError {
          XCTAssertEqual(error, .statusCodeMissed)
       } catch {
-         XCTFail("Unexpected error thrown")
+         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 }

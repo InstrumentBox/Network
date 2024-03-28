@@ -17,7 +17,7 @@ configuration.latency = ExactLatency(value: 3.0)
 ```
 
 This latency implementation uses the same value (3 seconds) for each request web client sends. The 
-second implementation provided by the library generated random latency in between given values for 
+second implementation provided by the library generates random latency in between given values for 
 each request.
 
 ```swift

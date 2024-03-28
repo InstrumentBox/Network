@@ -24,8 +24,8 @@ try chain.registerFallbackResponse()
 **Note:** `registerFallbackResponse()` throws error if `fallbackWebClient` is not provided by 
 configuration.
 
-In this case `StubbedWebClient` will return succeeded response with some object 3 times, then it 
-will throw an API error, and then it will use you server to receive responses to a request.
+In the case above `StubbedWebClient` will return succeeded response with some object 3 times, then it 
+will throw an API error, and then it will use your server to receive responses to a request.
 
 Also you can reset whole chain by using 
 ```swift  
