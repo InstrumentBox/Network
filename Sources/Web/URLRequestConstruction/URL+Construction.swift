@@ -106,7 +106,15 @@ extension URL {
       let isPathCompleteURL = path.range(of: "://") != nil
 
       var comps = URLComponents(string: path)
-      comps?.percentEncodedQuery = try encoder.encode(query)
+      if !query.isEmpty {
+         if var existingQuery = comps?.percentEncodedQuery {
+            existingQuery += "&"
+            existingQuery += try encoder.encode(query)
+            comps?.percentEncodedQuery = existingQuery
+         } else {
+            comps?.percentEncodedQuery = try encoder.encode(query)
+         }
+      }
       let completeURL = isPathCompleteURL ? comps?.url : comps?.url(relativeTo: baseURL)
 
       guard let completeURL else {

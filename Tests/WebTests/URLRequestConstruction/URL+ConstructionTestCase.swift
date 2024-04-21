@@ -50,6 +50,28 @@ class URLConstructionTestCase: XCTestCase {
       XCTAssertEqual(url.absoluteString, expectedURL?.absoluteString)
    }
 
+   func test_url_isConstructedWithEmptyQuery() throws {
+      let expectedURL = URL(string: "https://api.service.com/v1/test/endpoint")
+      let resultURL = try URL(path: "test/endpoint", baseURL: baseURL, query: [:])
+      XCTAssertEqual(resultURL.absoluteString, expectedURL?.absoluteString)
+   }
+
+   func test_url_isConstructedWithQueryInPath() throws {
+      let expectedURL = URL(string: "https://api.service.com/v1/test/endpoint?params%5Bkey%5D=value")
+      let url = try URL(path: "test/endpoint?params[key]=value", baseURL: baseURL)
+      XCTAssertEqual(url.absoluteString, expectedURL?.absoluteString)
+   }
+
+   func test_url_isConstructedByMergingQueryInPathAndQueryArgument() throws {
+      let expectedURL = URL(string: "https://api.service.com/v1/test/endpoint?params%5Bkey%5D=value&params%5Bother_key%5D=other_value")
+      let url = try URL(
+         path: "test/endpoint?params[key]=value",
+         baseURL: baseURL,
+         query: ["params": ["other_key": "other_value"]]
+      )
+      XCTAssertEqual(url.absoluteString, expectedURL?.absoluteString)
+   }
+
    func test_url_isConstructed_ifQueryIsInPath() throws {
       let expectedURL = URL(string: "https://api.service.com/v1/test/endpoint?query=value")
       let url = try URL(path: "test/endpoint?query=value", baseURL: baseURL)
