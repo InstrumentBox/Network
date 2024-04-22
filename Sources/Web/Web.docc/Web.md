@@ -9,9 +9,33 @@ Converters, etc. Built on top of new concurrency model introduced in Swift 5.5.
 
 - <doc:Installation>
 - <doc:FirstRequest>
+- <doc:MacrosRequestDeclaration>
 
 - ``Request``
 - ``WebClient``
+
+- ``CONNECT(_:)``
+- ``DELETE(_:)``
+- ``GET(_:)``
+- ``HEAD(_:)``
+- ``OPTIONS(_:)``
+- ``PATCH(_:)``
+- ``POST(_:)``
+- ``PUT(_:)``
+- ``TRACE(_:)``
+
+- ``Path()``
+- ``Path(_:)``
+
+- ``Headers(_:)``
+- ``Header()``
+- ``Header(_:)``
+
+- ``Query()``
+- ``Query(_:)``
+
+- ``Body()``
+- ``Body(_:)``
 
 ### Request
 
@@ -41,6 +65,8 @@ Converters, etc. Built on top of new concurrency model introduced in Swift 5.5.
 - ``FormData``
 - ``BodyPart``
 
+- ``Foundation``
+
 ### Response
 
 - ``Response``
@@ -49,6 +75,9 @@ Converters, etc. Built on top of new concurrency model introduced in Swift 5.5.
 
 - ``ResponseValidator``
 - ``ResponseValidationDisposition``
+- ``SuccessObjectResponseValidationDisposition``
+- ``ErrorObjectResponseValidationDisposition``
+- ``ValidationErrorResponseValidationDisposition``
 - ``StatusCodeContentTypeResponseValidator``
 - ``StatusCodeContentTypeResponseValidatorError``
 

@@ -1,5 +1,5 @@
 //
-//  ValidationErrorResponseValidationDisposition.swift
+//  Diagnostic+UnexpectedError.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -22,27 +22,17 @@
 //  THE SOFTWARE.
 //
 
-/// Response validation disposition that throws error validation process resulted in.
-public struct ValidationErrorResponseValidationDisposition: ResponseValidationDisposition {
-   let error: Error
+import SwiftDiagnostics
+import SwiftSyntax
 
-   // MARK: - Init
-
-   /// Creates and returns a new instance of `ValidationErrorResponseValidationDisposition` with
-   /// given error.
-   ///
-   /// - Parameters:
-   ///   - error: An error that's should be thrown by `processResponse(_:for:)` method.
-   public init(error: Error) {
-      self.error = error
-   }
-
-   // MARK: - ResponseValidationDisposition
-
-   public func processResponse<SuccessObject>(
-      _ response: Response,
-      for request: some Request<SuccessObject>
-   ) throws -> SuccessObject {
-      throw error
+extension Diagnostic {
+   static func unexpectedError(for node: SyntaxProtocol, domain: String = #file) -> Diagnostic {
+      let domain = domain.components(separatedBy: ".")[0]
+      let message = DiagnosticMessage(
+         diagnosticID: MessageID(domain: domain, id: "unexpectedError"),
+         message: "Unexpected error. Please report at https://github.com/InstrumentBox/Network/issues/new",
+         severity: .error
+      )
+      return Diagnostic(node: node, message: message)
    }
 }

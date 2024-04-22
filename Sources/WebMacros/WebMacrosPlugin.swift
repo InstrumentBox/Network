@@ -27,5 +27,12 @@ import SwiftSyntaxMacros
 
 @main
 struct WebMacrosPlugin: CompilerPlugin {
-   let providingMacros: [any Macro.Type] = []
+   let providingMacros: [any Macro.Type] = [
+      BodyMacro.self,
+      HeaderMacro.self,
+      HeadersMacro.self,
+      PathMacro.self,
+      QueryMacro.self,
+      RequestMacro.self
+   ]
 }

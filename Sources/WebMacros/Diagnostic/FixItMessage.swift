@@ -1,5 +1,5 @@
 //
-//  ValidationErrorResponseValidationDisposition.swift
+//  FixItMessage.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -22,27 +22,10 @@
 //  THE SOFTWARE.
 //
 
-/// Response validation disposition that throws error validation process resulted in.
-public struct ValidationErrorResponseValidationDisposition: ResponseValidationDisposition {
-   let error: Error
+import SwiftDiagnostics
+import SwiftSyntax
 
-   // MARK: - Init
-
-   /// Creates and returns a new instance of `ValidationErrorResponseValidationDisposition` with
-   /// given error.
-   ///
-   /// - Parameters:
-   ///   - error: An error that's should be thrown by `processResponse(_:for:)` method.
-   public init(error: Error) {
-      self.error = error
-   }
-
-   // MARK: - ResponseValidationDisposition
-
-   public func processResponse<SuccessObject>(
-      _ response: Response,
-      for request: some Request<SuccessObject>
-   ) throws -> SuccessObject {
-      throw error
-   }
+struct FixItMessage: SwiftDiagnostics.FixItMessage {
+   let fixItID: MessageID
+   let message: String
 }

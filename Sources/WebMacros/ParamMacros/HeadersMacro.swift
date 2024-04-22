@@ -1,5 +1,5 @@
 //
-//  ValidationErrorResponseValidationDisposition.swift
+//  HeadersMacro.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -22,27 +22,28 @@
 //  THE SOFTWARE.
 //
 
-/// Response validation disposition that throws error validation process resulted in.
-public struct ValidationErrorResponseValidationDisposition: ResponseValidationDisposition {
-   let error: Error
+import SwiftSyntax
+import SwiftSyntaxMacros
 
-   // MARK: - Init
+public struct HeadersMacro: PeerMacro {
+   public static func expansion(
+      of node: AttributeSyntax,
+      providingPeersOf declaration: some DeclSyntaxProtocol,
+      in context: some MacroExpansionContext
+   ) throws -> [DeclSyntax] {
+      guard let attributeName = node.attributeName.as(IdentifierTypeSyntax.self) else {
+         context.diagnose(.unexpectedError(for: node))
+         return []
+      }
 
-   /// Creates and returns a new instance of `ValidationErrorResponseValidationDisposition` with
-   /// given error.
-   ///
-   /// - Parameters:
-   ///   - error: An error that's should be thrown by `processResponse(_:for:)` method.
-   public init(error: Error) {
-      self.error = error
-   }
+      let macroName = "\(attributeName.name)"
+      let diagnostics = Diagnostics(macroName: macroName)
 
-   // MARK: - ResponseValidationDisposition
+      guard declaration.is(ClassDeclSyntax.self) || declaration.is(StructDeclSyntax.self) else {
+         context.diagnose(diagnostics.classOrStructOnly(for: declaration))
+         return []
+      }
 
-   public func processResponse<SuccessObject>(
-      _ response: Response,
-      for request: some Request<SuccessObject>
-   ) throws -> SuccessObject {
-      throw error
+      return []
    }
 }
