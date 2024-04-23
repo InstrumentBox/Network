@@ -1,5 +1,5 @@
 //
-//  WebMacrosPlugin.swift
+//  SkippedAuthorizationMacroTestCase.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -22,18 +22,36 @@
 //  THE SOFTWARE.
 //
 
-import SwiftCompilerPlugin
-import SwiftSyntaxMacros
+#if canImport(WebMacros)
 
-@main
-struct WebMacrosPlugin: CompilerPlugin {
-   let providingMacros: [any Macro.Type] = [
-      BodyMacro.self,
-      HeaderMacro.self,
-      HeadersMacro.self,
-      PathMacro.self,
-      QueryMacro.self,
-      RequestMacro.self,
-      SkippedAuthorizationMacro.self
-   ]
+import SwiftSyntaxMacros
+import SwiftSyntaxMacrosTestSupport
+import WebMacros
+import XCTest
+
+private let testMacros: [String: Macro.Type] = [
+   "SkippedAuthorization": SkippedAuthorizationMacro.self
+]
+
+class SkippedAuthorizationMacroTestCase: XCTestCase {
+   func test_skippedAuthorizationMacro_generatesConformance() {
+      assertMacroExpansion(
+      """
+      @SkippedAuthorization
+      struct TestObjectRequest {
+      }
+      """,
+      expandedSource:
+      """
+      struct TestObjectRequest {
+      }
+
+      extension TestObjectRequest: NonAuthorizableRequest {
+      }
+      """,
+      macros: testMacros
+      )
+   }
 }
+
+#endif

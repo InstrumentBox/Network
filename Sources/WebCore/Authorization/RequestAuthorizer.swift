@@ -48,3 +48,15 @@ public protocol RequestAuthorizer {
    /// - Returns: A header that will be used to authorize request.
    func authorizationHeader(for request: some Request) async throws -> AuthorizationHeader
 }
+
+extension RequestAuthorizer {
+   /// Asks authorizer if request should be authorized by setting them authorization header.
+   ///
+   /// - Parameters:
+   ///   - request: A request that's probably needed to be authorized.
+   /// - Returns: `false` if request doesn't conform to `NonAuthorizableRequest` protocol, otherwise
+   ///            `true`.
+   public func needsAuthorization(for request: some Request) -> Bool {
+      request is NonAuthorizableRequest ? false : true
+   }
+}

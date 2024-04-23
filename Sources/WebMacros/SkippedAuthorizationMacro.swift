@@ -1,5 +1,5 @@
 //
-//  WebMacrosPlugin.swift
+//  SkippedAuthorizationMacro.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -22,18 +22,17 @@
 //  THE SOFTWARE.
 //
 
-import SwiftCompilerPlugin
+import SwiftSyntax
 import SwiftSyntaxMacros
 
-@main
-struct WebMacrosPlugin: CompilerPlugin {
-   let providingMacros: [any Macro.Type] = [
-      BodyMacro.self,
-      HeaderMacro.self,
-      HeadersMacro.self,
-      PathMacro.self,
-      QueryMacro.self,
-      RequestMacro.self,
-      SkippedAuthorizationMacro.self
-   ]
+public struct SkippedAuthorizationMacro: ExtensionMacro {
+   public static func expansion(
+      of node: AttributeSyntax,
+      attachedTo declaration: some DeclGroupSyntax,
+      providingExtensionsOf type: some TypeSyntaxProtocol,
+      conformingTo protocols: [TypeSyntax],
+      in context: some MacroExpansionContext
+   ) throws -> [ExtensionDeclSyntax] {
+      try [ExtensionDeclSyntax("extension \(type): NonAuthorizableRequest") { }]
+   }
 }

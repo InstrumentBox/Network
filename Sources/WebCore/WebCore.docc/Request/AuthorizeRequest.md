@@ -13,8 +13,6 @@ token.
 class MyAppRequestAuthorizer: RequestAuthorizer {
    ...
 
-   func needsAuthorization(for request: some Request) -> Bool { true }
-
    func authorizationHeader(for request: some Request) async throws -> Header? {
       let token = try keychain.fetchToken()
       return .bearerAuthorization(with: token)
@@ -32,5 +30,26 @@ configuration.requestAuthorizer = MyAppRequestAuthorizer(keychain: keychain)
 ## Skip Authorization for Requests
 
 If you need some requests to not to be authorized, you can either use a different web client 
-instance whose configuration doesn't have request authorizer, or just return `false` in 
-`needsAuthorization(for:)` method of ``RequestAuthorizer``.
+instance whose configuration doesn't have request authorizer, or conform desired requests to
+`NonAuthorizableRequest` protocol provided by the *Web* library
+
+```swift
+struct SomeRequestWithoutAuthorization: Request, NonAuthorizableRequest {
+   ...
+}
+```
+
+or if your prefer to use macros
+
+```swift
+@SkippedAuthorization
+struct SomeRequestWithoutAuthorization {
+   ...
+}
+```
+
+In this case default implementation of `needsAuthorization(for:)` method of ``RequestAuthorizer``
+checks if request conform to `NonAuthorizableRequest` and returns `true` or `false` depending on
+this conformance.
+
+For more control you may implement `needsAuthorization(for:)` method of by yourself. 

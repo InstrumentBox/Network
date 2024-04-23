@@ -1,5 +1,5 @@
 //
-//  WebMacrosPlugin.swift
+//  RequestAuthorizerTestCase.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -22,18 +22,33 @@
 //  THE SOFTWARE.
 //
 
-import SwiftCompilerPlugin
-import SwiftSyntaxMacros
+import NetworkTestUtils
+import Web
+import WebCore
+import XCTest
 
-@main
-struct WebMacrosPlugin: CompilerPlugin {
-   let providingMacros: [any Macro.Type] = [
-      BodyMacro.self,
-      HeaderMacro.self,
-      HeadersMacro.self,
-      PathMacro.self,
-      QueryMacro.self,
-      RequestMacro.self,
-      SkippedAuthorizationMacro.self
-   ]
+class RequestAuthorizerTestCase: XCTestCase {
+   func test_requestAuthorizer_defaultImplementation_tellsAuthorizeRequest() {
+      let authorizer = TestRequestAuthorizer()
+      let req = TestObjectRequest()
+      XCTAssertTrue(authorizer.needsAuthorization(for: req))
+   }
+
+   func test_requestAuthorizer_defaultImplementation_tellsToSkipAuthorizationForNonAuthorizableRequest() {
+      let authorizer = TestRequestAuthorizer()
+      let req = NonAuthorizableTestObjectRequest()
+      XCTAssertFalse(authorizer.needsAuthorization(for: req))
+   }
+}
+
+// MARK: -
+
+@SkippedAuthorization
+@GET<TestObject, APIError>("test_objects/42")
+private struct NonAuthorizableTestObjectRequest { }
+
+private class TestRequestAuthorizer: RequestAuthorizer {
+   func authorizationHeader(for request: some Request) async throws -> AuthorizationHeader {
+      .bearerAuthorization("42")
+   }
 }

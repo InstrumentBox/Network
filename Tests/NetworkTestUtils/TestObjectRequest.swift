@@ -25,26 +25,8 @@
 import Foundation
 import Web
 
-package class TestObjectRequest: Request {
-   // MARK: - Init
-
+@GET<TestObject, APIError>("test_objects/42")
+@Headers(["Accept": "application/json"])
+package class TestObjectRequest {
    package init() { }
-
-   // MARK: - Request
-
-   package var successObjectResponseConverter: any ResponseConverter<TestObject> {
-      JSONDecoderResponseConverter()
-   }
-
-   package var errorObjectResponseConverter: any ResponseConverter<APIError> {
-      JSONDecoderResponseConverter()
-   }
-
-   package func toURLRequest(with baseURL: URL?) throws -> URLRequest {
-      try URLRequest(
-         url: URL(path: "test_object/42", baseURL: baseURL),
-         method: .get,
-         headers: ["Accept": "application/json"]
-      )
-   }
 }

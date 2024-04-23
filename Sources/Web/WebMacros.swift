@@ -284,3 +284,7 @@ public macro Body() = #externalMacro(module: "WebMacros", type: "BodyMacro")
 ///   - converter: Converter's initialization code that's used to create converter.
 @attached(peer)
 public macro Body(_ converter: (any BodyConverter)) = #externalMacro(module: "WebMacros", type: "BodyMacro")
+
+/// Generated conformance of request to ``NonAuthorizableRequest`` protocol.
+@attached(extension, conformances: NonAuthorizableRequest)
+public macro SkippedAuthorization() = #externalMacro(module: "WebMacros", type: "SkippedAuthorizationMacro")

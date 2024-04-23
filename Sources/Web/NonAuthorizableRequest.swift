@@ -1,5 +1,5 @@
 //
-//  WebMacrosPlugin.swift
+//  NonAuthorizableRequest.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -22,18 +22,5 @@
 //  THE SOFTWARE.
 //
 
-import SwiftCompilerPlugin
-import SwiftSyntaxMacros
-
-@main
-struct WebMacrosPlugin: CompilerPlugin {
-   let providingMacros: [any Macro.Type] = [
-      BodyMacro.self,
-      HeaderMacro.self,
-      HeadersMacro.self,
-      PathMacro.self,
-      QueryMacro.self,
-      RequestMacro.self,
-      SkippedAuthorizationMacro.self
-   ]
-}
+/// A protocol marker which can be used to identify request that doesn't require authorization.
+public protocol NonAuthorizableRequest { }

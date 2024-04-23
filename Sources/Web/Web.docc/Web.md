@@ -12,6 +12,7 @@ Converters, etc. Built on top of new concurrency model introduced in Swift 5.5.
 - <doc:MacrosRequestDeclaration>
 
 - ``Request``
+- ``NonAuthorizableRequest``
 - ``WebClient``
 
 - ``CONNECT(_:)``
@@ -36,6 +37,8 @@ Converters, etc. Built on top of new concurrency model introduced in Swift 5.5.
 
 - ``Body()``
 - ``Body(_:)``
+
+- ``SkippedAuthorization()``
 
 ### Request
 

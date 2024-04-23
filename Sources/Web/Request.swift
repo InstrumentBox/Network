@@ -44,8 +44,7 @@ public protocol Request<SuccessObject> {
    var errorObjectResponseConverter: any ResponseConverter<ErrorObject> { get }
 
    /// A validator that check incoming response for a validity and gives disposition what way a
-   /// `WebClient` should use to complete response processing. By default this property returns
-   /// ``StatusCodeContentTypeResponseValidator``.
+   /// `WebClient` should use to complete response processing.
    ///
    /// Response validator is an object that tells if `WebClient` should either complete with
    /// validation error, or parse response and return object, or parse response and throw API error.
@@ -62,6 +61,7 @@ public protocol Request<SuccessObject> {
 }
 
 extension Request {
+   /// Returns ``StatusCodeContentTypeResponseValidator``.
    public var responseValidator: ResponseValidator {
       StatusCodeContentTypeResponseValidator()
    }
