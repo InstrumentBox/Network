@@ -62,7 +62,7 @@ your project manually.
 
 - Download the repository at [https://github.com/InstrumentBox/Network](https://github.com/InstrumentBox/Network)
 - Unzip archive
-- Copy all `*.swift` files from `Sources/Web` to your project
+- Copy all `*.swift` files from `Sources/Web` and `Sources/WebCore` to your project
 - Go to Xcode and select `File` -> `Add Files to "<Project Name>"...`
 - Select recently copied files
 
