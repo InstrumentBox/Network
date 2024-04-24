@@ -51,9 +51,9 @@ you need to implement conformance to ``Request`` by yourself.
 ## Make Path Dependent on Variables
 
 You are allowed to make a path dynamically changed. Path may have variables that begin with colon 
-sign. In this case a request declaration MUST have variable that marked with `@Path` macro.  
-Name of this variable may match name of variable in path or you may provide path variable name via 
-attribute argument. Variable names in path MUST NOT be the same.
+sign. In this case a request declaration MUST have variables that marked with `@Path` macro.  
+Name of these variables may match name of variables in path or you may provide path variable name via 
+macro argument. Variable names in path MUST NOT be the same.
 
 Let's say you need to get some article written by an author:
 
@@ -71,9 +71,9 @@ struct ArticleByIDRequest {
 ## Define Query Items
 
 Each request may have query items. To define query items you may write them directly in path string 
-if their values are constants or you may mark needed variables with `@Query` macro. In the 
+if their values are constant or you may mark needed variables with `@Query` macro. In the 
 second case name of variable will be used as query parameter name. To customize it you need to pass 
-query parameter name via attribute's argument. `@Query` variable may be optional. Duplication of 
+query parameter name via macro's argument. `@Query` variable may be optional. Duplication of 
 query item names is error.
 
 ```swift
@@ -112,7 +112,7 @@ struct SomeObjectRequest {
 
 ## Send Request with Body
 
-Body of request may be passed using `@Body` macro. Each request must contain the only body 
+Body of request may be passed using `@Body` macro. Each request must contain at most one body 
 parameter.
 
 ```swift
@@ -135,7 +135,7 @@ If you need to customize body converter's type or customize initialization of co
 this by passing argument to `@Body` macro. In that case type of variable must match type body 
 converter works with.
 
-Let's say you need customize data encoding strategy of your `JSONEncoder` that's used by converter.
+Let's say you need to customize data encoding strategy of your `JSONEncoder` that's used by converter.
 
 ```swift
 @POST<SomeObject, APIError>("path/to/some/object")
