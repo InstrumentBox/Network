@@ -52,4 +52,4 @@ In this case default implementation of `needsAuthorization(for:)` method of ``Re
 checks if request conform to `NonAuthorizableRequest` and returns `true` or `false` depending on
 this conformance.
 
-For more control you may implement `needsAuthorization(for:)` method of by yourself. 
+For more control you may implement `needsAuthorization(for:)` method by yourself. 

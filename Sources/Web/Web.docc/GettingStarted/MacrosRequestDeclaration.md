@@ -142,7 +142,7 @@ Let's say you need to customize data encoding strategy of your `JSONEncoder` tha
 struct SomeObjectRequest {
    @Body(JSONEncoderBodyConverter<SomeObject>(encoder: {
       let encoder = JSONEncoder()
-      encoder.dataEncodingStrategy = .iso8601
+      encoder.dateEncodingStrategy = .iso8601
       return encoder
    }()))
    let someObject: SomeObject
