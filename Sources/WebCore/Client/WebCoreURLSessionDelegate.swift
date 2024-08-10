@@ -1,5 +1,5 @@
 //
-//  WebURLSessionDelegate.swift
+//  WebCoreURLSessionDelegate.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -24,7 +24,7 @@
 
 import Foundation
 
-class WebURLSessionDelegate: NSObject, URLSessionDelegate {
+class WebCoreURLSessionDelegate: NSObject, URLSessionDelegate {
    private let configuration: URLSessionWebClientConfiguration
 
    // MARK: - Init

@@ -41,7 +41,7 @@ public class URLSessionWebClient: WebClient {
    ///   - configuration: Configuration that will be used to create a web client.
    public init(configuration: URLSessionWebClientConfiguration) {
       self.configuration = configuration
-      let delegate = WebURLSessionDelegate(configuration: configuration)
+      let delegate = WebCoreURLSessionDelegate(configuration: configuration)
       session = URLSession(
          configuration: configuration.sessionConfiguration,
          delegate: delegate,
