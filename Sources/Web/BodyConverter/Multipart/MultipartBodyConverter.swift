@@ -50,29 +50,43 @@ extension MultipartBodyConverter {
 public struct MultipartBodyConverter: BodyConverter {
    private let contentTypeKind: ContentTypeKind
    private let boundary: String
-   private let addsLineBreaks: Bool
+   private let preamble: String?
+   private let epilogue: String?
 
    // MARK: - Init
 
    /// Creates and returns an instance of `MultipartBodyConverter` with a given parameters.
    ///
+   /// Preamble and epilogue parameters may be useful with `mixed`, `alternative` or `related`
+   /// content types.
+   ///
    /// - Parameters:
    ///   - contentTypeKind: The kind of content. Defaults to `.formData`.
-   ///   - addLineBreaks: Tells converter if it should add empty line in the beginning of body and
-   ///                    add line break in the end of body. Defaults to `true`. This setting may
-   ///                    be useful if you use nested multipart bodies.
-   public init(contentTypeKind: ContentTypeKind = .formData, addsLineBreaks: Bool = true) {
+   ///   - preamble: A string to be added before the first boundary. Defaults to `"\r\n"`.
+   ///   - epilogue: A string to be added after the last boundary. Defaults to `"\r\n"`.
+   public init(
+      contentTypeKind: ContentTypeKind = .formData,
+      preamble: String? = "\r\n",
+      epilogue: String? = "\r\n"
+   ) {
       self.init(
          contentTypeKind: contentTypeKind,
          boundary: UUID().uuidString,
-         addsLineBreaks: addsLineBreaks
+         preamble: preamble,
+         epilogue: epilogue
       )
    }
 
-   init(contentTypeKind: ContentTypeKind, boundary: String, addsLineBreaks: Bool) {
+   init(
+      contentTypeKind: ContentTypeKind,
+      boundary: String,
+      preamble: String? = "\r\n",
+      epilogue: String? = "\r\n"
+   ) {
       self.contentTypeKind = contentTypeKind
       self.boundary = boundary
-      self.addsLineBreaks = addsLineBreaks
+      self.preamble = preamble
+      self.epilogue = epilogue
    }
 
    // MARK: - BodyConverter
@@ -93,8 +107,8 @@ public struct MultipartBodyConverter: BodyConverter {
    public func convert(_ body: [BodyPart]) throws -> Data {
       var bodyData = Data()
 
-      if addsLineBreaks {
-         bodyData.append("\r\n")
+      if let preamble {
+         bodyData.append(preamble)
       }
 
       for bodyPart in body {
@@ -104,8 +118,8 @@ public struct MultipartBodyConverter: BodyConverter {
 
       bodyData.append("--\(boundary)--")
 
-      if addsLineBreaks {
-         bodyData.append("\r\n")
+      if let epilogue {
+         bodyData.append(epilogue)
       }
 
       return bodyData

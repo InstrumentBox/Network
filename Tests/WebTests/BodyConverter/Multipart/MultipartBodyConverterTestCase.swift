@@ -50,7 +50,8 @@ class MultipartBodyConverterTestCase: XCTestCase {
       let converter = MultipartBodyConverter(
          contentTypeKind: .formData,
          boundary: outerBoundary,
-         addsLineBreaks: true
+         preamble: "\r\n",
+         epilogue: "\r\n"
       )
       let parts = try makeBodyParts()
       let body = try converter.convert(parts)
@@ -86,7 +87,8 @@ class MultipartBodyConverterTestCase: XCTestCase {
          converter: MultipartBodyConverter(
             contentTypeKind: .mixed,
             boundary: innerBoundary,
-            addsLineBreaks: false
+            preamble: nil,
+            epilogue: nil
          )
       )
 
