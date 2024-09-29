@@ -1,5 +1,5 @@
 //
-//  LineByLineReaderTestCase.swift
+//  LineByLineReaderTests.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -25,16 +25,19 @@
 @testable
 import WebStub
 
-import XCTest
+import Foundation
+import Testing
 
-class LineByLineReaderTestCase: XCTestCase {
-   func test_linewiseReader_readsFileLineByLine() throws {
-      let fileURL = try XCTUnwrap(Bundle.module.url(forResource: "Data", withExtension: "txt"))
-      let reader = try XCTUnwrap(LineByLineReader(fileURL: fileURL))
+@Suite("Line by line reader")
+struct LineByLineReaderTests {
+   @Test("Reads file line by line")
+   func readFile() throws {
+      let fileURL = try #require(Bundle.module.url(forResource: "Data", withExtension: "txt"))
+      let reader = try #require(LineByLineReader(fileURL: fileURL))
       var lines: [Data] = []
-      while let line: Data = reader.readLine() {
+      while let line = reader.readLine() {
          lines.append(line)
       }
-      XCTAssertEqual(lines, [Data([0x30]), Data([0x31]), Data([0x32]), Data([0x33])])
+      #expect(lines == [Data([0x30]), Data([0x31]), Data([0x32]), Data([0x33])])
    }
 }

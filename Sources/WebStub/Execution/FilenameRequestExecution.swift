@@ -27,15 +27,6 @@ import Web
 
 public enum FilenameRequestExecutionError: Error, Equatable {
    case cannotCreateResponseParser(URL)
-
-   // MARK: - Equatable
-
-   public static func ==(lhs: FilenameRequestExecutionError, rhs: FilenameRequestExecutionError) -> Bool {
-      switch (lhs, rhs) {
-         case let (.cannotCreateResponseParser(lhsURL), .cannotCreateResponseParser(rhsURL)):
-            return lhsURL == rhsURL
-      }
-   }
 }
 
 class FilenameRequestExecution: RequestExecution {

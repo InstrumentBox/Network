@@ -78,7 +78,8 @@ let package = Package(
             .process("ResponseParser/Resources/NoStatusCode.response"),
             .process("ResponseParser/Resources/IncorrectHeader.response"),
             .process("ResponseParser/Resources/HeadersAsBody.response"),
-            .process("ResponseParser/Resources/JustStatusCode.response")
+            .process("ResponseParser/Resources/JustStatusCode.response"),
+            .process("ResponseParser/Resources/IncorrectStatusCode.response")
          ]
       ),
 

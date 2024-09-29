@@ -1,5 +1,5 @@
 //
-//  FallbackRequestExecutionTestCase.swift
+//  ResponseBuilderTests.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -25,19 +25,31 @@
 @testable
 import WebStub
 
-import NetworkTestUtils
-import Web
-import WebCore
-import XCTest
+import Foundation
+import Testing
 
-class FallbackRequestExecutionTestCase: XCTestCase {
-   func test_fallbackRequestExecution_forwardsRequestToWebClient() async throws {
-      let configuration: URLSessionWebClientConfiguration = .ephemeral
-      configuration.sessionConfiguration.protocolClasses = [TestObjectWebTestsURLProtocol.self]
-      let fallbackWebClient = URLSessionWebClient(configuration: configuration)
+@Suite("Response builder")
+struct ResponseBuilderTests {
+   @Test("Returns response")
+   func returnResponse() throws {
+      let request = try URLRequest(url: #require(URL(string: "https://api.myservice.com/")))
+      let builder = ResponseBuilder(request: request)
+      builder.setStatusCode(200)
+      let response = try builder.response
 
-      let execution = FallbackRequestExecution(webClient: fallbackWebClient)
-      let object = try await execution.execute(TestObjectRequest())
-      XCTAssertEqual(object, .some)
+      #expect(response.request == request)
+      #expect(response.statusCode == 200)
+      #expect(response.headers.isEmpty)
+      #expect(response.body.isEmpty)
+   }
+
+   @Test("Throws error if no status code set")
+   func buildWithNoStatusCode() throws {
+      let request = try URLRequest(url: #require(URL(string: "https://api.myservice.com/")))
+      let builder = ResponseBuilder(request: request)
+
+      #expect(throws: ResponseParserError.statusCodeMissed) {
+         try builder.response
+      }
    }
 }

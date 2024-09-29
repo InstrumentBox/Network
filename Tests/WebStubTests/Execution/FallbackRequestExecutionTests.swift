@@ -1,5 +1,5 @@
 //
-//  ResponseBuilderTestCase.swift
+//  FallbackRequestExecutionTests.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -25,31 +25,21 @@
 @testable
 import WebStub
 
-import XCTest
+import NetworkTestUtils
+import Testing
+import Web
+import WebCore
 
-class ResponseBuilderTestCase: XCTestCase {
-   func test_responseBuilder_returnsResponse() throws {
-      let request = try URLRequest(url: XCTUnwrap(URL(string: "https://api.myservice.com/")))
-      let builder = ResponseBuilder(request: request)
-      builder.setStatusCode(200)
-      let response = try builder.response
+@Suite("Fallback request execution")
+struct FallbackRequestExecutionTests {
+   @Test("Forward requests to a web client")
+   func executeRequest() async throws {
+      let configuration: URLSessionWebClientConfiguration = .ephemeral
+      configuration.sessionConfiguration.protocolClasses = [TestObjectWebTestsURLProtocol.self]
+      let fallbackWebClient = URLSessionWebClient(configuration: configuration)
 
-      XCTAssertEqual(response.request, request)
-      XCTAssertEqual(response.statusCode, 200)
-      XCTAssertTrue(response.headers.isEmpty)
-      XCTAssertTrue(response.body.isEmpty)
-   }
-
-   func test_responseBuilder_throwsError_ifNoStatusCodeSet() throws {
-      let request = try URLRequest(url: XCTUnwrap(URL(string: "https://api.myservice.com/")))
-      let builder = ResponseBuilder(request: request)
-      do {
-         _ = try builder.response
-         XCTFail("Unexpected response returned")
-      } catch let error as ResponseParserError {
-         XCTAssertEqual(error, .statusCodeMissed)
-      } catch {
-         XCTFail("Unexpected error thrown: \(error)")
-      }
+      let execution = FallbackRequestExecution(webClient: fallbackWebClient)
+      let object = try await execution.execute(TestObjectRequest())
+      #expect(object == .some)
    }
 }

@@ -26,7 +26,11 @@ import Foundation
 import Web
 
 class ResponseParser {
-   var state: ResponseParserState!
+   lazy var state: ResponseParserState = ReceivingStatusCodeResponseParserState(
+      parser: self,
+      builder: builder
+   )
+
    private let builder: ResponseBuilder
    private let reader: LineByLineReader
 
@@ -39,7 +43,6 @@ class ResponseParser {
 
       self.reader = reader
       builder = ResponseBuilder(request: request)
-      state = ReceivingStatusCodeResponseParserState(parser: self, builder: builder)
    }
 
    // MARK: - Parsing

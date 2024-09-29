@@ -1,5 +1,5 @@
 //
-//  StubChainTestCase.swift
+//  StubChainTests.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -26,78 +26,82 @@
 import WebStub
 
 import NetworkTestUtils
+import Testing
 import Web
 import WebCore
-import XCTest
 
-class StubChainTestCase: XCTestCase {
-   func test_stubChain_returnsExecution() async throws {
+@Suite("Stub chain")
+struct StubChainTests {
+   @Test("Returns execution")
+   func returnsExecution() throws {
       let chain = makeStubChain()
       try chain.registerFallbackResponse()
-      XCTAssertNotNil(chain.dequeueNextExecution())
+      #expect(chain.dequeueNextExecution() != nil)
    }
 
-   func test_stubChain_returnsNil_ifNoRecordsRegistered() async throws {
+   @Test("Returns nil if no records registered")
+   func noRecordsRegistered() {
       let chain = StubChain(configuration: StubbedWebClientConfiguration())
       let execution = chain.dequeueNextExecution()
-      XCTAssertNil(execution)
+      #expect(execution == nil)
    }
 
-   func test_stubChain_throwsFallbackRegistrationError_ifNoFallbackWebClient() async throws {
+   @Test("Throws registration error if no fallback client")
+   func noFallbackWebClient() async throws {
       let chain = StubChain(configuration: StubbedWebClientConfiguration())
-      do {
+
+      #expect(throws: StubChainError.cannotRegisterFallbackExecution) {
          try chain.registerFallbackResponse()
-         XCTFail("Unexpected successful registration")
-      } catch let error as StubChainError {
-         XCTAssertEqual(error, .cannotRegisterFallbackExecution)
-      } catch {
-         XCTFail("Unexpected error thrown \(error)")
       }
    }
 
-   func test_stubChain_returnsLastExecution_despiteItIsExhausted() async throws {
+   @Test("Returns last execution despite it's exhausted")
+   func returnLastExecution() async throws {
       let chain = makeStubChain()
       try chain.registerFallbackResponse()
       let execution1 = chain.dequeueNextExecution()
       let execution2 = chain.dequeueNextExecution()
-      XCTAssertTrue(execution1 === execution2)
+      #expect(execution1 === execution2)
    }
 
+   @Test("Drops execution if exhausted")
    func test_stubChain_dropsExecution_ifExhausted() async throws {
       let chain = makeStubChain()
-      try chain.registerResponse(at: XCTUnwrap(Responses.testObject))
+      try chain.registerResponse(at: #require(Responses.testObject))
       try chain.registerFallbackResponse()
 
       let execution1 = chain.dequeueNextExecution()
       let execution2 = chain.dequeueNextExecution()
 
-      XCTAssertTrue(execution1 is FilenameRequestExecution)
-      XCTAssertTrue(execution2 is FallbackRequestExecution)
+      #expect(execution1 is FilenameRequestExecution)
+      #expect(execution2 is FallbackRequestExecution)
    }
 
-   func test_stubChain_dropsExecution_onlyWhenUsageCountExceeded() async throws {
+   @Test("Drops execution only if usage count exceeded")
+   func dropWhenUsageCountExceeded() async throws {
       let chain = makeStubChain()
-      try chain.registerResponse(at: XCTUnwrap(Responses.testObject), usageCount: 2)
+      try chain.registerResponse(at: #require(Responses.testObject), usageCount: 2)
       try chain.registerFallbackResponse()
 
       let execution1 = chain.dequeueNextExecution()
       let execution2 = chain.dequeueNextExecution()
       let execution3 = chain.dequeueNextExecution()
 
-      XCTAssertTrue(execution1 is FilenameRequestExecution)
-      XCTAssertTrue(execution2 is FilenameRequestExecution)
-      XCTAssertTrue(execution1 === execution2)
-      XCTAssertTrue(execution3 is FallbackRequestExecution)
+      #expect(execution1 is FilenameRequestExecution)
+      #expect(execution2 is FilenameRequestExecution)
+      #expect(execution1 === execution2)
+      #expect(execution3 is FallbackRequestExecution)
    }
 
-   func test_stubChain_resetsRecords() async throws {
+   @Test("Resets records")
+   func resetRecords() async throws {
       let chain = makeStubChain()
       try chain.registerFallbackResponse()
       var execution = chain.dequeueNextExecution()
-      XCTAssertNotNil(execution)
+      #expect(execution != nil)
       chain.reset()
       execution = chain.dequeueNextExecution()
-      XCTAssertNil(execution)
+      #expect(execution == nil)
    }
 }
 

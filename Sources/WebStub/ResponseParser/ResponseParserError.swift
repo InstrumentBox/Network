@@ -35,19 +35,4 @@ public enum ResponseParserError: Error, Equatable {
 
    /// Thrown when header string can't be parsed into name and value divided by colon.
    case incorrectHeader(String)
-
-   // MARK: - Equatable
-
-   public static func ==(lhs: ResponseParserError, rhs: ResponseParserError) -> Bool {
-      switch (lhs, rhs) {
-         case (.incorrectStatusCodeData, .incorrectStatusCodeData),
-              (.statusCodeMissed, .statusCodeMissed),
-              (.incorrectHeaderData, .incorrectHeaderData):
-            return true
-         case let (.incorrectHeader(lhsHeader), .incorrectHeader(rhsHeader)):
-            return lhsHeader == rhsHeader
-         default:
-            return false
-      }
-   }
 }

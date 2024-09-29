@@ -1,5 +1,5 @@
 //
-//  ResponseParserTestCase.swift
+//  ResponseParserTests.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -25,92 +25,99 @@
 @testable
 import WebStub
 
-import XCTest
+import Foundation
+import Testing
 
-class ResponseParserTestCase: XCTestCase {
+@Suite("Response parser")
+struct ResponseParserTests {
    private let expectedHeaders = [
       "Content-Type": "application/json; charset=utf-8",
       "Content-Lang": "en"
    ]
    private let expectedBodyString = "hello\nworld\n"
 
-   // MARK: - Test Cases
+   // MARK: - Tests
 
-   func test_responseParser_returnsResponse_ifAllFieldsExists() throws {
+   @Test("Returns response when all fields exist")
+   func fullResponse() throws {
       let parser = try makeParser(responseName: "Full")
       let response = try parser.parse()
 
-      XCTAssertEqual(response.statusCode, 200)
-      XCTAssertEqual(response.headers, expectedHeaders)
+      #expect(response.statusCode == 200)
+      #expect(response.headers == expectedHeaders)
 
-      let bodyString = try XCTUnwrap(String(data: response.body, encoding: .utf8))
-      XCTAssertEqual(bodyString, expectedBodyString)
+      let bodyString = try #require(String(data: response.body, encoding: .utf8))
+      #expect(bodyString == expectedBodyString)
    }
 
-   func test_responseParser_returnsResponse_ifEmptyBody() throws {
+   @Test("Returns response when body is empty")
+   func emptyBody() throws {
       let parser = try makeParser(responseName: "EmptyBody")
       let response = try parser.parse()
 
-      XCTAssertEqual(response.statusCode, 200)
-      XCTAssertEqual(response.headers, expectedHeaders)
-      XCTAssertTrue(response.body.isEmpty)
+      #expect(response.statusCode == 200)
+      #expect(response.headers == expectedHeaders)
+      #expect(response.body.isEmpty)
    }
 
-   func test_responseParser_returnsResponse_ifNoHeaders() throws {
+   @Test("Returns response if no headers")
+   func noHeaders() throws {
       let parser = try makeParser(responseName: "NoHeaders")
       let response = try parser.parse()
 
-      XCTAssertEqual(response.statusCode, 200)
-      XCTAssertTrue(response.headers.isEmpty)
+      #expect(response.statusCode == 200)
+      #expect(response.headers.isEmpty)
 
-      let bodyString = try XCTUnwrap(String(data: response.body, encoding: .utf8))
-      XCTAssertEqual(bodyString, expectedBodyString)
+      let bodyString = try #require(String(data: response.body, encoding: .utf8))
+      #expect(bodyString == expectedBodyString)
    }
 
-   func test_responseParser_returnsResponse_ifJustStatusCode() throws {
+   @Test("Returns response when just status code")
+   func justStatusCode() throws {
       let parser = try makeParser(responseName: "JustStatusCode")
       let response = try parser.parse()
 
-      XCTAssertEqual(response.statusCode, 404)
-      XCTAssertTrue(response.headers.isEmpty)
-      XCTAssertTrue(response.body.isEmpty)
+      #expect(response.statusCode == 404)
+      #expect(response.headers.isEmpty)
+      #expect(response.body.isEmpty)
    }
 
+   @Test("Parses headers as body when empty line between status code and headers")
    func test_responseParser_parsesHeadersAsBody_ifEmptyLineBetweenStatusCodeAndHeaders() throws {
       let parser = try makeParser(responseName: "HeadersAsBody")
       let response = try parser.parse()
 
-      XCTAssertEqual(response.statusCode, 200)
-      XCTAssertTrue(response.headers.isEmpty)
+      #expect(response.statusCode == 200)
+      #expect(response.headers.isEmpty)
 
-      let bodyString = try XCTUnwrap(String(data: response.body, encoding: .utf8))
+      let bodyString = try #require(String(data: response.body, encoding: .utf8))
       let expectedBodyString =
          "Content-Type: application/json; charset=utf-8\nContent-Lang: en\n\n" +
          self.expectedBodyString
-      XCTAssertEqual(bodyString, expectedBodyString)
+      #expect(bodyString == expectedBodyString)
    }
 
-   func test_responseParser_throwsError_ifNoStatusCode() throws {
+   @Test("Throws error if status code missed")
+   func noStatusCode() throws {
       let parser = try makeParser(responseName: "NoStatusCode")
-      do {
+      #expect(throws: ResponseParserError.incorrectStatusCodeData) {
          _ = try parser.parse()
-         XCTFail("Unexpectedly parsed response")
-      } catch let error as ResponseParserError {
-         XCTAssertEqual(error, .incorrectStatusCodeData)
-      } catch {
-         XCTFail("Unexpected error \(error)")
       }
    }
 
-   func test_responseParser_throwsError_ifIncorrectHeader() throws {
+   @Test("Throws error if incorrect header")
+   func incorrectHeader() throws {
       let parser = try makeParser(responseName: "IncorrectHeader")
-      do {
+      #expect(throws: ResponseParserError.incorrectHeader("SomeHeader")) {
          _ = try parser.parse()
-         XCTFail("Unexpectedly parsed response")
-      } catch let error as ResponseParserError {
-         XCTAssertEqual(error, .incorrectHeader("SomeHeader"))
-      } catch {
-         XCTFail("Unexpected error \(error)")
+      }
+   }
+
+   @Test("Throws error if incorrect status code")
+   func incorrectStatusCode() throws {
+      let parser = try makeParser(responseName: "IncorrectStatusCode")
+      #expect(throws: ResponseParserError.incorrectStatusCodeData) {
+         _ = try parser.parse()
       }
    }
 }
@@ -119,7 +126,7 @@ class ResponseParserTestCase: XCTestCase {
 
 private func makeParser(responseName: String) throws -> ResponseParser {
    let bundle: Bundle = .module
-   let responseURL = try XCTUnwrap(bundle.url(forResource: responseName, withExtension: "response"))
-   let request = try URLRequest(url: XCTUnwrap(URL(string: "https://api.myserice.com")))
-   return try XCTUnwrap(ResponseParser(request: request, responseURL: responseURL))
+   let responseURL = try #require(bundle.url(forResource: responseName, withExtension: "response"))
+   let request = try URLRequest(url: #require(URL(string: "https://api.myserice.com")))
+   return try #require(ResponseParser(request: request, responseURL: responseURL))
 }

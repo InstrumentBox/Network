@@ -31,17 +31,4 @@ public enum StubbedWebClientError: Error, Equatable {
 
    /// Thrown when response record in the chain for request not found. Contains type name of request.
    case cannotFindRequestExecution(String)
-
-   // MARK: - Equatable
-
-   public static func ==(lhs: StubbedWebClientError, rhs: StubbedWebClientError) -> Bool {
-      switch (lhs, rhs) {
-         case let (.cannotFindResponseChain(lhsType), .cannotFindResponseChain(rhsType)):
-            return lhsType == rhsType
-         case let (.cannotFindRequestExecution(lhsType), .cannotFindRequestExecution(rhsType)):
-            return lhsType == rhsType
-         default:
-            return false
-      }
-   }
 }

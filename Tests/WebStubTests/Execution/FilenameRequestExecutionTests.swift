@@ -1,5 +1,5 @@
 //
-//  FilenameRequestExecutionTestCase.swift
+//  FilenameRequestExecutionTests.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -25,45 +25,46 @@
 @testable
 import WebStub
 
+import Foundation
 import NetworkTestUtils
+import Testing
 import Web
-import XCTest
 
-class FilenameRequestExecutionTestCase: XCTestCase {
-   func test_filenameRequestExecution_returnsSuccessObject() async throws {
-      let execution = try FilenameRequestExecution(responseURL: XCTUnwrap(Responses.testObject), latency: nil)
+@Suite("Filename request execution")
+struct FilenameRequestExecutionTests {
+   @Test("Returns success object")
+   func fetchSuccessObject() async throws {
+      let execution = try FilenameRequestExecution(responseURL: #require(Responses.testObject), latency: nil)
       let object = try await execution.execute(TestObjectRequest())
-      XCTAssertEqual(object, .some)
+      #expect(object == .some)
    }
 
-   func test_filenameRequestExecution_throwsAPIError() async throws {
-      let execution = try FilenameRequestExecution(responseURL: XCTUnwrap(Responses.apiError), latency: nil)
-      do {
+   @Test("Throws API Error")
+   func fetchAPIError() async throws {
+      let execution = try FilenameRequestExecution(responseURL: #require(Responses.apiError), latency: nil)
+
+      await #expect(throws: APIError.testObjectNotFound) {
          _ = try await execution.execute(TestObjectRequest())
-         XCTFail("Unexpected success object returned")
-      } catch let error as APIError {
-         XCTAssertEqual(error, .testObjectNotFound)
-      } catch {
-         XCTFail("Unexpected error thrown \(error)")
       }
    }
 
-   func test_filenameRequestExecution_throwsResponseValidationError() async throws {
-      let execution = try FilenameRequestExecution(responseURL: XCTUnwrap(Responses.xml), latency: nil)
-      do {
+   @Test("Throws response validation error")
+   func responseValidation() async throws {
+      let execution = try FilenameRequestExecution(responseURL: #require(Responses.xml), latency: nil)
+
+      await #expect(throws: StatusCodeContentTypeResponseValidatorError.unacceptableContentType(
+         expected: "application/json",
+         received: "text/xml"
+      )) {
          _ = try await execution.execute(TestObjectRequest())
-         XCTFail("Unexpected success object returned")
-      } catch let error as StatusCodeContentTypeResponseValidatorError {
-         XCTAssertEqual(error, .unacceptableContentType(expected: "application/json", received: "text/xml"))
-      } catch {
-         XCTFail("Unexpected error thrown \(error)")
       }
    }
 
-   func test_filenameRequestExecution_returnsResponseNotEarlierThanLatency() async throws {
+   @Test("Returns object not earlier than latency")
+   func fetchObjectWithLatency() async throws {
       let latencyValue: TimeInterval = 1.0
       let execution = try FilenameRequestExecution(
-         responseURL: XCTUnwrap(Responses.testObject),
+         responseURL: #require(Responses.testObject),
          latency: ExactLatency(value: latencyValue)
       )
 
@@ -71,7 +72,7 @@ class FilenameRequestExecutionTestCase: XCTestCase {
       _ = try await execution.execute(TestObjectRequest())
       let duration = CFAbsoluteTimeGetCurrent() - start
 
-      XCTAssertTrue(
+      #expect(
          duration >= latencyValue,
          "Total duration of request execution (\(duration) is less than latency \(latencyValue)"
       )

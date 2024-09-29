@@ -1,5 +1,5 @@
 //
-//  StubChain.RecordTestCase.swift
+//  StubChain.RecordTests.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -26,26 +26,22 @@
 import WebStub
 
 import NetworkTestUtils
-import XCTest
+import Testing
 
-class StubChainRecordTestCase: XCTestCase {
-   func test_stubChainRecord_returnsExhaustedTrue_ifCurrentUsageCountEqualsToUsageCount() async throws {
-      let execution = try FilenameRequestExecution(responseURL: XCTUnwrap(Responses.testObject), latency: nil)
+@Suite("Stub chain")
+struct StubChainRecordTests {
+   @Test("Exhausted if current usage count greater than or equals to usage count", arguments: [1, 2])
+   func exhausted(currentUsageCount: Int) async throws {
+      let execution = try FilenameRequestExecution(responseURL: #require(Responses.testObject), latency: nil)
       let record = StubChain.Record(execution: execution, usageCount: 1)
-      record.currentUsageCount = 1
-      XCTAssertTrue(record.isExhausted)
+      record.currentUsageCount = currentUsageCount
+      #expect(record.isExhausted)
    }
 
-   func test_stubChainRecord_returnsExhaustedTrue_ifCurrentUsageCountGreaterThanUsageCount() async throws {
-      let execution = try FilenameRequestExecution(responseURL: XCTUnwrap(Responses.testObject), latency: nil)
+   @Test("Not exhausted if current usage count less than usage count")
+   func notExhausted() async throws {
+      let execution = try FilenameRequestExecution(responseURL: #require(Responses.testObject), latency: nil)
       let record = StubChain.Record(execution: execution, usageCount: 1)
-      record.currentUsageCount = 2
-      XCTAssertTrue(record.isExhausted)
-   }
-
-   func test_stubChainRecord_returnsExhaustedFalse_ifCurrentUsageCountLessThanUsageCount() async throws {
-      let execution = try FilenameRequestExecution(responseURL: XCTUnwrap(Responses.testObject), latency: nil)
-      let record = StubChain.Record(execution: execution, usageCount: 1)
-      XCTAssertFalse(record.isExhausted)
+      #expect(!record.isExhausted)
    }
 }

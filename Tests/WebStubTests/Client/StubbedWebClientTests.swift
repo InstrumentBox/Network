@@ -1,5 +1,5 @@
 //
-//  StubbedWebClientTestCase.swift
+//  StubbedWebClientTests.swift
 //
 //  Copyright © 2023 Aleksei Zaikin.
 //
@@ -23,96 +23,89 @@
 //
 
 import NetworkTestUtils
+import Testing
 import WebCore
 import WebStub
-import XCTest
 
-class StubbedWebClientTestCase: XCTestCase {
-   func test_stubbedWebClient_registersStubbedResponse_andReturnsResult() async throws {
-      let client = StubbedWebClient()
+@Suite("Stubbed web client")
+struct StubbedWebClientTests {
+   private let client = StubbedWebClient()
+
+   // MARK: - Tests
+
+   @Test("Registers stubbed response and returns result")
+   func registerStubAndReturnObject() async throws {
       let chain = client.stubChain(for: TestObjectRequest.self)
-      try chain.registerResponse(at: XCTUnwrap(Responses.testObject))
+      try chain.registerResponse(at: #require(Responses.testObject))
 
       let object = try await client.execute(TestObjectRequest())
-      XCTAssertEqual(object, .some)
+      #expect(object == .some)
    }
 
-   func test_stubbedWebClient_registersStubbedResponsesInTheSameChain_andReturnsResults() async throws {
-      let client = StubbedWebClient()
+   @Test("Registers stubbed response in the same chain and return result")
+   func registerInTheSameChainAndReturnObject() async throws {
       try client
          .stubChain(for: TestObjectRequest.self)
-         .registerResponse(at: XCTUnwrap(Responses.testObject))
+         .registerResponse(at: #require(Responses.testObject))
       try client
          .stubChain(for: TestObjectRequest.self)
-         .registerResponse(at: XCTUnwrap(Responses.apiError))
+         .registerResponse(at: #require(Responses.apiError))
 
       let object = try await client.execute(TestObjectRequest())
-      XCTAssertEqual(object, .some)
+      #expect(object == .some)
 
-      do {
+      await #expect(throws: APIError.testObjectNotFound) {
          _ = try await client.execute(TestObjectRequest())
-         XCTFail("Unexpected object returned")
-      } catch let error as APIError {
-         XCTAssertEqual(error, .testObjectNotFound)
-      } catch {
-         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 
+   @Test("Uses fallback web client")
    func test_stubbedWebClient_usesFallbackWebClient() async throws {
-      let client = makeStubbedWebClientWithFallbackWebClient()
+      let client = makeStubbedWebClientWithFallbackWebClient(fallbackWhenNoResponses: false)
       try client.stubChain(for: TestObjectRequest.self).registerFallbackResponse()
       let object = try await client.execute(TestObjectRequest())
-      XCTAssertEqual(object, .some)
+      #expect(object == .some)
    }
 
-   func test_stubbedWebClient_throwsError_ifCannotFindChain() async throws {
-      let client = StubbedWebClient()
-      do {
+   @Test("Throws error if couldn't find chain")
+   func chainNotFound() async throws {
+      await #expect(throws: StubbedWebClientError.cannotFindResponseChain("\(TestObjectRequest.self)")) {
          _ = try await client.execute(TestObjectRequest())
-         XCTFail("Unexpected object returned")
-      } catch let error as StubbedWebClientError {
-         XCTAssertEqual(error, .cannotFindResponseChain("\(TestObjectRequest.self)"))
-      } catch {
-         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 
-   func test_stubbedWebClient_throwsError_ifResponseNotRegistered() async throws {
-      let client = StubbedWebClient()
+   @Test("Throws error if response not registered")
+   func responseNotRegistered() async throws {
       _ = client.stubChain(for: TestObjectRequest.self)
-      do {
+      await #expect(throws: StubbedWebClientError.cannotFindRequestExecution("\(TestObjectRequest.self)")) {
          _ = try await client.execute(TestObjectRequest())
-         XCTFail("Unexpected object returned")
-      } catch let error as StubbedWebClientError {
-         XCTAssertEqual(error, .cannotFindRequestExecution("\(TestObjectRequest.self)"))
-      } catch {
-         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 
-   func test_stubbedWebClient_usesFallbackWebClient_ifCannotFindChain() async throws {
-      let client = makeStubbedWebClientWithFallbackWebClient()
+   @Test("Uses fallback web client if couldn't find chain")
+   func fallbackWhenNoChain() async throws {
+      let client = makeStubbedWebClientWithFallbackWebClient(fallbackWhenNoResponses: true)
       let object = try await client.execute(TestObjectRequest())
-      XCTAssertEqual(object, .some)
+      #expect(object == .some)
    }
 
-   func test_stubbedWebClient_usesFallbackWebClient_ifResponseNotRegistered() async throws {
-      let client = makeStubbedWebClientWithFallbackWebClient()
+   @Test("Uses fallback web client if response no registered")
+   func fallbackWhenNoResponse() async throws {
+      let client = makeStubbedWebClientWithFallbackWebClient(fallbackWhenNoResponses: true)
       _ = client.stubChain(for: TestObjectRequest.self)
       let object = try await client.execute(TestObjectRequest())
-      XCTAssertEqual(object, .some)
+      #expect(object == .some)
    }
 }
 
 // MARK: -
 
-private func makeStubbedWebClientWithFallbackWebClient() -> StubbedWebClient {
+private func makeStubbedWebClientWithFallbackWebClient(fallbackWhenNoResponses: Bool) -> StubbedWebClient {
    let fallbackWebClientConfiguration: URLSessionWebClientConfiguration = .ephemeral
    fallbackWebClientConfiguration.sessionConfiguration.protocolClasses = [TestObjectWebTestsURLProtocol.self]
    let fallbackWebClient = URLSessionWebClient(configuration: fallbackWebClientConfiguration)
    let configuration = StubbedWebClientConfiguration()
    configuration.fallbackWebClient = fallbackWebClient
-   configuration.fallbackRequestsIfNoResponsesRegistered = true
+   configuration.fallbackRequestsIfNoResponsesRegistered = fallbackWhenNoResponses
    return StubbedWebClient(configuration: configuration)
 }
