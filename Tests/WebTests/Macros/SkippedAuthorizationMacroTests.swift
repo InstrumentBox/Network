@@ -1,5 +1,5 @@
 //
-//  SkippedAuthorizationMacroTestCase.swift
+//  SkippedAuthorizationMacroTests.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -26,15 +26,17 @@
 
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
+import Testing
 import WebMacros
-import XCTest
 
 private let testMacros: [String: Macro.Type] = [
    "SkippedAuthorization": SkippedAuthorizationMacro.self
 ]
 
-class SkippedAuthorizationMacroTestCase: XCTestCase {
-   func test_skippedAuthorizationMacro_generatesConformance() {
+@Suite("@SkippedAuthorization")
+struct SkippedAuthorizationMacroTests {
+   @Test("Generates conformance")
+   func expandMacro() {
       assertMacroExpansion(
       """
       @SkippedAuthorization

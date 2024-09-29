@@ -1,5 +1,5 @@
 //
-//  URLEncoderTestCase.swift
+//  URLEncoderTests.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -25,41 +25,49 @@
 @testable
 import Web
 
-import XCTest
+import Foundation
+import Testing
 
-class URLEncoderTestCase: XCTestCase {
+@Suite("URLEncoder")
+struct URLEncoderTests {
    let encoder = URLEncoder()
 
-   // MARK: - Tests Cases
+   // MARK: - Tests
 
-   func test_urlEncoder_encodesBool_usingLiteralEncoding() throws {
+   @Test("Encodes bool as literal")
+   func testEncodeBool() throws {
       let value = try encoder.encode(["bool": true])
-      XCTAssertEqual(value, "bool=true")
+      #expect(value == "bool=true")
    }
 
-   func test_urlEncoder_encodesNumberWithBool_usingLiteralEncoding() throws {
+   @Test("Encodes number with bool as literal")
+   func encodeNumberWithBool() throws {
       let value = try encoder.encode(["bool": NSNumber(value: true)])
-      XCTAssertEqual(value, "bool=true")
+      #expect(value == "bool=true")
    }
 
-   func test_urlEncoder_encodesArrayKey_usingBracketsEncoding() throws {
+   @Test("Encodes array key with brackets")
+   func encodeArray() throws {
       let value = try encoder.encode(["array": [42]])
-      XCTAssertEqual(value, "array%5B%5D=42")
+      #expect(value == "array%5B%5D=42")
    }
 
-   func test_urlEncoder_encodesValues_usingPercentEncoding() throws {
+   @Test("Encodes by using percent escaping")
+   func encodePercentEscapedValues() throws {
       let value = try encoder.encode(["greeting": "hello world"])
-      XCTAssertEqual(value, "greeting=hello%20world")
+      #expect(value == "greeting=hello%20world")
    }
 
-   func test_urlEncoder_encodesDictionaryValue() throws {
+   @Test("Encodes dictionary")
+   func encodeDictionary() throws {
       let value = try encoder.encode(["dict": ["value": 42]])
-      XCTAssertEqual(value, "dict%5Bvalue%5D=42")
+      #expect(value == "dict%5Bvalue%5D=42")
    }
 
-   func test_urlEncoder_encodesParametersInTheSameOrder() throws {
+   @Test("Encodes in the same order")
+   func encodeTwoTimes() throws {
       let firstValue = try encoder.encode(["foo": "bar", "baz": 42])
       let secondValue = try encoder.encode(["baz": 42, "foo": "bar"])
-      XCTAssertEqual(firstValue, secondValue)
+      #expect(firstValue == secondValue)
    }
 }

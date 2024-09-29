@@ -1,5 +1,5 @@
 //
-//  ArrayKeyEncodingTestCase.swift
+//  URLEncoderEncodingTests.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -22,43 +22,22 @@
 //  THE SOFTWARE.
 //
 
+import Testing
 import Web
-import XCTest
 
-class ArrayKeyEncodingTestCase: XCTestCase {
-   func test_bracketsArrayKeyEncoding_encodesKey() {
+@Suite("Array key encoding")
+struct ArrayKeyEncodingTests {
+   @Test("Encodes key with brackets")
+   func encodeKeyWithBrackets() {
       let encoding = URLEncoder.BracketsArrayKeyEncoding()
       let encoded = encoding.encode("key")
-      XCTAssertEqual(encoded, "key[]")
+      #expect(encoded == "key[]")
    }
 
-   func test_noBracketsArrayKeyEncoding_encodesKey() {
+   @Test("Encodes key without brackets")
+   func encodeKeyWithoutBrackets() {
       let encoding = URLEncoder.NoBracketsArrayKeyEncoding()
       let encoded = encoding.encode("key")
-      XCTAssertEqual(encoded, "key")
-   }
-
-   func test_numericBoolEncoding_encodesTrueAs1() {
-      let encoding = URLEncoder.NumericBoolEncoding()
-      let encoded = encoding.encode(true)
-      XCTAssertEqual(encoded, "1")
-   }
-
-   func test_numericBoolEncoding_encodesFalseAs0() {
-      let encoding = URLEncoder.NumericBoolEncoding()
-      let encoded = encoding.encode(false)
-      XCTAssertEqual(encoded, "0")
-   }
-
-   func test_literalBoolEncoding_encodesTrueAsTrue() {
-      let encoding = URLEncoder.LiteralBoolEncoding()
-      let encoded = encoding.encode(true)
-      XCTAssertEqual(encoded, "true")
-   }
-
-   func test_literalBoolEncoding_encodesFalseAsFalse() {
-      let encoding = URLEncoder.LiteralBoolEncoding()
-      let encoded = encoding.encode(false)
-      XCTAssertEqual(encoded, "false")
+      #expect(encoded == "key")
    }
 }

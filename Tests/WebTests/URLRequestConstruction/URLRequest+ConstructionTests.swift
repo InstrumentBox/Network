@@ -1,5 +1,5 @@
 //
-//  URLRequest+ConstructionTestCase.swift
+//  URLRequest+ConstructionTests.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -25,33 +25,43 @@
 @testable
 import Web
 
-import XCTest
+import Foundation
+import Testing
 
-class URLRequestConstructionTestCase: XCTestCase {
-   private let url = try! URL(
-      path: "test/endpoint",
-      baseURL: URL(string: "https://api.service.com/v1/")
-   )
+@Suite("URLRequest construction extensions")
+struct URLRequestConstructionTests {
+   private let url: URL
 
-   // MARK: - Test Cases
+   // MARK: - Before
 
-   func test_urlRequest_isConstructedWithURLMethodAndHeaders() throws {
-      let request = URLRequest(url: url, method: .get, headers: ["Header-Field": "Header Value"])
-      XCTAssertEqual(try XCTUnwrap(request.url?.absoluteString), url.absoluteString)
-      XCTAssertEqual(request.httpMethod, "GET")
-      XCTAssertEqual(request.allHTTPHeaderFields, ["Header-Field": "Header Value"])
+   init() throws {
+      url = try URL(
+         path: "test/endpoint",
+         baseURL: URL(string: "https://api.service.com/v1/")
+      )
    }
 
-   func test_urlRequest_isConstructedWithBody() throws {
+   // MARK: - Tests
+
+   @Test("Constructed without body")
+   func makeWithoutBody() throws {
+      let request = URLRequest(url: url, method: .get, headers: ["Header-Field": "Header Value"])
+      try #expect(#require(request.url?.absoluteString) == url.absoluteString)
+      #expect(request.httpMethod == "GET")
+      #expect(request.allHTTPHeaderFields == ["Header-Field": "Header Value"])
+   }
+
+   @Test("Constructed with body")
+   func makeWithBody() throws {
       let request = try URLRequest(
          url: url,
          method: .post,
          body: Data([0x1, 0x2, 0x3]),
          converter: DataBodyConverter(contentType: "application/octet-stream")
       )
-      XCTAssertEqual(try XCTUnwrap(request.url?.absoluteString), url.absoluteString)
-      XCTAssertEqual(request.httpMethod, "POST")
-      XCTAssertEqual(request.allHTTPHeaderFields, ["Content-Type": "application/octet-stream"])
-      XCTAssertEqual(request.httpBody, Data([0x1, 0x2, 0x3]))
+      try #expect(#require(request.url?.absoluteString) == url.absoluteString)
+      #expect(request.httpMethod == "POST")
+      #expect(request.allHTTPHeaderFields == ["Content-Type": "application/octet-stream"])
+      #expect(request.httpBody == Data([0x1, 0x2, 0x3]))
    }
 }

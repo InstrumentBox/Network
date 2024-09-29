@@ -1,5 +1,5 @@
 //
-//  FormDataTestCase.swift
+//  FormDataTests.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -25,36 +25,41 @@
 @testable
 import Web
 
-import XCTest
+import Foundation
+import Testing
 
-class FormDataTestCase: XCTestCase {
+@Suite("Form data")
+struct FormDataTests {
    private let partName = "some_data"
    private let fileName = "some_file"
    private let contentType = "application/octet-stream"
    private let body = Data([0x01, 0x02, 0x03])
    private let boundary = "123456"
 
-   // MARK: - Test Cases
+   // MARK: - Tests
 
-   func test_formData_isConvertedCorrectly_withoutFileName() throws {
+   @Test("Converted without filename")
+   func convertWithoutFilename() throws {
       let expectedData = makeExpectedData(withFileName: false, withHeaders: false)
       let formData = try makeFormData(withFileName: false, withHeaders: false)
       let partData = try formData.toBodyPartData(with: boundary)
-      XCTAssertEqual(partData, expectedData)
+      #expect(partData == expectedData)
    }
 
-   func test_formData_isConvertedCorrectly_withFileName() throws {
+   @Test("Converted with filename")
+   func convertWithFilename() throws {
       let expectedData = makeExpectedData(withFileName: true, withHeaders: false)
       let formData = try makeFormData(withFileName: true, withHeaders: false)
       let partData = try formData.toBodyPartData(with: boundary)
-      XCTAssertEqual(partData, expectedData)
+      #expect(partData == expectedData)
    }
 
-   func test_formData_isConvertedCorrectly_withHeaders() throws {
+   @Test("Converted with headers")
+   func convertWithHeaders() throws {
       let expectedData = makeExpectedData(withFileName: false, withHeaders: true)
       let formData = try makeFormData(withFileName: false, withHeaders: true)
       let partData = try formData.toBodyPartData(with: boundary)
-      XCTAssertEqual(partData, expectedData)
+      #expect(partData == expectedData)
    }
 
    // MARK: - Factory

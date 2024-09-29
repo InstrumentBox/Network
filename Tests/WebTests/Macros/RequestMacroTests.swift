@@ -1,5 +1,5 @@
 //
-//  RequestMacroMethodsTestCase.swift
+//  RequestMacroTests.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -26,8 +26,8 @@
 
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
+import Testing
 import WebMacros
-import XCTest
 
 private let testMacros: [String: Macro.Type] = [
    "CONNECT": RequestMacro.self,
@@ -41,46 +41,47 @@ private let testMacros: [String: Macro.Type] = [
    "TRACE": RequestMacro.self
 ]
 
-class RequestMacroTestCase: XCTestCase {
-   func test_requestMacro_isExpandedWithCorrectHTTPMethod() {
-      for macroName in testMacros.keys {
-         assertMacroExpansion(
-            """
-            @\(macroName)<TestObject, APIError>("path/to/resource")
-            class TestObjectRequest {
-            }
-            """,
-            expandedSource:
-            """
-            class TestObjectRequest {
-            }
+@Suite("@GET/@POST/etc")
+struct RequestMacroTests {
+   @Test("Expanded with correct HTTP method", arguments: testMacros.keys)
+   func expandWithAllHTTPMethods(method: String) {
+      assertMacroExpansion(
+         """
+         @\(method)<TestObject, APIError>("path/to/resource")
+         class TestObjectRequest {
+         }
+         """,
+         expandedSource:
+         """
+         class TestObjectRequest {
+         }
 
-            extension TestObjectRequest: Request {
-                typealias SuccessObject = TestObject
-                typealias ErrorObject = APIError
-                var successObjectResponseConverter: any ResponseConverter<TestObject> {
-                    JSONDecoderResponseConverter()
-                }
-                var errorObjectResponseConverter: any ResponseConverter<APIError> {
-                    JSONDecoderResponseConverter()
-                }
-                func toURLRequest(with baseURL: URL?) throws -> URLRequest {
-                    let method = Method("\(macroName)")
-                    let path = "path/to/resource"
-                    let query: [String: Any] = [:]
-                    let url = try URL(path: path, baseURL: baseURL, query: query)
-                    let headers: [String: String] = [:]
-                    let request = URLRequest(url: url, method: method, headers: headers)
-                    return request
-                }
-            }
-            """,
-            macros: testMacros
-         )
-      }
+         extension TestObjectRequest: Request {
+             typealias SuccessObject = TestObject
+             typealias ErrorObject = APIError
+             var successObjectResponseConverter: any ResponseConverter<TestObject> {
+                 JSONDecoderResponseConverter()
+             }
+             var errorObjectResponseConverter: any ResponseConverter<APIError> {
+                 JSONDecoderResponseConverter()
+             }
+             func toURLRequest(with baseURL: URL?) throws -> URLRequest {
+                 let method = Method("\(method)")
+                 let path = "path/to/resource"
+                 let query: [String: Any] = [:]
+                 let url = try URL(path: path, baseURL: baseURL, query: query)
+                 let headers: [String: String] = [:]
+                 let request = URLRequest(url: url, method: method, headers: headers)
+                 return request
+             }
+         }
+         """,
+         macros: testMacros
+      )
    }
 
-   func test_requestMacro_isExandedWithNoGeneratedResponseConverters_ifConverterIsDefinedByDeveloper() {
+   @Test("Expanded with no generated converters if converters are defined by a developer")
+   func expandWithDefinedConverters() {
       assertMacroExpansion(
          """
          @GET<TestObject, APIError>("path/to/some/object")
@@ -124,7 +125,8 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_isExpandedWithPathSubstitutions() {
+   @Test("Expanded with path substitutions")
+   func expandWithPathSubstitutions() {
       assertMacroExpansion(
          """
          @POST<TestObject, APIError>("path/:to/some/:resource")
@@ -170,7 +172,8 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_showsError_whenPathSegmentsDuplication() {
+   @Test("Shows error if path segments duplication")
+   func expandWithPathSegmentDuplication() {
       assertMacroExpansion(
          """
          @POST<TestObject, APIError>("path/:to/some/:resource/:resource")
@@ -189,7 +192,8 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_showsError_ifParameterNotFound() {
+   @Test("Shows error if path parameter not found")
+   func expandWithPathParameterNotFound() {
       assertMacroExpansion(
          """
          @POST<TestObject, APIError>("path/:to/some/:resource")
@@ -213,7 +217,8 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_showsError_ifPathParameterDuplication() {
+   @Test("Shows error if path parameter duplication")
+   func expandWithPathParameterDuplication() {
       assertMacroExpansion(
          """
          @POST<TestObject, APIError>("path/:to/some/:resource")
@@ -248,7 +253,8 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_isExpandedWithQueryParameters() {
+   @Test("Expanded with query parameters")
+   func expandWithQueryParameters() {
       assertMacroExpansion(
          """
          @POST<TestObject, APIError>("path/to/resource")
@@ -298,7 +304,8 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_showsError_ifQueryItemDuplication() {
+   @Test("Shows error if query item duplication")
+   func expandWithQueryItemDuplication() {
       assertMacroExpansion(
          """
          @POST<TestObject, APIError>("path/to/resource")
@@ -333,7 +340,8 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_isExpandedWithHeaderParameters() {
+   @Test("Expanded with header parameters")
+   func expandWithHeaderParameters() {
       assertMacroExpansion(
          """
          @POST<TestObject, APIError>("path/to/resource")
@@ -394,7 +402,8 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_showsError_ifHeaderDuplication() {
+   @Test("Shows error if header duplication")
+   func expandWithHeaderDuplication() {
       assertMacroExpansion(
          """
          @POST<TestObject, APIError>("path/to/resource")
@@ -429,7 +438,8 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_isExpandedWithBodyParameter() {
+   @Test("Expanded with body parameter")
+   func expandWithBody() {
       assertMacroExpansion(
          """
          @POST<TestObject, APIError>("path/to/resource")
@@ -471,7 +481,8 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_usesBodyConverterInitializationPassedViaBodyArgument() {
+   @Test("Expanded with body converter given by a developer")
+   func expandWithDefinedBodyConverter() {
       assertMacroExpansion(
          """
          @POST<TestObject, APIError>("path/to/resource")
@@ -525,7 +536,8 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_showsError_ifMoreThanOneBody() {
+   @Test("Shows error if more than one @Body")
+   func expandWithMoreThanOneBody() {
       assertMacroExpansion(
          """
          @POST<TestObject, APIError>("path/to/resource")
@@ -554,7 +566,8 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_showsError_ifCannotInferBodyConverterType() {
+   @Test("Shows error if can't infer body converter type")
+   func expandWithUnknownBodyConverter() {
       assertMacroExpansion(
          """
          @POST<TestObject, APIError>("path/to/resource")
@@ -581,149 +594,140 @@ class RequestMacroTestCase: XCTestCase {
       )
    }
 
-   func test_requestMacro_isExpandedWithCorrectResponseConvertersDependingOnType() {
-      let types = [
-         "Response": "AsIsResponseConverter",
-         "Data": "DataResponseConverter",
-         "Void": "EmptyResponseConverter",
-         "String": "StringResponseConverter",
-         "UIImage": "ImageResponseConverter",
-         "[TestObject]": "JSONDecoderResponseConverter",
-         "AnyOther": "JSONDecoderResponseConverter"
-      ]
+   @Test("Expanded with correct response converter depending on type", arguments: [
+      ("Response", "AsIsResponseConverter"),
+      ("Data", "DataResponseConverter"),
+      ("Void", "EmptyResponseConverter"),
+      ("String", "StringResponseConverter"),
+      ("UIImage", "ImageResponseConverter"),
+      ("[TestObject]", "JSONDecoderResponseConverter"),
+      ("AnyOther", "JSONDecoderResponseConverter")
+   ])
+   func expandWithGeneratedResponseConverter(type: String, converterType: String) {
+      assertMacroExpansion(
+         """
+         @GET<\(type), \(type)>("path/to/resource")
+         struct TestObjectRequest {
+         }
+         """,
+         expandedSource:
+         """
+         struct TestObjectRequest {
+         }
 
-      for (type, converterType) in types {
-         assertMacroExpansion(
-            """
-            @GET<\(type), \(type)>("path/to/resource")
-            struct TestObjectRequest {
-            }
-            """,
-            expandedSource:
-            """
-            struct TestObjectRequest {
-            }
-
-            extension TestObjectRequest: Request {
-                typealias SuccessObject = \(type)
-                typealias ErrorObject = \(type)
-                var successObjectResponseConverter: any ResponseConverter<\(type)> {
-                    \(converterType)()
-                }
-                var errorObjectResponseConverter: any ResponseConverter<\(type)> {
-                    \(converterType)()
-                }
-                func toURLRequest(with baseURL: URL?) throws -> URLRequest {
-                    let method = Method("GET")
-                    let path = "path/to/resource"
-                    let query: [String: Any] = [:]
-                    let url = try URL(path: path, baseURL: baseURL, query: query)
-                    let headers: [String: String] = [:]
-                    let request = URLRequest(url: url, method: method, headers: headers)
-                    return request
-                }
-            }
-            """,
-            macros: testMacros
-         )
-      }
+         extension TestObjectRequest: Request {
+             typealias SuccessObject = \(type)
+             typealias ErrorObject = \(type)
+             var successObjectResponseConverter: any ResponseConverter<\(type)> {
+                 \(converterType)()
+             }
+             var errorObjectResponseConverter: any ResponseConverter<\(type)> {
+                 \(converterType)()
+             }
+             func toURLRequest(with baseURL: URL?) throws -> URLRequest {
+                 let method = Method("GET")
+                 let path = "path/to/resource"
+                 let query: [String: Any] = [:]
+                 let url = try URL(path: path, baseURL: baseURL, query: query)
+                 let headers: [String: String] = [:]
+                 let request = URLRequest(url: url, method: method, headers: headers)
+                 return request
+             }
+         }
+         """,
+         macros: testMacros
+      )
    }
 
-   func test_requestMacro_isExpandedWithCorrectBodyConverterDependingOnType() {
-      let types = [
-         "String": "StringBodyConverter",
-         "AnyOther": "JSONEncoderBodyConverter<AnyOther>"
-      ]
+   @Test("Expanded with correct body converter depending on type", arguments: [
+      ("String", "StringBodyConverter"),
+      ("AnyOther", "JSONEncoderBodyConverter<AnyOther>")
+   ])
+   func expandWithGeneratedBodyConverter(type: String, converterType: String) {
+      assertMacroExpansion(
+         """
+         @POST<TestObject, APIError>("path/to/resource")
+         struct TestObjectRequest {
+             @Body
+             let object: \(type)
+         }
+         """,
+         expandedSource:
+         """
+         struct TestObjectRequest {
+             @Body
+             let object: \(type)
+         }
 
-      for (type, converterType) in types {
-         assertMacroExpansion(
-            """
-            @POST<TestObject, APIError>("path/to/resource")
-            struct TestObjectRequest {
-                @Body
-                let object: \(type)
-            }
-            """,
-            expandedSource:
-            """
-            struct TestObjectRequest {
-                @Body
-                let object: \(type)
-            }
-
-            extension TestObjectRequest: Request {
-                typealias SuccessObject = TestObject
-                typealias ErrorObject = APIError
-                var successObjectResponseConverter: any ResponseConverter<TestObject> {
-                    JSONDecoderResponseConverter()
-                }
-                var errorObjectResponseConverter: any ResponseConverter<APIError> {
-                    JSONDecoderResponseConverter()
-                }
-                func toURLRequest(with baseURL: URL?) throws -> URLRequest {
-                    let method = Method("POST")
-                    let path = "path/to/resource"
-                    let query: [String: Any] = [:]
-                    let url = try URL(path: path, baseURL: baseURL, query: query)
-                    let headers: [String: String] = [:]
-                    let body = object
-                    let bodyConverter = \(converterType)()
-                    let request = try URLRequest(url: url, method: method, headers: headers, body: body, converter: bodyConverter)
-                    return request
-                }
-            }
-            """,
-            macros: testMacros
-         )
-      }
+         extension TestObjectRequest: Request {
+             typealias SuccessObject = TestObject
+             typealias ErrorObject = APIError
+             var successObjectResponseConverter: any ResponseConverter<TestObject> {
+                 JSONDecoderResponseConverter()
+             }
+             var errorObjectResponseConverter: any ResponseConverter<APIError> {
+                 JSONDecoderResponseConverter()
+             }
+             func toURLRequest(with baseURL: URL?) throws -> URLRequest {
+                 let method = Method("POST")
+                 let path = "path/to/resource"
+                 let query: [String: Any] = [:]
+                 let url = try URL(path: path, baseURL: baseURL, query: query)
+                 let headers: [String: String] = [:]
+                 let body = object
+                 let bodyConverter = \(converterType)()
+                 let request = try URLRequest(url: url, method: method, headers: headers, body: body, converter: bodyConverter)
+                 return request
+             }
+         }
+         """,
+         macros: testMacros
+      )
    }
 
-   func test_requestMacro_isExpandedWithCorrectAccessModifier() {
-      let accessModifiers = [
-         "open ": "open ",
-         "public ": "public ",
-         "package ": "package ",
-         "internal ": "",
-         "fileprivate ": "",
-         "private ": "",
-         "": ""
-      ]
+   @Test("Expanded with correct access modifier", arguments: [
+      ("open ", "open "),
+      ("public ", "public "),
+      ("package ", "package "),
+      ("internal ", ""),
+      ("fileprivate ", ""),
+      ("private ", ""),
+      ("", "")
+   ])
+   func expandWithAccessModifier(accessModifier: String, expectedAccessModifier: String) {
+      assertMacroExpansion(
+         """
+         @GET<TestObject, APIError>("path/to/resource")
+         \(accessModifier)class TestObjectRequest {
+         }
+         """,
+         expandedSource:
+         """
+         \(accessModifier)class TestObjectRequest {
+         }
 
-      for (accessModifier, expectedAccessModifier) in accessModifiers {
-         assertMacroExpansion(
-            """
-            @GET<TestObject, APIError>("path/to/resource")
-            \(accessModifier)class TestObjectRequest {
-            }
-            """,
-            expandedSource:
-            """
-            \(accessModifier)class TestObjectRequest {
-            }
-
-            extension TestObjectRequest: Request {
-                \(expectedAccessModifier)typealias SuccessObject = TestObject
-                \(expectedAccessModifier)typealias ErrorObject = APIError
-                \(expectedAccessModifier)var successObjectResponseConverter: any ResponseConverter<TestObject> {
-                    JSONDecoderResponseConverter()
-                }
-                \(expectedAccessModifier)var errorObjectResponseConverter: any ResponseConverter<APIError> {
-                    JSONDecoderResponseConverter()
-                }
-                \(expectedAccessModifier)func toURLRequest(with baseURL: URL?) throws -> URLRequest {
-                    let method = Method("GET")
-                    let path = "path/to/resource"
-                    let query: [String: Any] = [:]
-                    let url = try URL(path: path, baseURL: baseURL, query: query)
-                    let headers: [String: String] = [:]
-                    let request = URLRequest(url: url, method: method, headers: headers)
-                    return request
-                }
-            }
-            """,
-            macros: testMacros
-         )
-      }
+         extension TestObjectRequest: Request {
+             \(expectedAccessModifier)typealias SuccessObject = TestObject
+             \(expectedAccessModifier)typealias ErrorObject = APIError
+             \(expectedAccessModifier)var successObjectResponseConverter: any ResponseConverter<TestObject> {
+                 JSONDecoderResponseConverter()
+             }
+             \(expectedAccessModifier)var errorObjectResponseConverter: any ResponseConverter<APIError> {
+                 JSONDecoderResponseConverter()
+             }
+             \(expectedAccessModifier)func toURLRequest(with baseURL: URL?) throws -> URLRequest {
+                 let method = Method("GET")
+                 let path = "path/to/resource"
+                 let query: [String: Any] = [:]
+                 let url = try URL(path: path, baseURL: baseURL, query: query)
+                 let headers: [String: String] = [:]
+                 let request = URLRequest(url: url, method: method, headers: headers)
+                 return request
+             }
+         }
+         """,
+         macros: testMacros
+      )
    }
 }
 

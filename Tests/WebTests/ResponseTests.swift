@@ -1,5 +1,5 @@
 //
-//  ResponseTestCase.swift
+//  ResponseTests.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -25,43 +25,26 @@
 @testable
 import Web
 
-import XCTest
+import Foundation
+import Testing
 
-class ResponseTestCase: XCTestCase {
-   // MARK: - Test Cases
-
-   func test_response_returnsNilMIME_ifNoContentType() throws {
-      let response = try makeResponse(contentType: nil)
-      let mime = response.contentTypeMIME()
-      XCTAssertNil(mime)
-   }
-
-   func test_response_returnsMIME_ifContentType() throws {
-      let expectedMIME = MIME(type: "application", subtype: "json")
-      let response = try makeResponse(contentType: "application/json")
-      let mime = response.contentTypeMIME()
-      XCTAssertEqual(mime, expectedMIME)
-   }
-
-   func test_response_returnsMIME_ifContentType_withCharset() throws {
-      let expectedMIME = MIME(type: "application", subtype: "json")
-      let response = try makeResponse(contentType: "application/json; charset=utf8")
-      let mime = response.contentTypeMIME()
-      XCTAssertEqual(mime, expectedMIME)
-   }
-
-   // MARK: - Factory
-
-   private func makeResponse(contentType: String?) throws -> Response {
-      let url = try XCTUnwrap(URL(string: "https://service.com"))
-      let request = URLRequest(url: url)
-      return Response(
-         request: request,
+@Suite("Response")
+struct ResponseTests {
+   @Test("Returns Content-Type MIME", arguments: [
+      (nil, nil),
+      ("application/json", MIME(type: "application", subtype: "json")),
+      ("application/json; charset=utf8", MIME(type: "application", subtype: "json")),
+   ])
+   func extractContentType(contentType: String?, expectedMIME: MIME?) throws {
+      let response = try Response(
+         request: URLRequest(url: #require(URL(string: "https://service.com"))),
          statusCode: 200,
          headers: contentType.map { contentType in
             ["Content-Type": contentType]
          } ?? [:],
          body: Data()
       )
+      let mime = response.contentTypeMIME()
+      #expect(mime == expectedMIME)
    }
 }

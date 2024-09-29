@@ -1,7 +1,7 @@
 //
-//  Data+MultipartTestCase.swift
+//  BoolEncodingTests.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,16 +22,28 @@
 //  THE SOFTWARE.
 //
 
-@testable
+import Testing
 import Web
 
-import XCTest
+@Suite("Bool encoding")
+struct BoolEncodingTests {
+   @Test("Encodes bool as number", arguments: [
+      (true, "1"),
+      (false, "0"),
+   ])
+   func encodeBoolToNumber(value: Bool, expected: String) {
+      let encoding = URLEncoder.NumericBoolEncoding()
+      let encoded = encoding.encode(value)
+      #expect(encoded == expected)
+   }
 
-class DataAppendStringTestCase: XCTestCase {
-   func test_data_appendsString() {
-      let expectedData = Data([0x30])
-      var data = Data()
-      data.append("0")
-      XCTAssertEqual(data, expectedData)
+   @Test("Encodes bool as literal", arguments: [
+      (true, "true"),
+      (false, "false"),
+   ])
+   func encodeBoolToLiteral(value: Bool, expected: String) {
+      let encoding = URLEncoder.LiteralBoolEncoding()
+      let encoded = encoding.encode(value)
+      #expect(encoded == expected)
    }
 }

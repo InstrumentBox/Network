@@ -1,7 +1,7 @@
 //
-//  ValidationErrorResponseValidationDisposition.swift
+//  DataTests.swift
 //
-//  Copyright © 2024 Aleksei Zaikin.
+//  Copyright © 2022 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,27 +22,18 @@
 //  THE SOFTWARE.
 //
 
-/// Response validation disposition that throws error validation process resulted in.
-public struct ValidationErrorResponseValidationDisposition: ResponseValidationDisposition {
-   let error: any Error
+@testable
+import Web
 
-   // MARK: - Init
+import Foundation
+import Testing
 
-   /// Creates and returns a new instance of `ValidationErrorResponseValidationDisposition` with
-   /// given error.
-   ///
-   /// - Parameters:
-   ///   - error: An error that's should be thrown by `processResponse(_:for:)` method.
-   public init(error: some Error) {
-      self.error = error
-   }
-
-   // MARK: - ResponseValidationDisposition
-
-   public func processResponse<SuccessObject>(
-      _ response: Response,
-      for request: some Request<SuccessObject>
-   ) throws -> SuccessObject {
-      throw error
+@Suite("Data multipart extensions")
+struct DataTests {
+   @Test("String is appended")
+   func appendString() {
+      var data = Data()
+      data.append("0")
+      #expect(data == Data([0x30]))
    }
 }

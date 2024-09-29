@@ -1,5 +1,5 @@
 //
-//  URL+ConstructionTestCase.swift
+//  URL+ConstructionTests.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -25,65 +25,65 @@
 @testable
 import Web
 
-import XCTest
+import Foundation
+import Testing
 
-class URLConstructionTestCase: XCTestCase {
+@Suite("URL construction extensions")
+struct URLConstructionTests {
    private let baseURL = URL(string: "https://api.service.com/v1/")
 
-   // MARK: - Test Cases
+   // MARK: - Tests
 
-   func test_url_isConstructedFromPathAndBaseURL() throws {
+   @Test("Constructed path and base URL")
+   func makeWithPathAndBaseURL() throws {
       let expectedURL = URL(string: "https://api.service.com/v1/test/endpoint")
-      let resultURL = try URL(path: "test/endpoint", baseURL: baseURL)
-      XCTAssertEqual(resultURL.absoluteString, expectedURL?.absoluteString)
+      let url = try URL(path: "test/endpoint", baseURL: baseURL)
+      #expect(url.absoluteString == expectedURL?.absoluteString)
    }
 
-   func test_url_isConstructedFromPathOnly_ifItContainsFullURL() throws {
+   @Test("Constructed from path only if path is full URL")
+   func makeWhenPathIsFullURL() throws {
       let expectedURL = URL(string: "https://api.other.service.com/v1/test/endpoint")
-      let resultURL = try URL(path: "https://api.other.service.com/v1/test/endpoint", baseURL: baseURL)
-      XCTAssertEqual(resultURL.absoluteString, expectedURL?.absoluteString)
+      let url = try URL(path: "https://api.other.service.com/v1/test/endpoint", baseURL: baseURL)
+      #expect(url.absoluteString == expectedURL?.absoluteString)
    }
 
-   func test_url_isConstructedWithQuery() throws {
+   @Test("Constructed with query")
+   func makeWithQuery() throws {
       let expectedURL = URL(string: "https://api.service.com/v1/test/endpoint?params%5Bkey%5D=value")
       let url = try URL(path: "test/endpoint", baseURL: baseURL, query: ["params": ["key": "value"]])
-      XCTAssertEqual(url.absoluteString, expectedURL?.absoluteString)
+      #expect(url.absoluteString == expectedURL?.absoluteString)
    }
 
-   func test_url_isConstructedWithEmptyQuery() throws {
+   @Test("Constructed with empty query")
+   func makeWithEmptyQuery() throws {
       let expectedURL = URL(string: "https://api.service.com/v1/test/endpoint")
-      let resultURL = try URL(path: "test/endpoint", baseURL: baseURL, query: [:])
-      XCTAssertEqual(resultURL.absoluteString, expectedURL?.absoluteString)
+      let url = try URL(path: "test/endpoint", baseURL: baseURL, query: [:])
+      #expect(url.absoluteString == expectedURL?.absoluteString)
    }
 
-   func test_url_isConstructedWithQueryInPath() throws {
+   @Test("Constructed with query in path")
+   func makeWithQueryInPath() throws {
       let expectedURL = URL(string: "https://api.service.com/v1/test/endpoint?params%5Bkey%5D=value")
       let url = try URL(path: "test/endpoint?params[key]=value", baseURL: baseURL)
-      XCTAssertEqual(url.absoluteString, expectedURL?.absoluteString)
+      #expect(url.absoluteString == expectedURL?.absoluteString)
    }
 
-   func test_url_isConstructedByMergingQueryInPathAndQueryArgument() throws {
+   @Test("Constructed by merging query in path and query dictionary")
+   func makeByMergingQuery() throws {
       let expectedURL = URL(string: "https://api.service.com/v1/test/endpoint?params%5Bkey%5D=value&params%5Bother_key%5D=other_value")
       let url = try URL(
          path: "test/endpoint?params[key]=value",
          baseURL: baseURL,
          query: ["params": ["other_key": "other_value"]]
       )
-      XCTAssertEqual(url.absoluteString, expectedURL?.absoluteString)
+      #expect(url.absoluteString == expectedURL?.absoluteString)
    }
 
-   func test_url_isConstructed_ifQueryIsInPath() throws {
-      let expectedURL = URL(string: "https://api.service.com/v1/test/endpoint?query=value")
-      let url = try URL(path: "test/endpoint?query=value", baseURL: baseURL)
-      XCTAssertEqual(url.absoluteString, expectedURL?.absoluteString)
-   }
-
-   func test_urlInitializer_throwsError() throws {
-      XCTAssertThrowsError(try URL(path: "https:// test endpoint", baseURL: baseURL)) { error in
-         guard case URLConstructionError.cannotConstructURL("https:// test endpoint", baseURL) = error else {
-            XCTFail("URL successfully constructed unexpectedly")
-            return
-         }
+   @Test("Throws construction error")
+   func throwConstructionError() throws {
+      #expect(throws: URLConstructionError.cannotConstructURL(path: "https:// test endpoint", baseURL: baseURL)) {
+         try URL(path: "https:// test endpoint", baseURL: baseURL)
       }
    }
 }

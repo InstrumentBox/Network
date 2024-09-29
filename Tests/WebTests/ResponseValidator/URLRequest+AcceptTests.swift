@@ -1,5 +1,5 @@
 //
-//  URLRequest+AcceptTestCase.swift
+//  URLRequest+AcceptTests.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -25,25 +25,28 @@
 @testable
 import Web
 
-import XCTest
+import Foundation
+import Testing
 
-class URLRequestAcceptTestCase: XCTestCase {
-   // MARK: - Test Cases
-
-   func test_request_returnsEmptyMIMEsArray_ifNoAccept() throws {
+@Suite("URLRequest accept header extensions")
+struct URLRequestAcceptTests {
+   @Test("Returns empty array if no header")
+   func extractWhenNotPresented() throws {
       let request = try makeRequest(accept: nil)
       let mimes = request.acceptMIMEs()
-      XCTAssertTrue(mimes.isEmpty)
+      #expect(mimes.isEmpty)
    }
 
-   func test_request_returnsArrayWithMIME_ifAcceptWithOneMIME() throws {
+   @Test("Returns array with the only MIME")
+   func extractWhenTheOnlyMIME() throws {
       let expectedMIMEs = [MIME(type: "application", subtype: "json")]
       let request = try makeRequest(accept: "application/json")
       let mimes = request.acceptMIMEs()
-      XCTAssertEqual(mimes, expectedMIMEs)
+      #expect(mimes == expectedMIMEs)
    }
 
-   func test_request_returnsArrayWithMIMEs_ifAcceptWithManyMIMEs() throws {
+   @Test("Returns all MIMEs from accept header")
+   func extractWhenMultipleMIMEs() throws {
       let expectedMIMEs = [
          MIME(type: "application", subtype: "json"),
          MIME(type: "application", subtype: "x-plist"),
@@ -53,17 +56,17 @@ class URLRequestAcceptTestCase: XCTestCase {
          accept: "application/json; q=1.0, application/x-plist; q=0.9, */*; q=0.7"
       )
       let mimes = request.acceptMIMEs()
-      XCTAssertEqual(mimes, expectedMIMEs)
+      #expect(mimes == expectedMIMEs)
    }
+}
 
-   // MARK: - Factory
+// MARK: -
 
-   private func makeRequest(accept: String?) throws -> URLRequest {
-      let url = try XCTUnwrap(URL(string: "https://service.com"))
-      var request = URLRequest(url: url)
-      request.allHTTPHeaderFields = accept.map { accept in
-         ["Accept": accept]
-      }
-      return request
+private func makeRequest(accept: String?) throws -> URLRequest {
+   let url = try #require(URL(string: "https://service.com"))
+   var request = URLRequest(url: url)
+   request.allHTTPHeaderFields = accept.map { accept in
+      ["Accept": accept]
    }
+   return request
 }

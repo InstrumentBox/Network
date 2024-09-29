@@ -31,18 +31,6 @@ public enum StatusCodeContentTypeResponseValidatorError: Error, Equatable {
    ///   - expected: A string that consists of MIME types of a request separated by comma.
    ///   - received: A MIME type of content of a response.
    case unacceptableContentType(expected: String, received: String)
-
-   // MARK: - Equatable
-
-   public static func ==(
-      lhs: StatusCodeContentTypeResponseValidatorError,
-      rhs: StatusCodeContentTypeResponseValidatorError
-   ) -> Bool {
-      switch (lhs, rhs) {
-         case let (.unacceptableContentType(lhsExpected, lhsReceived), .unacceptableContentType(rhsExpected, rhsReceived)):
-            return lhsExpected == rhsExpected && lhsReceived == rhsReceived
-      }
-   }
 }
 
 /// A validator that does the most common validation of a response used by developers.

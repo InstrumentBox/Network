@@ -1,5 +1,5 @@
 //
-//  MultipartBodyConverterTestCase.swift
+//  MultipartBodyConverterTests.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -25,9 +25,11 @@
 @testable
 import Web
 
-import XCTest
+import Foundation
+import Testing
 
-class MultipartBodyConverterTestCase: XCTestCase {
+@Suite("Multipart body converter")
+struct MultipartBodyConverterTests {
    private let outerBoundary = "123456"
    private let innerBoundary = "abcdef"
 
@@ -44,9 +46,10 @@ class MultipartBodyConverterTestCase: XCTestCase {
    private let innerBody1 = Data([0x34, 0x35, 0x36])
    private let innerBody2 = Data([0x37, 0x38, 0x39])
 
-   // MARK: - Test Cases
+   // MARK: - Tests
 
-   func test_converter_returnsCorrectBody() throws {
+   @Test("Return correct body")
+   func convertBody() throws {
       let converter = MultipartBodyConverter(
          contentTypeKind: .formData,
          boundary: outerBoundary,
@@ -56,8 +59,8 @@ class MultipartBodyConverterTestCase: XCTestCase {
       let parts = try makeBodyParts()
       let body = try converter.convert(parts)
       let expectedBody = makeExpectedBody()
-      XCTAssertEqual(converter.contentType, "multipart/form-data; boundary=\(outerBoundary)")
-      XCTAssertEqual(body, expectedBody)
+      #expect(converter.contentType == "multipart/form-data; boundary=\(outerBoundary)")
+      #expect(body == expectedBody)
    }
 
    // MARK: - Factory

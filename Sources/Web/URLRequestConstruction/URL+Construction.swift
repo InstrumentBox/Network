@@ -24,7 +24,12 @@
 
 import Foundation
 
-public enum URLConstructionError: Error {
+public enum URLConstructionError: Error, Equatable {
+   /// Thrown when path or base URL contains anything that's can't be accepted as input to make URL.
+   ///
+   /// - Parameters:
+   ///   - path: Path string which is used to construct URL.
+   ///   - baseURL: A URL `path` is related to.
    case cannotConstructURL(path: String, baseURL: URL?)
 }
 
