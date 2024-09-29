@@ -1,5 +1,5 @@
 //
-//  TwoFactorAuthenticationChallengeTestCase.swift
+//  TwoFactorAuthenticationChallengeTests.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -25,76 +25,75 @@
 @testable
 import WebCore
 
+import Foundation
 import NetworkTestUtils
+import Testing
 import Web
-import XCTest
 
-class TwoFactorAuthenticationChallengeTestCase: XCTestCase {
-   // MARK: - Test Cases
-
-   func test_challenge_doesNotDelegateWorkToHandler() async throws {
+@Suite("2FA")
+struct TwoFactorAuthenticationChallengeTests {
+   @Test("Doesn't delegate work to handler")
+   func successfulStatusCode() async throws {
       var isHandled = false
       try await makeChallengeAndRun(statusCode: 200) { c in
          isHandled = true
          c.complete()
       }
-      XCTAssertFalse(isHandled)
+      #expect(!isHandled)
    }
 
-   func test_challenge_delegatesWorkToHandler_ifNeeded() async throws {
+   @Test("Delegates work to handler")
+   func twoFactorAuthStatusCode() async throws {
       var isHandled = false
       try await makeChallengeAndRun { c in
          isHandled = true
          c.complete()
       }
-      XCTAssertTrue(isHandled)
+      #expect(isHandled)
    }
 
-   func test_challenge_returnsCorrectStatusCode() async throws {
+   @Test("Challenge returns correct status code")
+   func statusCodeFromChallenge() async throws {
       var statusCode: Int?
       try await makeChallengeAndRun { c in
          statusCode = c.responseStatusCode
          c.complete()
       }
-      XCTAssertEqual(statusCode, 600)
+      #expect(statusCode == 600)
    }
 
-   func test_challenge_returnsConvertedObject() async throws {
+   @Test("Challenge returns converted object")
+   func convertedObjectFromChallenge() async throws {
       var object: TestObject?
       try await makeChallengeAndRun { c in
          object = try? c.convertedResponse(using: JSONDecoderResponseConverter<TestObject>())
          c.complete()
       }
-      XCTAssertEqual(object, .some)
+      #expect(object == .some)
    }
 
-   func test_challenge_throwsCancelledError_ifCancelled() async throws {
-      do {
+   @Test("Throws cancelled error if cancelled")
+   func cancelChallenge() async throws {
+      await #expect(throws: TwoFactorAuthenticationChallengeError.cancelled) {
          try await makeChallengeAndRun { c in
             c.cancel()
          }
-      } catch let error as TwoFactorAuthenticationChallengeError {
-         XCTAssertEqual(error, .cancelled)
-      } catch {
-         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 
-   func test_challenge_throwsCompletionError_ifCompletedWithError() async throws {
+   @Test("Throws completion error if completed with error")
+   func completeWithCustomError() async throws {
       let expectedError = NSError(domain: "web.tests.domain", code: 600, userInfo: nil)
-      do {
+      await #expect(throws: expectedError) {
          try await makeChallengeAndRun { c in
             c.complete(with: expectedError)
          }
-      } catch let error as NSError {
-         XCTAssertTrue(error == expectedError)
-      } catch {
-         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 
-   func test_challenge_returnsActualResponse_ifAuthenticatedAndCompleted() async throws {
-      var request = try URLRequest(url: XCTUnwrap(URL(string: "https://service.com")))
+   @Test("Returns actual response if authenticated and completed")
+   func authenticateAndComplete() async throws {
+      var request = try URLRequest(url: #require(URL(string: "https://service.com")))
       request.addValue("1234", forHTTPHeaderField: "X-2FA")
       let expectedResponse = Response(
          request: request,
@@ -114,12 +113,13 @@ class TwoFactorAuthenticationChallengeTestCase: XCTestCase {
          }
       }
 
-      XCTAssertEqual(response, expectedResponse)
+      #expect(response == expectedResponse)
    }
 
-   func test_challenge_returnsTheSameResponse_ifRefreshed() async throws {
+   @Test("Return the same response if refreshed")
+   func refreshChallenge() async throws {
       let expectedResponse = try Response(
-         request: URLRequest(url: XCTUnwrap(URL(string: "https://service.com"))),
+         request: URLRequest(url: #require(URL(string: "https://service.com"))),
          statusCode: 600,
          headers: ["Content-Type": "application/json; charset=utf8"],
          body: TestObject.some.toJSONData()
@@ -136,39 +136,39 @@ class TwoFactorAuthenticationChallengeTestCase: XCTestCase {
          }
       }
 
-      XCTAssertEqual(response, expectedResponse)
+      #expect(response == expectedResponse)
    }
+}
 
-   // MARK: - Factory
+// MARK: -
 
-   @discardableResult
-   private func makeChallengeAndRun(
-      statusCode: Int = 600,
-      handle: @escaping (TwoFactorAuthenticationChallenge) -> Void
-   ) async throws -> Response {
-      let url = try XCTUnwrap(URL(string: "https://service.com"))
-      let request = URLRequest(url: url)
-      let response = Response(
-         request: request,
-         statusCode: statusCode,
-         headers: ["Content-Type": "application/json; charset=utf8"],
-         body: TestObject.some.toJSONData()
-      )
+@discardableResult
+private func makeChallengeAndRun(
+   statusCode: Int = 600,
+   handle: @escaping (TwoFactorAuthenticationChallenge) -> Void
+) async throws -> Response {
+   let url = try #require(URL(string: "https://service.com"))
+   let request = URLRequest(url: url)
+   let response = Response(
+      request: request,
+      statusCode: statusCode,
+      headers: ["Content-Type": "application/json; charset=utf8"],
+      body: TestObject.some.toJSONData()
+   )
 
-      let handler = WebTests2FAChallengeHandler()
+   let handler = WebTests2FAChallengeHandler()
 
-      let configuration: URLSessionConfiguration = .default
-      configuration.protocolClasses = [TwoFactorAuthenticationWebTestsURLProtocol.self]
-      let session = URLSession(configuration: configuration)
+   let configuration: URLSessionConfiguration = .default
+   configuration.protocolClasses = [TwoFactorAuthenticationWebTestsURLProtocol.self]
+   let session = URLSession(configuration: configuration)
 
-      let challenge = TwoFactorAuthenticationChallenge(
-         response: response,
-         handler: handler,
-         session: session
-      )
+   let challenge = TwoFactorAuthenticationChallenge(
+      response: response,
+      handler: handler,
+      session: session
+   )
 
-      handler.handleStub = handle
+   handler.handleStub = handle
 
-      return try await challenge.handleIfNeeded()
-   }
+   return try await challenge.handleIfNeeded()
 }

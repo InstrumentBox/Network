@@ -69,7 +69,10 @@ struct StatusCodeContentTypeResponseValidatorTests {
          contentType: contentType
       )
       let disposition = try #require(validator.validate(response) as? ValidationErrorResponseValidationDisposition)
-      #expect(throws: StatusCodeContentTypeResponseValidatorError.unacceptableContentType(expected: accept, received: contentType)) {
+      #expect(throws: StatusCodeContentTypeResponseValidatorError.unacceptableContentType(
+         expected: accept,
+         received: contentType
+      )) {
          try disposition.processResponse(response, for: TestObjectRequest())
       }
    }

@@ -1,5 +1,5 @@
 //
-//  URLSessionWebClientTestCase.swift
+//  URLSessionWebClientTests.swift
 //
 //  Copyright © 2022 Aleksei Zaikin.
 //
@@ -25,83 +25,72 @@
 @testable
 import WebCore
 
+import Foundation
 import NetworkTestUtils
+import Testing
 import Web
-import XCTest
 
-class URLSessionWebClientTestCase: XCTestCase {
-   func test_webClient_returnsObject() async throws {
+@Suite("Web client based on URL session")
+struct URLSessionWebClientTests {
+   @Test("Returns success object")
+   func fetchSuccessObject() async throws {
       let webClient = makeWebClient(protocolClass: TestObjectWebTestsURLProtocol.self)
       let object = try await webClient.execute(TestObjectRequest())
-      XCTAssertEqual(object, .some)
+      #expect(object == .some)
    }
 
-   func test_webClient_returnsObject_ifRequestAuthorized() async throws {
+   @Test("Returns success object if request authorized")
+   func authorizeAndFetchSuccessObject() async throws {
       let webClient = makeWebClient(
          protocolClass: AuthorizedWebTestsURLProtocol.self,
          requestAuthorizer: WebTestsRequestAuthorizer(needsAuthorization: true)
       )
       let object = try await webClient.execute(TestObjectRequest())
-      XCTAssertEqual(object, .some)
+      #expect(object == .some)
    }
 
-   func test_webClient_skipsAuthorization_ifAuthorizerTellsThatRequestShouldNoBeAuthorized() async throws {
+   @Test("Skips authorization if request should not be authorized")
+   func executeAndNotAuthorizeRequest() async throws {
       let webClient = makeWebClient(
          protocolClass: AuthorizedWebTestsURLProtocol.self,
          requestAuthorizer: WebTestsRequestAuthorizer(needsAuthorization: false)
       )
 
-      do {
+      await #expect(throws: APIError.notAuthorized) {
          _ = try await webClient.execute(TestObjectRequest())
-         XCTFail("Unexpected successful result")
-      } catch let error as APIError {
-         XCTAssertEqual(error, .notAuthorized)
-      } catch {
-         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 
-   func test_webClient_throwsAPIError_ifRequestNotAuthorized() async throws {
+   @Test("Throws APIError if request not authorized")
+   func executeNonAuthorizedRequest() async throws {
       let webClient = makeWebClient(protocolClass: AuthorizedWebTestsURLProtocol.self)
-      do {
+
+      await #expect(throws: APIError.notAuthorized) {
          _ = try await webClient.execute(TestObjectRequest())
-         XCTFail("Unexpected successful result")
-      } catch let error as APIError {
-         XCTAssertEqual(error, .notAuthorized)
-      } catch {
-         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 
-   func test_webClient_throwsAPIError() async throws {
+   @Test("Throws APIError")
+   func receiveAPIError() async throws {
       let webClient = makeWebClient(protocolClass: APIErrorWebTestsURLProtocol.self)
-      do {
+      await #expect(throws: APIError.testObjectNotFound) {
          _ = try await webClient.execute(TestObjectRequest())
-         XCTFail("Unexpected successful result")
-      } catch let error as APIError {
-         XCTAssertEqual(error, .testObjectNotFound)
-      } catch {
-         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 
-   func test_webClient_throwsResponseValidatorError_ifResponseNotValid() async throws {
+   @Test("Throws validator error if response not valid")
+   func validationFailed() async throws {
       let webClient = makeWebClient(protocolClass: WebTestsURLProtocol.self)
-      do {
+      await #expect(throws: StatusCodeContentTypeResponseValidatorError.unacceptableContentType(
+         expected: "application/json",
+         received: "application/octet-stream"
+      )) {
          _ = try await webClient.execute(TestObjectRequest())
-         XCTFail("Unexpected successful result")
-      } catch let StatusCodeContentTypeResponseValidatorError.unacceptableContentType(
-         expected,
-         received
-      ) {
-         XCTAssertEqual(expected, "application/json")
-         XCTAssertEqual(received, "application/octet-stream")
-      } catch {
-         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 
-   func test_webClient_returnsObject_if2FA() async throws {
+   @Test("Returns object after 2FA")
+   func fetchObjectAfter2FA() async throws {
       let webClient = makeWebClient(
          protocolClass: TwoFactorAuthenticationWebTestsURLProtocol.self
       ) { c in
@@ -116,10 +105,11 @@ class URLSessionWebClientTestCase: XCTestCase {
       }
 
       let object = try await webClient.execute(TestObjectRequest())
-      XCTAssertEqual(object, .some)
+      #expect(object == .some)
    }
 
-   func test_webClient_returns2FACancelledError_if2FACancelled() async throws {
+   @Test("Throws 2FA cancelled error")
+   func cancel2FA() async throws {
       let webClient = makeWebClient(
          protocolClass: TwoFactorAuthenticationWebTestsURLProtocol.self
       ) { c in
@@ -128,17 +118,13 @@ class URLSessionWebClientTestCase: XCTestCase {
          }
       }
 
-      do {
+      await #expect(throws: TwoFactorAuthenticationChallengeError.cancelled) {
          _ = try await webClient.execute(TestObjectRequest())
-         XCTFail("Unexpected successful result")
-      } catch let error as TwoFactorAuthenticationChallengeError {
-         XCTAssertEqual(error, .cancelled)
-      } catch {
-         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 
-   func test_webClient_returnsError_if2FACompletedWithError() async throws {
+   @Test("Throws 2FA completion error")
+   func complete2FAWithError() async throws {
       let webClient = makeWebClient(
          protocolClass: TwoFactorAuthenticationWebTestsURLProtocol.self
       ) { c in
@@ -147,13 +133,8 @@ class URLSessionWebClientTestCase: XCTestCase {
          }
       }
 
-      do {
+      await #expect(throws: APIError.twoFactorAuthChallengeFailed) {
          _ = try await webClient.execute(TestObjectRequest())
-         XCTFail("Unexpected successful result")
-      } catch let error as APIError {
-         XCTAssertEqual(error, .twoFactorAuthChallengeFailed)
-      } catch {
-         XCTFail("Unexpected error thrown: \(error)")
       }
    }
 }

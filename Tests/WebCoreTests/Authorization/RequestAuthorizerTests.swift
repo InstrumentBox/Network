@@ -1,5 +1,5 @@
 //
-//  RequestAuthorizerTestCase.swift
+//  RequestAuthorizerTests.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -22,22 +22,26 @@
 //  THE SOFTWARE.
 //
 
+import Foundation
 import NetworkTestUtils
+import Testing
 import Web
 import WebCore
-import XCTest
 
-class RequestAuthorizerTestCase: XCTestCase {
-   func test_requestAuthorizer_defaultImplementation_tellsAuthorizeRequest() {
+@Suite("Request authorizer")
+struct RequestAuthorizerTests {
+   @Test("Default implementation tells authorize request")
+   func needsAuthorizeByDefault() {
       let authorizer = TestRequestAuthorizer()
       let req = TestObjectRequest()
-      XCTAssertTrue(authorizer.needsAuthorization(for: req))
+      #expect(authorizer.needsAuthorization(for: req))
    }
 
-   func test_requestAuthorizer_defaultImplementation_tellsToSkipAuthorizationForNonAuthorizableRequest() {
+   @Test("Default implementation tells skip authorization for non authorizable request")
+   func notNeededToAuthorizeRequest() {
       let authorizer = TestRequestAuthorizer()
       let req = NonAuthorizableTestObjectRequest()
-      XCTAssertFalse(authorizer.needsAuthorization(for: req))
+      #expect(!authorizer.needsAuthorization(for: req))
    }
 }
 
