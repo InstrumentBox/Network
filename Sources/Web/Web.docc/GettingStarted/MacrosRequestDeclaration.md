@@ -135,7 +135,7 @@ If you need to customize body converter's type or customize initialization of co
 this by passing argument to `@Body` macro. In that case type of variable must match type body 
 converter works with.
 
-Let's say you need to customize data encoding strategy of your `JSONEncoder` that's used by converter.
+Let's say you need to customize date encoding strategy of your `JSONEncoder` that's used by converter.
 
 ```swift
 @POST<SomeObject, APIError>("path/to/some/object")
