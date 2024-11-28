@@ -41,14 +41,14 @@ struct StubChainTests {
 
    @Test("Returns nil if no records registered")
    func noRecordsRegistered() async {
-      let chain = StubChain(configuration: StubbedWebClientConfiguration())
+      let chain = StubChain(configuration: StubbedWebClient.Configuration())
       let execution = await chain.dequeueNextExecution()
       #expect(execution == nil)
    }
 
    @Test("Throws registration error if no fallback client")
    func noFallbackWebClient() async throws {
-      let chain = StubChain(configuration: StubbedWebClientConfiguration())
+      let chain = StubChain(configuration: StubbedWebClient.Configuration())
 
       await #expect(throws: StubChainError.cannotRegisterFallbackExecution) {
          try await chain.registerFallbackResponse()
@@ -111,7 +111,7 @@ private func makeStubChain() -> StubChain {
    let fallbackWebClientConfiguration: URLSessionWebClient.Configuration = .ephemeral
    fallbackWebClientConfiguration.sessionConfiguration.protocolClasses = [TestObjectWebTestsURLProtocol.self]
    let fallbackWebClient = URLSessionWebClient(configuration: fallbackWebClientConfiguration)
-   let stubbedWebClientConfiguration = StubbedWebClientConfiguration()
+   let stubbedWebClientConfiguration = StubbedWebClient.Configuration()
    stubbedWebClientConfiguration.fallbackWebClient = fallbackWebClient
    return StubChain(configuration: stubbedWebClientConfiguration)
 }

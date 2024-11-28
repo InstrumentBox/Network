@@ -12,7 +12,7 @@ to your requests.
 ```swift
 import WebStub
 
-let configuration = StubbedWebClientConfiguration()
+let configuration = StubbedWebClient.Configuration()
 let webClient = StubbedWebClient(configuration: configuration)
 ```
 

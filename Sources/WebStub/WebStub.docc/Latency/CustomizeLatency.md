@@ -10,7 +10,7 @@ file. The Library provides you with ``Latency`` protocol and couple of its imple
 ## Enable latency simulation
 
 To enable latency simulation you just need set latency implementation in a corresponding property of
-``StubbedWebClientConfiguration`` which is `nil` by default.
+`StubbedWebClient.Configuration` which is `nil` by default.
 
 ```swift
 configuration.latency = ExactLatency(value: 3.0)

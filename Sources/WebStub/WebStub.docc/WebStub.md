@@ -12,7 +12,6 @@ concurrency model introduced in Swift 5.5.
 - <doc:TakeMoreControl>
 
 - ``StubbedWebClient``
-- ``StubbedWebClientConfiguration``
 - ``StubChain``
 - ``FilenameRequestExecutionError``
 - ``ResponseParserError``

@@ -11,7 +11,7 @@ responses with responses from your server which may be useful e.g. in case of in
 ## How to make responses chain
 
 ```swift
-let configuration = StubbedWebClientConfiguration()
+let configuration = StubbedWebClient.Configuration()
 configuration.fallbackWebClient = <web client>
 let client = StubbedWebClient(configuration: configuration)
 
@@ -36,7 +36,7 @@ method and create new chain of responses.
 ## Fallback all requests
 
 In some cases you may want to fallback all requests responses to which are not registered. To do 
-this you need to enable corresponding setting in ``StubbedWebClientConfiguration`` that's disabled 
+this you need to enable corresponding setting in `StubbedWebClient.Configuration` that's disabled 
 by default.
 
 ```swift

@@ -29,7 +29,7 @@ import Web
 public actor StubbedWebClient: WebClient {
    private var stubChainRegistry: [String: StubChain] = [:]
 
-   private let configuration: StubbedWebClientConfiguration
+   private let configuration: Configuration
 
    // MARK: - Init
    
@@ -38,7 +38,7 @@ public actor StubbedWebClient: WebClient {
    /// - Parameters:
    ///   - configuration: Configuration that will be used to create web client. Configuration with
    ///                    default values by default.
-   public init(configuration: StubbedWebClientConfiguration = StubbedWebClientConfiguration()) {
+   public init(configuration: Configuration = Configuration()) {
       self.configuration = configuration
    }
 

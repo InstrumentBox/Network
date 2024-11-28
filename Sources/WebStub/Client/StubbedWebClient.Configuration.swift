@@ -1,5 +1,5 @@
 //
-//  StubbedWebClientConfiguration.swift
+//  StubbedWebClient.Configuration.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -24,22 +24,24 @@
 
 import Web
 
-/// A configuration of ``StubbedWebClient``.
-public class StubbedWebClientConfiguration: @unchecked Sendable {
-   /// A `WebClient` to use to send requests that have no prepared local responses. Defaults to `nil`.
-   public var fallbackWebClient: (any WebClient)?
-   
-   /// It provides value to simulate latency when returning response from a prepared `.response`
-   /// file. Defaults to `nil`.
-   public var latency: (any Latency)?
+extension StubbedWebClient {
+   /// A configuration of ``StubbedWebClient``.
+   public class Configuration: @unchecked Sendable {
+      /// A `WebClient` to use to send requests that have no prepared local responses. Defaults to `nil`.
+      public var fallbackWebClient: (any WebClient)?
 
-   /// Value that controls if requests should be sent to a fallback web client if no chain or
-   /// records in the chain was found. Requires `fallbackWebClient` property to be set. `False` by
-   /// default.
-   public var fallbackRequestsIfNoResponsesRegistered = false
+      /// It provides value to simulate latency when returning response from a prepared `.response`
+      /// file. Defaults to `nil`.
+      public var latency: (any Latency)?
 
-   // MARK: - Init
-   
-   /// Creates and returns a new instance of `StubbedWebClientConfiguration`.
-   public init() { }
+      /// Value that controls if requests should be sent to a fallback web client if no chain or
+      /// records in the chain was found. Requires `fallbackWebClient` property to be set. `False` by
+      /// default.
+      public var fallbackRequestsIfNoResponsesRegistered = false
+
+      // MARK: - Init
+
+      /// Creates and returns a new instance of `StubbedWebClient.Configuration`.
+      public init() { }
+   }
 }

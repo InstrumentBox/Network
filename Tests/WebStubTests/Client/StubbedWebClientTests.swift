@@ -104,7 +104,7 @@ private func makeStubbedWebClientWithFallbackWebClient(fallbackWhenNoResponses: 
    let fallbackWebClientConfiguration: URLSessionWebClient.Configuration = .ephemeral
    fallbackWebClientConfiguration.sessionConfiguration.protocolClasses = [TestObjectWebTestsURLProtocol.self]
    let fallbackWebClient = URLSessionWebClient(configuration: fallbackWebClientConfiguration)
-   let configuration = StubbedWebClientConfiguration()
+   let configuration = StubbedWebClient.Configuration()
    configuration.fallbackWebClient = fallbackWebClient
    configuration.fallbackRequestsIfNoResponsesRegistered = fallbackWhenNoResponses
    return StubbedWebClient(configuration: configuration)

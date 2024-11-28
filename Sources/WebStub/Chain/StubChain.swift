@@ -28,7 +28,7 @@ import Web
 /// An error that is thrown when ``StubChain`` fails.
 public enum StubChainError: Error, Equatable {
    /// Thrown when trying to register fallback response when fallback web client is not provided
-   /// in ``StubbedWebClientConfiguration``.
+   /// in `StubbedWebClient.Configuration`.
    case cannotRegisterFallbackExecution
 }
 
@@ -37,11 +37,11 @@ public enum StubChainError: Error, Equatable {
 public actor StubChain {
    private var records: [StubChain.Record] = []
 
-   private let configuration: StubbedWebClientConfiguration
+   private let configuration: StubbedWebClient.Configuration
 
    // MARK: - Init
 
-   init(configuration: StubbedWebClientConfiguration) {
+   init(configuration: StubbedWebClient.Configuration) {
       self.configuration = configuration
    }
 
@@ -60,7 +60,7 @@ public actor StubChain {
    }
    
    /// Add a response record that uses fallback web client provided by
-   /// ``StubbedWebClientConfiguration``. If fallback web client is not provided, error will be
+   /// `StubbedWebClient.Configuration`. If fallback web client is not provided, error will be
    /// thrown.
    ///
    /// - Parameters:
