@@ -54,7 +54,7 @@ public struct AuthorizationHeader: Sendable {
 
    /// Creates and returns the following header: `Authorization: Basic <base64 login + password>`.
    /// - Parameters:
-   ///   - token: Token to be set as header value.
+   ///   - base64: Base 64 encoded username and password.
    /// - Returns: Authorization header.
    public static func basicAuthorization(_ base64: String) -> AuthorizationHeader {
       AuthorizationHeader(name: "Authorization", value: "Basic \(base64)")
