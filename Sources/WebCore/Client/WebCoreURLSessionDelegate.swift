@@ -25,11 +25,11 @@
 import Foundation
 
 final class WebCoreURLSessionDelegate: NSObject, URLSessionDelegate {
-   private let configuration: URLSessionWebClientConfiguration
+   private let configuration: URLSessionWebClient.Configuration
 
    // MARK: - Init
 
-   init(configuration: URLSessionWebClientConfiguration) {
+   init(configuration: URLSessionWebClient.Configuration) {
       self.configuration = configuration
    }
 

@@ -45,7 +45,7 @@ class MyServerTrustPolicy: ServerTrustPolicy {
 The `ServerTrustURLAuthenticationHandler` is responsible for storing an internal mapping of 
 `ServerTrustPolicy` values to a particular host. This allows the web client to evaluate each host 
 with different evaluators. To apply policy for all hosts except specified use `*` as host name. This
-handler should be set as one of the handlers in a ``URLSessionWebClientConfiguration``.
+handler should be set as one of the handlers in a `URLSessionWebClient.Configuration`.
 
 ```swift
 let serverTrustHandler = ServerTrustURLAuthenticationHandler(serverTrustPolicies: [
@@ -53,6 +53,6 @@ let serverTrustHandler = ServerTrustURLAuthenticationHandler(serverTrustPolicies
    "keys.example.com": PublicKeysServerTrustPolicy(),
    "*": DefaultServerTrustPolicy()
 ])
-let configuration: URLSessionWebClientConfiguration = .default
+let configuration: URLSessionWebClient.Configuration = .default
 configuration.urlAuthenticationHandlers = [serverTrustHandler]
 ```

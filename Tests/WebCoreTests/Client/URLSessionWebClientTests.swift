@@ -147,7 +147,7 @@ private func makeWebClient(
    request: TestObjectRequest? = nil,
    handle2FA: ((TwoFactorAuthenticationChallenge) -> Void)? = nil
 ) -> URLSessionWebClient {
-   let configuration: URLSessionWebClientConfiguration = .ephemeral
+   let configuration: URLSessionWebClient.Configuration = .ephemeral
    configuration.sessionConfiguration.protocolClasses = [protocolClass]
    configuration.requestAuthorizer = requestAuthorizer
    configuration.twoFactorAuthenticationHandler = handle2FA.map { handle in

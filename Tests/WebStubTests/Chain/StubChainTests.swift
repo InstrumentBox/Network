@@ -108,7 +108,7 @@ struct StubChainTests {
 // MARK: -
 
 private func makeStubChain() -> StubChain {
-   let fallbackWebClientConfiguration: URLSessionWebClientConfiguration = .ephemeral
+   let fallbackWebClientConfiguration: URLSessionWebClient.Configuration = .ephemeral
    fallbackWebClientConfiguration.sessionConfiguration.protocolClasses = [TestObjectWebTestsURLProtocol.self]
    let fallbackWebClient = URLSessionWebClient(configuration: fallbackWebClientConfiguration)
    let stubbedWebClientConfiguration = StubbedWebClientConfiguration()

@@ -24,7 +24,7 @@
 
 import Web
 
-/// A protocol you need to implement and set to `URLSessionWebClientConfiguration` to allow
+/// A protocol you need to implement and set to `URLSessionWebClient.Configuration` to allow
 /// `WebClient` to authorize all sent requests.
 ///
 /// Request authorizer is a good place where you can ask your authorization token from a keychain

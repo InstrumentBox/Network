@@ -34,7 +34,7 @@ import WebCore
 struct FallbackRequestExecutionTests {
    @Test("Forward requests to a web client")
    func executeRequest() async throws {
-      let configuration: URLSessionWebClientConfiguration = .ephemeral
+      let configuration: URLSessionWebClient.Configuration = .ephemeral
       configuration.sessionConfiguration.protocolClasses = [TestObjectWebTestsURLProtocol.self]
       let fallbackWebClient = URLSessionWebClient(configuration: configuration)
 

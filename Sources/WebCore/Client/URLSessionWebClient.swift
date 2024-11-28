@@ -30,7 +30,7 @@ import Web
 /// ``URLSessionWebClient`` also provides `Request`s authorization, server trust evaluation, and
 /// 2FA challenges handling.
 public final class URLSessionWebClient: WebClient {
-   private let configuration: URLSessionWebClientConfiguration
+   private let configuration: Configuration
    private let session: URLSession
 
    // MARK: - Init
@@ -39,7 +39,7 @@ public final class URLSessionWebClient: WebClient {
    ///
    /// - Parameters:
    ///   - configuration: Configuration that will be used to create a web client.
-   public init(configuration: URLSessionWebClientConfiguration) {
+   public init(configuration: Configuration) {
       self.configuration = configuration
       let delegate = WebCoreURLSessionDelegate(configuration: configuration)
       session = URLSession(

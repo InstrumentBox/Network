@@ -8,7 +8,6 @@ request authorization, SSL pinning. Built on top of new concurrency model introd
 ### Getting Started
 
 - ``URLSessionWebClient``
-- ``URLSessionWebClientConfiguration``
 
 ### Request
 

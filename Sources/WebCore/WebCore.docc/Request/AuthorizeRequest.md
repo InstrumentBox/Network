@@ -23,7 +23,7 @@ class MyAppRequestAuthorizer: RequestAuthorizer {
 Then you need to set this authorizer to web client configuration.
 
 ```swift
-let configuration: URLSessionWebClientConfiguration = .default
+let configuration: URLSessionWebClient.Configuration = .default
 configuration.requestAuthorizer = MyAppRequestAuthorizer(keychain: keychain)
 ```
 

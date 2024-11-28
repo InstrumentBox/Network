@@ -106,7 +106,7 @@ func complete(_ challenge: TwoFactorAuthenticationChallenge, with error: Error?)
 Finally, set the handler to a web client configuration.
 
 ```swift
-let config: URLSessionWebClientConfiguration = .default
+let config: URLSessionWebClient.Configuration = .default
 config.twoFactorAuthenticationHandler = My2FAHandler(presentingViewController: controller)
 ```
 

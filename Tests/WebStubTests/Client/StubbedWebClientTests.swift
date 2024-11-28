@@ -101,7 +101,7 @@ struct StubbedWebClientTests {
 // MARK: -
 
 private func makeStubbedWebClientWithFallbackWebClient(fallbackWhenNoResponses: Bool) -> StubbedWebClient {
-   let fallbackWebClientConfiguration: URLSessionWebClientConfiguration = .ephemeral
+   let fallbackWebClientConfiguration: URLSessionWebClient.Configuration = .ephemeral
    fallbackWebClientConfiguration.sessionConfiguration.protocolClasses = [TestObjectWebTestsURLProtocol.self]
    let fallbackWebClient = URLSessionWebClient(configuration: fallbackWebClientConfiguration)
    let configuration = StubbedWebClientConfiguration()

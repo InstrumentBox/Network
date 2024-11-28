@@ -91,9 +91,9 @@ To send a request you need to create an instance of web client.
 ```swift
 import WebCore
 
-let configuration: URLSessionWebClientConfiguration = .default
+let configuration: URLSessionWebClient.Configuration = .default
 configuration.baseURL = URL(string: "https://api.myservice.com/v1/")
-let webClient: WebClient = URLSessionWebClient(configuration: configuration)
+let webClient: any WebClient = URLSessionWebClient(configuration: configuration)
 ```
 
 Important thing here is that if you use `URL(path:baseURL) throws` provided by this library,
