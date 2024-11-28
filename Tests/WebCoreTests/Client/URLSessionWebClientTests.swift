@@ -97,9 +97,9 @@ struct URLSessionWebClientTests {
          Task {
             do {
                try await c.authenticate(headerName: "X-2FA", headerValue: "1234")
-               c.complete()
+               await c.complete()
             } catch {
-               c.complete(with: error)
+               await c.complete(with: error)
             }
          }
       }
@@ -114,7 +114,7 @@ struct URLSessionWebClientTests {
          protocolClass: TwoFactorAuthenticationWebTestsURLProtocol.self
       ) { c in
          Task {
-            c.cancel()
+            await c.cancel()
          }
       }
 
@@ -129,7 +129,7 @@ struct URLSessionWebClientTests {
          protocolClass: TwoFactorAuthenticationWebTestsURLProtocol.self
       ) { c in
          Task {
-            c.complete(with: APIError.twoFactorAuthChallengeFailed)
+            await c.complete(with: APIError.twoFactorAuthChallengeFailed)
          }
       }
 
@@ -143,7 +143,7 @@ struct URLSessionWebClientTests {
 
 private func makeWebClient(
    protocolClass: URLProtocol.Type,
-   requestAuthorizer: RequestAuthorizer? = nil,
+   requestAuthorizer: (any RequestAuthorizer)? = nil,
    request: TestObjectRequest? = nil,
    handle2FA: ((TwoFactorAuthenticationChallenge) -> Void)? = nil
 ) -> URLSessionWebClient {

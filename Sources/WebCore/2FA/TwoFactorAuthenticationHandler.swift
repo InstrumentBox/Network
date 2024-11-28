@@ -26,7 +26,7 @@ import Web
 
 /// A protocol you need to implement and set to `URLSessionWebClientConfiguration` to handle
 /// authentication challenges.
-public protocol TwoFactorAuthenticationHandler: AnyObject {
+public protocol TwoFactorAuthenticationHandler: AnyObject, Sendable {
    /// Checks response and returns flag if 2FA process needs to be started.
    ///
    /// - Parameters:

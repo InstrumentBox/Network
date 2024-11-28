@@ -23,7 +23,7 @@
 //
 
 /// An HTTP method.
-public struct Method: Equatable {
+public struct Method: Equatable, Sendable {
    let raw: String
 
    // MARK: - Init

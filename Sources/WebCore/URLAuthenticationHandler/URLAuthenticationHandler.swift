@@ -1,5 +1,5 @@
 //
-//  StubbedWebClientActor.swift
+//  <#Filename#>.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -21,12 +21,3 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
-
-@globalActor
-actor StubbedWebClientActor {
-   static let shared = StubbedWebClientActor()
-
-   // MARK: - Init
-
-   private init() { }
-}

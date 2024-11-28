@@ -23,12 +23,12 @@
 //
 
 /// A protocol you need to conform an object to use it a response validator.
-public protocol ResponseValidator {
+public protocol ResponseValidator: Sendable {
    /// Validate a response and dispose what way a `WebClient` should go further.
    ///
    /// - Parameters:
    ///   - response: A response that needs to be validated.
    /// - Returns: A disposition of what way go further. See `ResponseValidationDisposition`
    ///            for more information.
-   func validate(_ response: Response) -> ResponseValidationDisposition
+   func validate(_ response: Response) -> any ResponseValidationDisposition
 }

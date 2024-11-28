@@ -24,7 +24,7 @@
 
 import Foundation
 
-package class NotHTTPResponseWebTestsURLProtocol: WebTestsURLProtocol {
+package class NotHTTPResponseWebTestsURLProtocol: WebTestsURLProtocol, @unchecked Sendable {
    override var response: URLResponse {
       URLResponse(
          url: request.url!,

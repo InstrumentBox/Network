@@ -24,7 +24,7 @@
 
 import Foundation
 
-package class TestObjectWebTestsURLProtocol: WebTestsURLProtocol {
+package class TestObjectWebTestsURLProtocol: WebTestsURLProtocol, @unchecked Sendable {
    override var headers: [String : String] {
       ["Content-Type": "application/json; charset=utf8"]
    }

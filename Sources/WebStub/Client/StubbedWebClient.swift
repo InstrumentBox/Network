@@ -26,7 +26,7 @@ import Web
 
 /// An implementation of `WebClient` that returns stubbed responses or falls requests back to other
 /// given web client.
-public class StubbedWebClient: WebClient {
+public actor StubbedWebClient: WebClient {
    private var stubChainRegistry: [String: StubChain] = [:]
 
    private let configuration: StubbedWebClientConfiguration
@@ -68,8 +68,7 @@ public class StubbedWebClient: WebClient {
 
    // MARK: - WebClient
 
-   @StubbedWebClientActor
-   public func execute<SuccessObject>(
+   public func execute<SuccessObject: Sendable>(
       _ request: some Request<SuccessObject>
    ) async throws -> SuccessObject {
       let requestType = type(of: request)
@@ -81,7 +80,7 @@ public class StubbedWebClient: WebClient {
          )
       }
 
-      guard let execution = chain.dequeueNextExecution() else {
+      guard let execution = await chain.dequeueNextExecution() else {
          return try await fallbackRequestOrThrowError(
             request,
             possibleError: StubbedWebClientError.cannotFindRequestExecution("\(requestType)")
@@ -91,7 +90,7 @@ public class StubbedWebClient: WebClient {
       return try await execution.execute(request)
    }
 
-   private func fallbackRequestOrThrowError<SuccessObject>(
+   private func fallbackRequestOrThrowError<SuccessObject: Sendable>(
       _ request: some Request<SuccessObject>,
       possibleError: Error
    ) async throws -> SuccessObject {

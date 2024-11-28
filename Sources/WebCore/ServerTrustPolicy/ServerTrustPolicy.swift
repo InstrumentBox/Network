@@ -25,7 +25,7 @@
 import Foundation
 
 /// A protocol you need to implement to perform server trust evaluation.
-public protocol ServerTrustPolicy {
+public protocol ServerTrustPolicy: Sendable {
    /// Evaluates given server trust for given host.
    ///
    /// - Parameters:

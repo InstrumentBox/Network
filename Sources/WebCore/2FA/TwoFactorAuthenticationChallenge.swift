@@ -36,16 +36,16 @@ public enum TwoFactorAuthenticationChallengeError: Error {
 /// It is intended to handle challenges when you need to send the same request to send a new
 /// one-time code to a user and authenticate challenge by sending the same request with some HTTP
 /// header.
-public class TwoFactorAuthenticationChallenge {
+public actor TwoFactorAuthenticationChallenge: Sendable {
    private var continuation: UnsafeContinuation<Response, Error>?
 
    private var response: Response
-   private let handler: TwoFactorAuthenticationHandler
+   private let handler: any TwoFactorAuthenticationHandler
    private let session: URLSession
 
    // MARK: - Init
 
-   init(response: Response, handler: TwoFactorAuthenticationHandler, session: URLSession) {
+   init(response: Response, handler: any TwoFactorAuthenticationHandler, session: URLSession) {
       self.response = response
       self.handler = handler
       self.session = session
@@ -63,9 +63,9 @@ public class TwoFactorAuthenticationChallenge {
    ///
    /// - Returns: Converter that will be used to convert response.
    /// - Throws: An underlying converter's error.
-   public func convertedResponse<ResponseConverter: Web.ResponseConverter>(
-      using converter: ResponseConverter
-   ) throws -> ResponseConverter.ConvertedResponse {
+   public func convertedResponse<Object: Sendable>(
+      using converter: some ResponseConverter<Object>
+   ) throws -> Object {
       try converter.convert(response)
    }
 

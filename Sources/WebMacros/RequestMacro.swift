@@ -348,9 +348,9 @@ public struct RequestMacro: ExtensionMacro {
       return try CodeBlockItemListSyntax {
 
          if queryItems.isEmpty {
-            try VariableDeclSyntax(#"let query: [String: Any] = [:]"#)
+            try VariableDeclSyntax(#"let query: [String: any Sendable] = [:]"#)
          } else {
-            try VariableDeclSyntax(#"var query: [String: Any] = [:]"#)
+            try VariableDeclSyntax(#"var query: [String: any Sendable] = [:]"#)
          }
          for queryItem in queryItems {
             if queryItem.isOptional {

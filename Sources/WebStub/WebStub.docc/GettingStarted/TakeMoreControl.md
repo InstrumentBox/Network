@@ -15,10 +15,10 @@ let configuration = StubbedWebClientConfiguration()
 configuration.fallbackWebClient = <web client>
 let client = StubbedWebClient(configuration: configuration)
 
-let chain = client.stubChain(for: SomeObjectRequest.self)
-chain.registerResponse(at: <URL to file with a successful response>, usageCount: 3)
-chain.registerResponse(at: <URL to file with an API error>)
-try chain.registerFallbackResponse()
+let chain = await client.stubChain(for: SomeObjectRequest.self)
+await chain.registerResponse(at: <URL to file with a successful response>, usageCount: 3)
+await chain.registerResponse(at: <URL to file with an API error>)
+try await chain.registerFallbackResponse()
 ```
 
 **Note:** `registerFallbackResponse()` throws error if `fallbackWebClient` is not provided by 
@@ -29,7 +29,7 @@ will throw an API error, and then it will use your server to receive responses t
 
 Also you can reset whole chain by using 
 ```swift  
-chain.reset()
+await chain.reset()
 ``` 
 method and create new chain of responses.
 

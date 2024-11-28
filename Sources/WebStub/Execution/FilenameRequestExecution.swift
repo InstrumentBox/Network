@@ -29,22 +29,24 @@ public enum FilenameRequestExecutionError: Error, Equatable {
    case cannotCreateResponseParser(URL)
 }
 
-class FilenameRequestExecution: RequestExecution {
+actor FilenameRequestExecution: RequestExecution {
    private var cachedResponse: Response?
 
    private let responseURL: URL
-   private let latency: Latency?
+   private let latency: (any Latency)?
 
    // MARK: - Init
 
-   init(responseURL: URL, latency: Latency?) {
+   init(responseURL: URL, latency: (any Latency)?) {
       self.responseURL = responseURL
       self.latency = latency
    }
 
    // MARK: - ResponseRecord
 
-   func execute<SuccessObject>(_ request: some Request<SuccessObject>) async throws -> SuccessObject {
+   func execute<SuccessObject: Sendable>(
+      _ request: some Request<SuccessObject>
+   ) async throws -> SuccessObject {
       let response = try await response(for: request)
 
       if let latency {

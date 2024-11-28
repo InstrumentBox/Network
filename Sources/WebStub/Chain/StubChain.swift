@@ -34,7 +34,7 @@ public enum StubChainError: Error, Equatable {
 
 /// A chain response records that will be used in a response to a concrete request. It uses
 /// responses in FIFO order and then continuously uses last record in the chain.
-public class StubChain {
+public actor StubChain {
    private var records: [StubChain.Record] = []
 
    private let configuration: StubbedWebClientConfiguration
@@ -84,16 +84,16 @@ public class StubChain {
 
    // MARK: - Access
 
-   func dequeueNextExecution() -> (any RequestExecution)? {
+   func dequeueNextExecution() async -> (any RequestExecution)? {
       var record = records.first
-      if record?.isExhausted ?? false {
+      if await record?.isExhausted ?? false {
          if records.count > 1 {
             records = Array(records.dropFirst())
             record = records.first
          }
       }
 
-      record?.currentUsageCount += 1
+      await record?.increaseUsageCount()
       return record?.execution
    }
 }

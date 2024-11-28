@@ -34,7 +34,6 @@ struct FormDataTests {
    private let fileName = "some_file"
    private let contentType = "application/octet-stream"
    private let body = Data([0x01, 0x02, 0x03])
-   private let boundary = "123456"
 
    // MARK: - Tests
 
@@ -42,7 +41,7 @@ struct FormDataTests {
    func convertWithoutFilename() throws {
       let expectedData = makeExpectedData(withFileName: false, withHeaders: false)
       let formData = try makeFormData(withFileName: false, withHeaders: false)
-      let partData = try formData.toBodyPartData(with: boundary)
+      let partData = try formData.toBodyPartData()
       #expect(partData == expectedData)
    }
 
@@ -50,7 +49,7 @@ struct FormDataTests {
    func convertWithFilename() throws {
       let expectedData = makeExpectedData(withFileName: true, withHeaders: false)
       let formData = try makeFormData(withFileName: true, withHeaders: false)
-      let partData = try formData.toBodyPartData(with: boundary)
+      let partData = try formData.toBodyPartData()
       #expect(partData == expectedData)
    }
 
@@ -58,13 +57,13 @@ struct FormDataTests {
    func convertWithHeaders() throws {
       let expectedData = makeExpectedData(withFileName: false, withHeaders: true)
       let formData = try makeFormData(withFileName: false, withHeaders: true)
-      let partData = try formData.toBodyPartData(with: boundary)
+      let partData = try formData.toBodyPartData()
       #expect(partData == expectedData)
    }
 
    // MARK: - Factory
 
-   private func makeFormData(withFileName: Bool, withHeaders: Bool) throws -> FormData {
+   private func makeFormData(withFileName: Bool, withHeaders: Bool) throws -> FormData<Data> {
       let converter = DataBodyConverter(contentType: contentType)
       return try FormData(
          name: partName,
@@ -77,8 +76,6 @@ struct FormDataTests {
 
    private func makeExpectedData(withFileName: Bool, withHeaders: Bool) -> Data {
       var data = Data()
-      data.append("--\(boundary)")
-      data.append("\r\n")
       data.append(#"Content-Disposition: form-data; name="\#(partName)""#)
       if withFileName {
          data.append(#"; filename="\#(fileName)""#)
@@ -93,7 +90,6 @@ struct FormDataTests {
       }
       data.append("\r\n")
       data.append(body)
-      data.append("\r\n")
       return data
    }
 }

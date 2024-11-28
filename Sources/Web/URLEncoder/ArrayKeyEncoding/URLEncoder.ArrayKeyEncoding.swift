@@ -24,7 +24,7 @@
 
 extension URLEncoder {
    /// Encoding to apply to array keys.
-   public protocol ArrayKeyEncoding {
+   public protocol ArrayKeyEncoding: Sendable {
       /// Encodes and returns a given key.
       ///
       /// - Parameters:

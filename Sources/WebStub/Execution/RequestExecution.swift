@@ -24,6 +24,8 @@
 
 import Web
 
-protocol RequestExecution: AnyObject {
-   func execute<SuccessObject>(_ request: some Request<SuccessObject>) async throws -> SuccessObject
+protocol RequestExecution: AnyObject, Sendable {
+   func execute<SuccessObject: Sendable>(
+      _ request: some Request<SuccessObject>
+   ) async throws -> SuccessObject
 }

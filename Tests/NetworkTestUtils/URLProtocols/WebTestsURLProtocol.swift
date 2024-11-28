@@ -24,7 +24,7 @@
 
 import Foundation
 
-package class WebTestsURLProtocol: URLProtocol {
+package class WebTestsURLProtocol: URLProtocol, @unchecked Sendable {
    private var timer: Timer?
 
    // MARK: - URLProtocol

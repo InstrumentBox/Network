@@ -25,7 +25,7 @@
 import Web
 import WebCore
 
-package class WebTests2FAChallengeHandler: TwoFactorAuthenticationHandler {
+package final class WebTests2FAChallengeHandler: @unchecked Sendable, TwoFactorAuthenticationHandler {
    // MARK: - Init
 
    package init() { }
@@ -36,8 +36,10 @@ package class WebTests2FAChallengeHandler: TwoFactorAuthenticationHandler {
       response.statusCode == 600
    }
 
-   package var handleStub: (TwoFactorAuthenticationChallenge) -> Void = { _ in }
+   package var handleStub: (TwoFactorAuthenticationChallenge) async -> Void = { _ in }
    package func handle(_ challenge: TwoFactorAuthenticationChallenge) {
-      handleStub(challenge)
+      Task {
+         await handleStub(challenge)
+      }
    }
 }

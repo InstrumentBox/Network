@@ -46,7 +46,7 @@ public struct JSONSerializationBodyConverter: BodyConverter {
       "application/json"
    }
 
-   public func convert(_ body: Any) throws -> Data {
+   public func convert(_ body: any Sendable) throws -> Data {
       try JSONSerialization.data(withJSONObject: body, options: options)
    }
 }

@@ -26,9 +26,9 @@ import Foundation
 
 /// A protocol you need to conform your object to use it as body converter when you create a new
 /// request.
-public protocol BodyConverter<Body> {
+public protocol BodyConverter<Body>: Sendable {
    /// A type of object body converter works with.
-   associatedtype Body
+   associatedtype Body: Sendable
 
    /// A MIME type that will be set as value of *Content-Type* header of request.
    var contentType: String { get }

@@ -23,7 +23,7 @@
 //
 
 /// A disposition of a validator after analyzing a response.
-public protocol ResponseValidationDisposition {
+public protocol ResponseValidationDisposition: Sendable {
    /// Processes received response by using either success object response converter or error object
    /// response converter provided by a request object.
    ///
@@ -33,7 +33,7 @@ public protocol ResponseValidationDisposition {
    /// - Returns: An object that is created by converting response using success object response
    ///            converter.
    /// - Throws: An error that is result of validation or converting process.
-   func processResponse<SuccessObject>(
+   func processResponse<SuccessObject: Sendable>(
       _ response: Response,
       for request: some Request<SuccessObject>
    ) throws -> SuccessObject

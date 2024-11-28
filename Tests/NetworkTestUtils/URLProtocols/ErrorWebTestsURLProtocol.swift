@@ -22,6 +22,6 @@
 //  THE SOFTWARE.
 //
 
-package class ErrorWebTestsURLProtocol: WebTestsURLProtocol {
+package class ErrorWebTestsURLProtocol: WebTestsURLProtocol, @unchecked Sendable {
    override var returnsError: Bool { true }
 }

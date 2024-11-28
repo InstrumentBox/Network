@@ -35,8 +35,8 @@ struct StubbedWebClientTests {
 
    @Test("Registers stubbed response and returns result")
    func registerStubAndReturnObject() async throws {
-      let chain = client.stubChain(for: TestObjectRequest.self)
-      try chain.registerResponse(at: #require(Responses.testObject))
+      let chain = await client.stubChain(for: TestObjectRequest.self)
+      try await chain.registerResponse(at: #require(Responses.testObject))
 
       let object = try await client.execute(TestObjectRequest())
       #expect(object == .some)
@@ -44,10 +44,10 @@ struct StubbedWebClientTests {
 
    @Test("Registers stubbed response in the same chain and return result")
    func registerInTheSameChainAndReturnObject() async throws {
-      try client
+      try await client
          .stubChain(for: TestObjectRequest.self)
          .registerResponse(at: #require(Responses.testObject))
-      try client
+      try await client
          .stubChain(for: TestObjectRequest.self)
          .registerResponse(at: #require(Responses.apiError))
 
@@ -62,7 +62,7 @@ struct StubbedWebClientTests {
    @Test("Uses fallback web client")
    func test_stubbedWebClient_usesFallbackWebClient() async throws {
       let client = makeStubbedWebClientWithFallbackWebClient(fallbackWhenNoResponses: false)
-      try client.stubChain(for: TestObjectRequest.self).registerFallbackResponse()
+      try await client.stubChain(for: TestObjectRequest.self).registerFallbackResponse()
       let object = try await client.execute(TestObjectRequest())
       #expect(object == .some)
    }
@@ -76,7 +76,7 @@ struct StubbedWebClientTests {
 
    @Test("Throws error if response not registered")
    func responseNotRegistered() async throws {
-      _ = client.stubChain(for: TestObjectRequest.self)
+      _ = await client.stubChain(for: TestObjectRequest.self)
       await #expect(throws: StubbedWebClientError.cannotFindRequestExecution("\(TestObjectRequest.self)")) {
          _ = try await client.execute(TestObjectRequest())
       }
@@ -92,7 +92,7 @@ struct StubbedWebClientTests {
    @Test("Uses fallback web client if response no registered")
    func fallbackWhenNoResponse() async throws {
       let client = makeStubbedWebClientWithFallbackWebClient(fallbackWhenNoResponses: true)
-      _ = client.stubChain(for: TestObjectRequest.self)
+      _ = await client.stubChain(for: TestObjectRequest.self)
       let object = try await client.execute(TestObjectRequest())
       #expect(object == .some)
    }

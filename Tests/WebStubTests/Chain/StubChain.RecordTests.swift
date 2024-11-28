@@ -34,14 +34,16 @@ struct StubChainRecordTests {
    func exhausted(currentUsageCount: Int) async throws {
       let execution = try FilenameRequestExecution(responseURL: #require(Responses.testObject), latency: nil)
       let record = StubChain.Record(execution: execution, usageCount: 1)
-      record.currentUsageCount = currentUsageCount
-      #expect(record.isExhausted)
+      for _ in 0..<currentUsageCount {
+         await record.increaseUsageCount()
+      }
+      #expect(await record.isExhausted)
    }
 
    @Test("Not exhausted if current usage count less than usage count")
    func notExhausted() async throws {
       let execution = try FilenameRequestExecution(responseURL: #require(Responses.testObject), latency: nil)
       let record = StubChain.Record(execution: execution, usageCount: 1)
-      #expect(!record.isExhausted)
+      #expect(await !record.isExhausted)
    }
 }

@@ -1,7 +1,7 @@
 //
-//  WebCoreURLSessionDelegate.swift
+//  ServerTrustURLAuthenticationHandler.swift
 //
-//  Copyright © 2022 Aleksei Zaikin.
+//  Copyright © 2024 Aleksei Zaikin.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,37 +24,36 @@
 
 import Foundation
 
-final class WebCoreURLSessionDelegate: NSObject, URLSessionDelegate {
-   private let configuration: URLSessionWebClientConfiguration
+/// A handler that processes server trust url authentication challenge.
+public final class ServerTrustURLAuthenticationHandler: URLAuthenticationHandler {
+   private let serverTrustPolicies: [String: any ServerTrustPolicy]
 
    // MARK: - Init
-
-   init(configuration: URLSessionWebClientConfiguration) {
-      self.configuration = configuration
+   
+   /// Creates and returns a new instance if `ServerTrustURLAuthenticationHandler` with a given
+   /// parameter.
+   ///
+   /// - Parameters:
+   ///   - serverTrustPolicies: The dictionary of policies mapped to a particular host. Map policy
+   ///                          to `*` if you want to use this policy for each host, for which
+   ///                          separate policy is not specified.
+   public init(serverTrustPolicies: [String: any ServerTrustPolicy]) {
+      self.serverTrustPolicies = serverTrustPolicies
    }
 
-   // MARK: - URLSessionDelegate
+   // MARK: - URLAuthenticationHandler
 
-   func urlSession(
-      _ session: URLSession,
-      didReceive challenge: URLAuthenticationChallenge
-   ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
-      if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
-         return authenticateServerTrustChallenge(challenge)
-      }
-
-      return (.performDefaultHandling, nil)
+   public func canHandleChallenge(_ challenge: URLAuthenticationChallenge) -> Bool {
+      challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust
    }
 
-   // MARK: - Server Trust Authentication
-
-   private func authenticateServerTrustChallenge(
-      _ challenge: URLAuthenticationChallenge
-   ) -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+   public func handleChallenge(_ challenge: URLAuthenticationChallenge) async -> (
+      URLSession.AuthChallengeDisposition,
+      URLCredential?
+   ) {
       let host = challenge.protectionSpace.host
       guard
          let serverTrust = challenge.protectionSpace.serverTrust,
-         let serverTrustPolicies = configuration.serverTrustPolicies,
          let policy = serverTrustPolicies[host] ?? serverTrustPolicies["*"]
       else {
          return (.performDefaultHandling, nil)

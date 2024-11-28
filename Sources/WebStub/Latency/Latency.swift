@@ -26,7 +26,7 @@ import Foundation
 import Web
 
 /// A protocol that describes latency that's used when reading responses from files.
-public protocol Latency {
+public protocol Latency: Sendable {
    /// Returns latency value for `Request`.
    ///
    /// - Parameters:

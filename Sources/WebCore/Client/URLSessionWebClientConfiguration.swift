@@ -31,7 +31,7 @@ import Foundation
 ///
 /// - Note: As `WebClient` is *NOT* intended to work with background URLSessions, it's not possible
 ///         to create a background configuration.
-public class URLSessionWebClientConfiguration {
+public class URLSessionWebClientConfiguration: @unchecked Sendable {
    /// Base URL that is used by web client.
    ///
    /// If you use `URL(path:baseURL) throws` initializer provided by this library and your base
@@ -46,14 +46,14 @@ public class URLSessionWebClientConfiguration {
    public var baseURL: URL?
 
    /// An object that will be used to authorize each request sent by a web client.
-   public var requestAuthorizer: RequestAuthorizer?
+   public var requestAuthorizer: (any RequestAuthorizer)?
 
    /// The dictionary of policies mapped to a particular host. Map policy to `*` if you want to use
    /// this policy for each host, for which separate policy is not specified.
-   public var serverTrustPolicies: [String: ServerTrustPolicy]?
+   public var serverTrustPolicies: [String: any ServerTrustPolicy]?
 
    /// Handler that will be used to receive 2FA challenges.
-   public var twoFactorAuthenticationHandler: TwoFactorAuthenticationHandler?
+   public var twoFactorAuthenticationHandler: (any TwoFactorAuthenticationHandler)?
 
    /// Configuration of underlying `URLSession` object.
    public let sessionConfiguration: URLSessionConfiguration

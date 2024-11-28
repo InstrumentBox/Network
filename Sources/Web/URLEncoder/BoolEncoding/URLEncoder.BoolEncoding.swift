@@ -24,7 +24,7 @@
 
 extension URLEncoder {
    /// Encoding to apply to bool values.
-   public protocol BoolEncoding {
+   public protocol BoolEncoding: Sendable {
       /// Encodes and returns a given value.
       ///
       /// - Parameters:

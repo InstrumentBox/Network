@@ -26,7 +26,7 @@ import Foundation
 
 /// A body converter that takes `Encodable` object and uses `JSONEncoder` to convert an object to a
 /// body data. The MIME type of a result is *application/json*.
-public struct JSONEncoderBodyConverter<Body: Encodable>: BodyConverter {
+public struct JSONEncoderBodyConverter<Body: Encodable & Sendable>: BodyConverter {
    private let encoder: JSONEncoder
 
    // MARK: - Init

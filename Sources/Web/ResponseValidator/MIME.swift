@@ -24,7 +24,7 @@
 
 import Foundation
 
-struct MIME: Hashable, CustomStringConvertible {
+struct MIME: Hashable, Sendable, CustomStringConvertible {
    let type: String
    let subtype: String
 

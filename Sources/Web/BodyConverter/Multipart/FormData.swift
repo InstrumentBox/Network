@@ -34,7 +34,7 @@ import Foundation
 /// Encoded data
 /// ```
 /// Where filename value is optional.
-public struct FormData: BodyPart {
+public struct FormData<Body: Sendable>: BodyPart {
    /// Name of body part. Used as value of *name* in *Content-Disposition*.
    public let name: String
 
@@ -44,11 +44,11 @@ public struct FormData: BodyPart {
    /// Additional headers of body part.
    public let headers: [String: String]?
 
-   /// Body part data.
-   public let body: Data
+   /// A body data to be sent to a server.
+   public let body: Body
 
-   /// MIME type of body part data.
-   public let contentType: String
+   /// A body converter to be used to convert body
+   public let converter: any BodyConverter<Body>
 
    // MARK: - Init
 
@@ -61,7 +61,7 @@ public struct FormData: BodyPart {
    ///   - body: An object to be used as a data of body part.
    ///   - converter: A ``BodyConverter`` to convert body object and set *Content-Type* of body part.
    /// - Throws: An error occurred during body object conversion.
-   public init<Body>(
+   public init(
       name: String,
       fileName: String? = nil,
       headers: [String: String]? = nil,
@@ -71,16 +71,14 @@ public struct FormData: BodyPart {
       self.name = name
       self.fileName = fileName
       self.headers = headers
-      self.body = try converter.convert(body)
-      self.contentType = converter.contentType
+      self.converter = converter
+      self.body = body
    }
 
    // MARK: - BodyPart
 
-   public func toBodyPartData(with boundary: String) throws -> Data {
+   public func toBodyPartData() throws -> Data {
       var formData = Data()
-
-      formData.append("--\(boundary)\r\n")
 
       var contentDisposition = #"Content-Disposition: form-data; name="\#(name)""#
       if let fileName {
@@ -89,7 +87,7 @@ public struct FormData: BodyPart {
       contentDisposition += "\r\n"
       formData.append(contentDisposition)
 
-      let contentType = "Content-Type: \(contentType)\r\n"
+      let contentType = "Content-Type: \(converter.contentType)\r\n"
       formData.append(contentType)
 
       if let headers {
@@ -100,8 +98,7 @@ public struct FormData: BodyPart {
       }
 
       formData.append("\r\n")
-      formData.append(body)
-      formData.append("\r\n")
+      try formData.append(converter.convert(body))
 
       return formData
    }

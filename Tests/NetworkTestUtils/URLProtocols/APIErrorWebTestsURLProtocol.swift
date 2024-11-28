@@ -24,7 +24,7 @@
 
 import Foundation
 
-package class APIErrorWebTestsURLProtocol: WebTestsURLProtocol {
+package class APIErrorWebTestsURLProtocol: WebTestsURLProtocol, @unchecked Sendable {
    override var statusCode: Int { 404 }
 
    override var headers: [String : String] {

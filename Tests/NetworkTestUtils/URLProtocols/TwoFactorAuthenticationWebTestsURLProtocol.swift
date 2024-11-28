@@ -24,7 +24,7 @@
 
 import Foundation
 
-package class TwoFactorAuthenticationWebTestsURLProtocol: WebTestsURLProtocol {
+package class TwoFactorAuthenticationWebTestsURLProtocol: WebTestsURLProtocol, @unchecked Sendable {
    override var statusCode: Int {
       isAuthenticated ? 200 : 600
    }

@@ -33,16 +33,16 @@ import WebCore
 @Suite("Stub chain")
 struct StubChainTests {
    @Test("Returns execution")
-   func returnsExecution() throws {
+   func returnsExecution() async throws {
       let chain = makeStubChain()
-      try chain.registerFallbackResponse()
-      #expect(chain.dequeueNextExecution() != nil)
+      try await chain.registerFallbackResponse()
+      #expect(await chain.dequeueNextExecution() != nil)
    }
 
    @Test("Returns nil if no records registered")
-   func noRecordsRegistered() {
+   func noRecordsRegistered() async {
       let chain = StubChain(configuration: StubbedWebClientConfiguration())
-      let execution = chain.dequeueNextExecution()
+      let execution = await chain.dequeueNextExecution()
       #expect(execution == nil)
    }
 
@@ -50,28 +50,28 @@ struct StubChainTests {
    func noFallbackWebClient() async throws {
       let chain = StubChain(configuration: StubbedWebClientConfiguration())
 
-      #expect(throws: StubChainError.cannotRegisterFallbackExecution) {
-         try chain.registerFallbackResponse()
+      await #expect(throws: StubChainError.cannotRegisterFallbackExecution) {
+         try await chain.registerFallbackResponse()
       }
    }
 
    @Test("Returns last execution despite it's exhausted")
    func returnLastExecution() async throws {
       let chain = makeStubChain()
-      try chain.registerFallbackResponse()
-      let execution1 = chain.dequeueNextExecution()
-      let execution2 = chain.dequeueNextExecution()
+      try await chain.registerFallbackResponse()
+      let execution1 = await chain.dequeueNextExecution()
+      let execution2 = await chain.dequeueNextExecution()
       #expect(execution1 === execution2)
    }
 
    @Test("Drops execution if exhausted")
    func test_stubChain_dropsExecution_ifExhausted() async throws {
       let chain = makeStubChain()
-      try chain.registerResponse(at: #require(Responses.testObject))
-      try chain.registerFallbackResponse()
+      try await chain.registerResponse(at: #require(Responses.testObject))
+      try await chain.registerFallbackResponse()
 
-      let execution1 = chain.dequeueNextExecution()
-      let execution2 = chain.dequeueNextExecution()
+      let execution1 = await chain.dequeueNextExecution()
+      let execution2 = await chain.dequeueNextExecution()
 
       #expect(execution1 is FilenameRequestExecution)
       #expect(execution2 is FallbackRequestExecution)
@@ -80,12 +80,12 @@ struct StubChainTests {
    @Test("Drops execution only if usage count exceeded")
    func dropWhenUsageCountExceeded() async throws {
       let chain = makeStubChain()
-      try chain.registerResponse(at: #require(Responses.testObject), usageCount: 2)
-      try chain.registerFallbackResponse()
+      try await chain.registerResponse(at: #require(Responses.testObject), usageCount: 2)
+      try await chain.registerFallbackResponse()
 
-      let execution1 = chain.dequeueNextExecution()
-      let execution2 = chain.dequeueNextExecution()
-      let execution3 = chain.dequeueNextExecution()
+      let execution1 = await chain.dequeueNextExecution()
+      let execution2 = await chain.dequeueNextExecution()
+      let execution3 = await chain.dequeueNextExecution()
 
       #expect(execution1 is FilenameRequestExecution)
       #expect(execution2 is FilenameRequestExecution)
@@ -96,11 +96,11 @@ struct StubChainTests {
    @Test("Resets records")
    func resetRecords() async throws {
       let chain = makeStubChain()
-      try chain.registerFallbackResponse()
-      var execution = chain.dequeueNextExecution()
+      try await chain.registerFallbackResponse()
+      var execution = await chain.dequeueNextExecution()
       #expect(execution != nil)
-      chain.reset()
-      execution = chain.dequeueNextExecution()
+      await chain.reset()
+      execution = await chain.dequeueNextExecution()
       #expect(execution == nil)
    }
 }

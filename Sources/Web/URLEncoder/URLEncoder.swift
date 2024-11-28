@@ -30,13 +30,15 @@ public enum URLEncoderError: Error {
    case cannotPercentEncode(String)
 }
 
-/// An object that encodes instances of `[String: Any]` into URL-encoded query strings.
-public class URLEncoder {
+/// An object that encodes instances of `[String: any Sendable]` into URL-encoded query strings.
+public final class URLEncoder: Sendable {
    /// Global setting for array key encoding. Defaults to ``BracketsArrayKeyEncoding``.
-   public static var arrayKeyEncoding: ArrayKeyEncoding = BracketsArrayKeyEncoding()
+   nonisolated(unsafe)
+   public static var arrayKeyEncoding: any ArrayKeyEncoding = BracketsArrayKeyEncoding()
 
    /// Global setting for bool encoding. Defaults to ``LiteralBoolEncoding``.
-   public static var boolEncoding: BoolEncoding = LiteralBoolEncoding()
+   nonisolated(unsafe)
+   public static var boolEncoding: any BoolEncoding = LiteralBoolEncoding()
 
    /// A character set of allowed (non-escaped) characters.
    public static let allowedCharacterSet: CharacterSet = {
@@ -46,8 +48,8 @@ public class URLEncoder {
       return CharacterSet.urlQueryAllowed.subtracting(encodableCharacterSet)
    }()
 
-   private let arrayKeyEncoding: ArrayKeyEncoding
-   private let boolEncoding: BoolEncoding
+   private let arrayKeyEncoding: any ArrayKeyEncoding
+   private let boolEncoding: any BoolEncoding
 
    // MARK: - Init
 
@@ -58,8 +60,8 @@ public class URLEncoder {
    ///                       `URLEncoder.arrayKeyEncoding`.
    ///   - boolEncoding: Encoding to apply to boolean values. Defaults to `URLEncoder.boolEncoding`.
    public init(
-      arrayKeyEncoding: ArrayKeyEncoding = URLEncoder.arrayKeyEncoding,
-      boolEncoding: BoolEncoding = URLEncoder.boolEncoding
+      arrayKeyEncoding: any ArrayKeyEncoding = URLEncoder.arrayKeyEncoding,
+      boolEncoding: any BoolEncoding = URLEncoder.boolEncoding
    ) {
       self.arrayKeyEncoding = arrayKeyEncoding
       self.boolEncoding = boolEncoding
@@ -73,7 +75,7 @@ public class URLEncoder {
    ///   -  dict: A dictionary that will be encoded.
    /// - Returns: A URL-encoded string.
    /// - Throws:  `URLEncoderError` if encoding failed.
-   public func encode(_ dict: [String: Any]) throws -> String {
+   public func encode(_ dict: [String: any Sendable]) throws -> String {
       let keys = dict.keys.sorted()
       var encoded: [String] = []
       for key in keys {
@@ -85,15 +87,15 @@ public class URLEncoder {
       return encoded.joined(separator: "&")
    }
 
-   private func encode(key: String, value: Any) throws -> [String] {
+   private func encode(key: String, value: any Sendable) throws -> [String] {
       var components: [String] = []
 
       switch value {
-         case let parameters as [String: Any]:
+         case let parameters as [String: any Sendable]:
             for (nestedKey, value) in parameters {
                components += try encode(key: "\(key)[\(nestedKey)]", value: value)
             }
-         case let values as [Any]:
+         case let values as [any Sendable]:
             for value in values {
                components += try encode(key: arrayKeyEncoding.encode(key), value: value)
             }

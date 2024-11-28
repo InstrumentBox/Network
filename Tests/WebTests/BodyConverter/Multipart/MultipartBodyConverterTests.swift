@@ -65,7 +65,7 @@ struct MultipartBodyConverterTests {
 
    // MARK: - Factory
 
-   private func makeBodyParts() throws -> [FormData] {
+   private func makeBodyParts() throws -> [any BodyPart] {
       let dataBodyConverter = DataBodyConverter(contentType: contentType)
 
       let innerPart1 = try FormData(

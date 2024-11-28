@@ -26,7 +26,7 @@
 /// by validating them and returns either resulting objects or API errors.
 ///
 /// - Note: A web client is *NOT* intended to work with a background URL session.
-public protocol WebClient {
+public protocol WebClient: Sendable {
    /// Executes `Request` asynchronously.
    ///
    /// - Parameters:
@@ -35,5 +35,7 @@ public protocol WebClient {
    /// - Returns: An object received from a server.
    /// - Throws: An error that occurred during request. It may be API error in case of 4xx or 5xx,
    ///           `URLError`, response converter error, or any other error.
-   func execute<SuccessObject>(_ request: some Request<SuccessObject>) async throws -> SuccessObject
+   func execute<SuccessObject: Sendable>(
+      _ request: some Request<SuccessObject>
+   ) async throws -> SuccessObject
 }

@@ -22,6 +22,7 @@
 //  THE SOFTWARE.
 //
 
+@preconcurrency
 import Foundation
 
 /// A policy that uses the pinned public keys to validate the server trust.
@@ -31,7 +32,7 @@ import Foundation
 /// provides a very secure form of server trust evaluation mitigating most, if not all, MITM
 /// attacks. Applications are encouraged to always evaluate the host and require a valid certificate
 /// chain in production environments.
-public class PublicKeysServerTrustPolicy: ServerTrustPolicy {
+public final class PublicKeysServerTrustPolicy: ServerTrustPolicy {
    private let keys: [SecKey]
    private let evaluateHost: Bool
 

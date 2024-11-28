@@ -25,9 +25,9 @@
 import Foundation
 
 /// A protocol that describes every request sent by a `WebClient`.
-public protocol Request<SuccessObject> {
+public protocol Request<SuccessObject>: Sendable {
    /// A type of object that is expected in case of successful request execution.
-   associatedtype SuccessObject
+   associatedtype SuccessObject: Sendable
 
    /// A type of object that is expected in case of invalid server response, e.g. some API error.
    /// Designed to be thrown by ``WebClient``.
@@ -48,7 +48,7 @@ public protocol Request<SuccessObject> {
    ///
    /// Response validator is an object that tells if `WebClient` should either complete with
    /// validation error, or parse response and return object, or parse response and throw API error.
-   var responseValidator: ResponseValidator { get }
+   var responseValidator: any ResponseValidator { get }
 
    /// The point where you need to create and return an instance of `URLRequest` with appropriate
    /// URL, method, headers, and body.
@@ -62,7 +62,7 @@ public protocol Request<SuccessObject> {
 
 extension Request {
    /// Returns ``StatusCodeContentTypeResponseValidator``.
-   public var responseValidator: ResponseValidator {
+   public var responseValidator: any ResponseValidator {
       StatusCodeContentTypeResponseValidator()
    }
 }

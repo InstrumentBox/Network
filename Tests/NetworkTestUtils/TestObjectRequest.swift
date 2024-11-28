@@ -27,6 +27,6 @@ import Web
 
 @GET<TestObject, APIError>("test_objects/42")
 @Headers(["Accept": "application/json"])
-package class TestObjectRequest {
+package struct TestObjectRequest {
    package init() { }
 }

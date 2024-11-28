@@ -57,7 +57,7 @@ public struct URLEncoderBodyConverter: BodyConverter {
       "application/x-www-form-urlencoded"
    }
 
-   public func convert(_ body: [String: Any]) throws -> Data {
+   public func convert(_ body: [String: any Sendable]) throws -> Data {
       let encoded = try encoder.encode(body)
       let converter = StringBodyConverter(
          encoding: encoding,

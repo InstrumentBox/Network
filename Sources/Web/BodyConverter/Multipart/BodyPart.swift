@@ -26,7 +26,7 @@ import Foundation
 
 /// A protocol you need to conform your object to be used as a body part in multipart request you
 /// create.
-public protocol BodyPart {
+public protocol BodyPart: Sendable {
    /// This method is a place where you need to convert your object to a body part. You need to add
    /// boundary string in the beginning of body part and add line break in the end of body part.
    ///
@@ -34,5 +34,5 @@ public protocol BodyPart {
    ///   - boundary: A boundary string that needs to be used if the beginning of body part. You are
    ///               responsible to add dashes before and/or after if needed.
    /// - Returns: Binary representation of a body part.
-   func toBodyPartData(with boundary: String) throws -> Data
+   func toBodyPartData() throws -> Data
 }

@@ -50,9 +50,9 @@ A server may return you some data about 2FA challenge so you need to get this da
 @MainActor
 func handle(_ challenge: TwoFactorAuthenticationChallenge) {
    do {
-      let props = try challenge.convertedResponse(using: JSONDecoderResponseConverter<TwoFAProps>()) 
+      let props = try await challenge.convertedResponse(using: JSONDecoderResponseConverter<TwoFAProps>()) 
    } catch {
-      challenge.complete(with: error)
+      await challenge.complete(with: error)
    }
 }
 ```
@@ -87,14 +87,18 @@ func handle(_ challenge: TwoFactorAuthenticationChallenge) {
 @MainActor
 func cancel(_ challenge: TwoFactorAuthenticationChallenge) {
    presentingViewController.dismiss(animated: true) {
-      challenge.cancel()
+      Task {
+         await challenge.cancel()
+      }
    }
 }
 
 @MainActor
 func complete(_ challenge: TwoFactorAuthenticationChallenge, with error: Error?) {
    presentingViewController.dismiss(animated: true) {
-      challenge.complete(with: error)
+      Task {
+         await challenge.complete(with: error)
+      }
    }
 }
 ```

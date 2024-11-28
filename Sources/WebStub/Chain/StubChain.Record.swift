@@ -25,15 +25,15 @@
 import Web
 
 extension StubChain {
-   class Record {
-      var currentUsageCount = 0
+   actor Record {
+      private var currentUsageCount = 0
 
-      let execution: RequestExecution
+      let execution: any RequestExecution
       let usageCount: Int
 
       // MARK: - Init
 
-      init(execution: RequestExecution, usageCount: Int) {
+      init(execution: any RequestExecution, usageCount: Int) {
          self.execution = execution
          self.usageCount = usageCount
       }
@@ -42,6 +42,10 @@ extension StubChain {
 
       var isExhausted: Bool {
          currentUsageCount >= usageCount
+      }
+
+      func increaseUsageCount() {
+         currentUsageCount += 1
       }
    }
 }

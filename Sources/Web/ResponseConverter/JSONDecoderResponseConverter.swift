@@ -26,7 +26,7 @@ import Foundation
 
 /// A response converter that uses `JSONDecoder` to convert response body to some `Decodable`
 /// object.
-public struct JSONDecoderResponseConverter<ConvertedResponse: Decodable>: ResponseConverter {
+public struct JSONDecoderResponseConverter<ConvertedResponse: Decodable & Sendable>: ResponseConverter {
    private let decoder: JSONDecoder
 
    // MARK: - Init

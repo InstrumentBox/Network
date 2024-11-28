@@ -26,7 +26,7 @@ import Foundation
 import Web
 
 class ResponseParser {
-   lazy var state: ResponseParserState = ReceivingStatusCodeResponseParserState(
+   lazy var state: any ResponseParserState = ReceivingStatusCodeResponseParserState(
       parser: self,
       builder: builder
    )

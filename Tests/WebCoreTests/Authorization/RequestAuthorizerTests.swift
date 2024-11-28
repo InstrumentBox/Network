@@ -51,7 +51,7 @@ struct RequestAuthorizerTests {
 @GET<TestObject, APIError>("test_objects/42")
 private struct NonAuthorizableTestObjectRequest { }
 
-private class TestRequestAuthorizer: RequestAuthorizer {
+private final class TestRequestAuthorizer: RequestAuthorizer {
    func authorizationHeader(for request: some Request) async throws -> AuthorizationHeader {
       .bearerAuthorization("42")
    }

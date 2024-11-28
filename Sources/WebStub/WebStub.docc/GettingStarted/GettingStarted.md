@@ -21,8 +21,8 @@ responses.  To solve this, you need to register a response. Let's say you need t
 `SomeObjectRequest`
 
 ```swift
-let chain = client.stubChain(for: SomeObjectRequest.self)
-chain.registerResponse(at: <URL to file with a response>)
+let chain = await client.stubChain(for: SomeObjectRequest.self)
+await chain.registerResponse(at: <URL to file with a response>)
 ```
 
 Now you need to add a response file. Response file is a file with the following format:

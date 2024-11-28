@@ -23,7 +23,7 @@
 //
 
 /// An authorization header.
-public struct AuthorizationHeader {
+public struct AuthorizationHeader: Sendable {
    /// Name of authorization header.
    public let name: String
 

@@ -23,9 +23,9 @@
 //
 
 /// A protocol you need to conform an object to make this object to convert a received response.
-public protocol ResponseConverter<ConvertedResponse> {
+public protocol ResponseConverter<ConvertedResponse>: Sendable {
    /// A type of object converter results in.
-   associatedtype ConvertedResponse
+   associatedtype ConvertedResponse: Sendable
 
    /// Does the conversion from a response to some object.
    ///

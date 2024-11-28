@@ -29,7 +29,7 @@ import Foundation
 ///  It allows you to control whether to validate the host provided by the challenge. Applications
 ///  are encouraged to always validate the host in production environments to guarantee the
 ///  validity of the server's certificate chain.
-public class DefaultServerTrustPolicy: ServerTrustPolicy {
+public final class DefaultServerTrustPolicy: ServerTrustPolicy {
    private let evaluateHost: Bool
 
    // MARK: - Init

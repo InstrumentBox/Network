@@ -23,4 +23,4 @@
 //
 
 /// A protocol marker which can be used to identify request that doesn't require authorization.
-public protocol NonAuthorizableRequest { }
+public protocol NonAuthorizableRequest: Sendable { }

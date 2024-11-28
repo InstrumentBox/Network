@@ -33,7 +33,7 @@ import Web
 ///
 /// - Note: Request authorizer is intended to be used if you authorize your requests with HTTP
 ///         header.
-public protocol RequestAuthorizer {
+public protocol RequestAuthorizer: Sendable {
    /// Asks authorizer if request should be authorized by setting them authorization header.
    ///
    /// - Parameters:
@@ -54,9 +54,9 @@ extension RequestAuthorizer {
    ///
    /// - Parameters:
    ///   - request: A request that's probably needed to be authorized.
-   /// - Returns: `false` if request doesn't conform to `NonAuthorizableRequest` protocol, otherwise
-   ///            `true`.
+   /// - Returns: `true` if request doesn't conform to `NonAuthorizableRequest` protocol, otherwise
+   ///            `false`.
    public func needsAuthorization(for request: some Request) -> Bool {
-      request is NonAuthorizableRequest ? false : true
+      !(request is any NonAuthorizableRequest)
    }
 }

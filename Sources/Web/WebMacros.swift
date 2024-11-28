@@ -40,7 +40,10 @@
       named(errorObjectResponseConverter),
       named(toURLRequest(with:))
 )
-public macro CONNECT<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(module: "WebMacros", type: "RequestMacro")
+public macro CONNECT<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(
+   module: "WebMacros",
+   type: "RequestMacro"
+)
 
 /// Generates conformance to a ``Request`` protocol and uses *DELETE* HTTP method.
 ///
@@ -61,7 +64,10 @@ public macro CONNECT<SuccessObject, ErrorObject>(_ path: String) = #externalMacr
       named(errorObjectResponseConverter),
       named(toURLRequest(with:))
 )
-public macro DELETE<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(module: "WebMacros", type: "RequestMacro")
+public macro DELETE<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(
+   module: "WebMacros",
+   type: "RequestMacro"
+)
 
 /// Generates conformance to a ``Request`` protocol and uses *GET* HTTP method.
 ///
@@ -82,7 +88,10 @@ public macro DELETE<SuccessObject, ErrorObject>(_ path: String) = #externalMacro
       named(errorObjectResponseConverter),
       named(toURLRequest(with:))
 )
-public macro GET<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(module: "WebMacros", type: "RequestMacro")
+public macro GET<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(
+   module: "WebMacros",
+   type: "RequestMacro"
+)
 
 /// Generates conformance to a ``Request`` protocol and uses *HEAD* HTTP method.
 ///
@@ -103,7 +112,10 @@ public macro GET<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(mo
       named(errorObjectResponseConverter),
       named(toURLRequest(with:))
 )
-public macro HEAD<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(module: "WebMacros", type: "RequestMacro")
+public macro HEAD<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(
+   module: "WebMacros",
+   type: "RequestMacro"
+)
 
 /// Generates conformance to a ``Request`` protocol and uses *OPTIONS* HTTP method.
 ///
@@ -124,7 +136,10 @@ public macro HEAD<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(m
       named(errorObjectResponseConverter),
       named(toURLRequest(with:))
 )
-public macro OPTIONS<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(module: "WebMacros", type: "RequestMacro")
+public macro OPTIONS<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(
+   module: "WebMacros",
+   type: "RequestMacro"
+)
 
 /// Generates conformance to a ``Request`` protocol and uses *PATCH* HTTP method.
 ///
@@ -145,7 +160,10 @@ public macro OPTIONS<SuccessObject, ErrorObject>(_ path: String) = #externalMacr
       named(errorObjectResponseConverter),
       named(toURLRequest(with:))
 )
-public macro PATCH<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(module: "WebMacros", type: "RequestMacro")
+public macro PATCH<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(
+   module: "WebMacros",
+   type: "RequestMacro"
+)
 
 /// Generates conformance to a ``Request`` protocol and uses *POST* HTTP method.
 ///
@@ -166,7 +184,10 @@ public macro PATCH<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(
       named(errorObjectResponseConverter),
       named(toURLRequest(with:))
 )
-public macro POST<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(module: "WebMacros", type: "RequestMacro")
+public macro POST<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(
+   module: "WebMacros",
+   type: "RequestMacro"
+)
 
 /// Generates conformance to a ``Request`` protocol and uses *PUT* HTTP method.
 ///
@@ -187,7 +208,10 @@ public macro POST<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(m
       named(errorObjectResponseConverter),
       named(toURLRequest(with:))
 )
-public macro PUT<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(module: "WebMacros", type: "RequestMacro")
+public macro PUT<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(
+   module: "WebMacros",
+   type: "RequestMacro"
+)
 
 /// Generates conformance to a ``Request`` protocol and uses *TRACE* HTTP method.
 ///
@@ -208,7 +232,10 @@ public macro PUT<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(mo
       named(errorObjectResponseConverter),
       named(toURLRequest(with:))
 )
-public macro TRACE<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(module: "WebMacros", type: "RequestMacro")
+public macro TRACE<SuccessObject, ErrorObject>(_ path: String) = #externalMacro(
+   module: "WebMacros",
+   type: "RequestMacro"
+)
 
 // MARK: -
 
@@ -266,7 +293,10 @@ public macro Header(_ headerName: String) = #externalMacro(module: "WebMacros", 
 /// - Parameters:
 ///   - headers: A set of headers.
 @attached(peer)
-public macro Headers(_ headers: [String: String]) = #externalMacro(module: "WebMacros", type: "HeadersMacro")
+public macro Headers(_ headers: [String: String]) = #externalMacro(
+   module: "WebMacros",
+   type: "HeadersMacro"
+)
 
 /// Marks a variable that should be used as body of a request.
 ///
@@ -283,8 +313,14 @@ public macro Body() = #externalMacro(module: "WebMacros", type: "BodyMacro")
 /// - Parameters:
 ///   - converter: Converter's initialization code that's used to create converter.
 @attached(peer)
-public macro Body(_ converter: (any BodyConverter)) = #externalMacro(module: "WebMacros", type: "BodyMacro")
+public macro Body(_ converter: (any BodyConverter)) = #externalMacro(
+   module: "WebMacros",
+   type: "BodyMacro"
+)
 
 /// Generates conformance of request to ``NonAuthorizableRequest`` protocol.
 @attached(extension, conformances: NonAuthorizableRequest)
-public macro SkippedAuthorization() = #externalMacro(module: "WebMacros", type: "SkippedAuthorizationMacro")
+public macro SkippedAuthorization() = #externalMacro(
+   module: "WebMacros",
+   type: "SkippedAuthorizationMacro"
+)

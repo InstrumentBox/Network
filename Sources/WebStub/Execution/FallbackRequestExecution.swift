@@ -25,18 +25,20 @@
 import Foundation
 import Web
 
-class FallbackRequestExecution: RequestExecution {
-   private let webClient: WebClient
+final class FallbackRequestExecution: RequestExecution {
+   private let webClient: any WebClient
 
    // MARK: - Init
 
-   init(webClient: WebClient) {
+   init(webClient: any WebClient) {
       self.webClient = webClient
    }
 
    // MARK: - ResponseRecord
 
-   func execute<SuccessObject>(_ request: some Request<SuccessObject>) async throws -> SuccessObject {
+   func execute<SuccessObject: Sendable>(
+      _ request: some Request<SuccessObject>
+   ) async throws -> SuccessObject {
       return try await webClient.execute(request)
    }
 }

@@ -26,7 +26,7 @@ import Foundation
 import Web
 
 /// Latency that uses constant value for every request.
-public class ExactLatency: Latency {
+public final class ExactLatency: Latency {
    private let value: TimeInterval
 
    // MARK: - Init

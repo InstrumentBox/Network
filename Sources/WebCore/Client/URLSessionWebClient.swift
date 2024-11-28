@@ -29,7 +29,7 @@ import Web
 ///
 /// ``URLSessionWebClient`` also provides `Request`s authorization, server trust evaluation, and
 /// 2FA challenges handling.
-public class URLSessionWebClient: WebClient {
+public final class URLSessionWebClient: WebClient {
    private let configuration: URLSessionWebClientConfiguration
    private let session: URLSession
 
@@ -56,7 +56,7 @@ public class URLSessionWebClient: WebClient {
    // MARK: - WebClient
 
    @URLSessionWebClientActor
-   public func execute<SuccessObject>(
+   public func execute<SuccessObject: Sendable>(
       _ request: some Request<SuccessObject>
    ) async throws -> SuccessObject {
       let task = Task {
@@ -69,9 +69,11 @@ public class URLSessionWebClient: WebClient {
       return try await task.value
    }
 
+   @URLSessionWebClientActor
    private func makeURLRequest(request: some Request) async throws -> URLRequest {
       var urlRequest = try request.toURLRequest(with: configuration.baseURL)
-      if let authorizer = configuration.requestAuthorizer, 
+      if
+         let authorizer = configuration.requestAuthorizer,
          authorizer.needsAuthorization(for: request)
       {
          let header = try await authorizer.authorizationHeader(for: request)
@@ -81,6 +83,7 @@ public class URLSessionWebClient: WebClient {
       return urlRequest
    }
 
+   @URLSessionWebClientActor
    private func handleTwoFactorAuthenticationChallengeIfNeeded(
       _ response: Response
    ) async throws -> Response {
@@ -96,7 +99,8 @@ public class URLSessionWebClient: WebClient {
       return try await challenge.handleIfNeeded()
    }
 
-   private func processResponse<SuccessObject>(
+   @URLSessionWebClientActor
+   private func processResponse<SuccessObject: Sendable>(
       _ response: Response,
       for request: some Request<SuccessObject>
    ) throws -> SuccessObject {

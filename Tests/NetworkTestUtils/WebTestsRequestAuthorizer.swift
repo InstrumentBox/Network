@@ -25,7 +25,7 @@
 import Web
 import WebCore
 
-package class WebTestsRequestAuthorizer: RequestAuthorizer {
+package final class WebTestsRequestAuthorizer: RequestAuthorizer {
    let needsAuthorization: Bool
 
    // MARK: - Init

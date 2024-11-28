@@ -105,7 +105,7 @@ extension URL {
    public init(
       path: String,
       baseURL: URL?,
-      query: [String: Any],
+      query: [String: any Sendable],
       encoder: URLEncoder = URLEncoder()
    ) throws {
       let isPathCompleteURL = path.range(of: "://") != nil

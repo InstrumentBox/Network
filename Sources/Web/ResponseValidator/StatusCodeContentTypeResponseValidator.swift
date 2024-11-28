@@ -69,8 +69,8 @@ public struct StatusCodeContentTypeResponseValidator: ResponseValidator {
 
    // MARK: - ResponseValidator
 
-   public func validate(_ response: Response) -> ResponseValidationDisposition {
-      let statusCodeDisposition: ResponseValidationDisposition
+   public func validate(_ response: Response) -> any ResponseValidationDisposition {
+      let statusCodeDisposition: any ResponseValidationDisposition
       if acceptableStatusCodes.contains(response.statusCode) {
          statusCodeDisposition = SuccessObjectResponseValidationDisposition()
       } else {

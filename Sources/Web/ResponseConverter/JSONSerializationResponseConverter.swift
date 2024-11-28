@@ -36,7 +36,7 @@ public enum JSONSerializationResponseConverterError: Error {
 /// strings.
 ///
 /// - Note: String in response must be double-quoted. If not, use `StringResponseConverter`.
-public struct JSONSerializationResponseConverter<ConvertedResponse>: ResponseConverter {
+public struct JSONSerializationResponseConverter<ConvertedResponse: Sendable>: ResponseConverter {
    private let options: JSONSerialization.ReadingOptions
 
    // MARK: - Init

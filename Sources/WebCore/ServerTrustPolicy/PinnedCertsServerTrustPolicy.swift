@@ -22,6 +22,7 @@
 //  THE SOFTWARE.
 //
 
+@preconcurrency
 import Foundation
 
 /// A policy that uses pinned certificates to evaluate the server trust.
@@ -31,7 +32,7 @@ import Foundation
 /// a very secure form of server trust evaluation mitigating most, if not all, MITM attacks.
 /// Applications are encouraged to always validate the host and require a valid certificate chain
 /// in production environments.
-public class PinnedCertsServerTrustPolicy: ServerTrustPolicy {
+public final class PinnedCertsServerTrustPolicy: ServerTrustPolicy {
    private let certs: [SecCertificate]
    private let evaluateHost: Bool
    private let allowSelfSigned: Bool

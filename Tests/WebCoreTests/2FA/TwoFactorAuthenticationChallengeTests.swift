@@ -37,7 +37,7 @@ struct TwoFactorAuthenticationChallengeTests {
       var isHandled = false
       try await makeChallengeAndRun(statusCode: 200) { c in
          isHandled = true
-         c.complete()
+         await c.complete()
       }
       #expect(!isHandled)
    }
@@ -47,7 +47,7 @@ struct TwoFactorAuthenticationChallengeTests {
       var isHandled = false
       try await makeChallengeAndRun { c in
          isHandled = true
-         c.complete()
+         await c.complete()
       }
       #expect(isHandled)
    }
@@ -56,8 +56,8 @@ struct TwoFactorAuthenticationChallengeTests {
    func statusCodeFromChallenge() async throws {
       var statusCode: Int?
       try await makeChallengeAndRun { c in
-         statusCode = c.responseStatusCode
-         c.complete()
+         statusCode = await c.responseStatusCode
+         await c.complete()
       }
       #expect(statusCode == 600)
    }
@@ -66,8 +66,8 @@ struct TwoFactorAuthenticationChallengeTests {
    func convertedObjectFromChallenge() async throws {
       var object: TestObject?
       try await makeChallengeAndRun { c in
-         object = try? c.convertedResponse(using: JSONDecoderResponseConverter<TestObject>())
-         c.complete()
+         object = try? await c.convertedResponse(using: JSONDecoderResponseConverter<TestObject>())
+         await c.complete()
       }
       #expect(object == .some)
    }
@@ -76,7 +76,7 @@ struct TwoFactorAuthenticationChallengeTests {
    func cancelChallenge() async throws {
       await #expect(throws: TwoFactorAuthenticationChallengeError.cancelled) {
          try await makeChallengeAndRun { c in
-            c.cancel()
+            await c.cancel()
          }
       }
    }
@@ -86,7 +86,7 @@ struct TwoFactorAuthenticationChallengeTests {
       let expectedError = NSError(domain: "web.tests.domain", code: 600, userInfo: nil)
       await #expect(throws: expectedError) {
          try await makeChallengeAndRun { c in
-            c.complete(with: expectedError)
+            await c.complete(with: expectedError)
          }
       }
    }
@@ -106,9 +106,9 @@ struct TwoFactorAuthenticationChallengeTests {
          Task {
             do {
                try await c.authenticate(headerName: "X-2FA", headerValue: "1234")
-               c.complete()
+               await c.complete()
             } catch {
-               c.complete(with: error)
+               await c.complete(with: error)
             }
          }
       }
@@ -129,9 +129,9 @@ struct TwoFactorAuthenticationChallengeTests {
          Task {
             do {
                try await c.refresh()
-               c.complete()
+               await c.complete()
             } catch {
-               c.complete(with: error)
+               await c.complete(with: error)
             }
          }
       }
@@ -145,7 +145,7 @@ struct TwoFactorAuthenticationChallengeTests {
 @discardableResult
 private func makeChallengeAndRun(
    statusCode: Int = 600,
-   handle: @escaping (TwoFactorAuthenticationChallenge) -> Void
+   handle: @escaping (TwoFactorAuthenticationChallenge) async -> Void
 ) async throws -> Response {
    let url = try #require(URL(string: "https://service.com"))
    let request = URLRequest(url: url)

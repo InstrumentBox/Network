@@ -26,7 +26,7 @@ import Foundation
 
 extension MultipartBodyConverter {
    /// Kind of multipart content on which resulting *Content-Type* depends.
-   public enum ContentTypeKind {
+   public enum ContentTypeKind: Sendable {
       /// Content type kind that is intended to be used for e-mails. *Content-Type* is
       /// *multipart/alternative*.
       case alternative
@@ -104,7 +104,7 @@ public struct MultipartBodyConverter: BodyConverter {
       }
    }
 
-   public func convert(_ body: [BodyPart]) throws -> Data {
+   public func convert(_ body: [any BodyPart]) throws -> Data {
       var bodyData = Data()
 
       if let preamble {
@@ -112,8 +112,10 @@ public struct MultipartBodyConverter: BodyConverter {
       }
 
       for bodyPart in body {
-         let bodyPartData = try bodyPart.toBodyPartData(with: boundary)
+         bodyData.append("--\(boundary)\r\n")
+         let bodyPartData = try bodyPart.toBodyPartData()
          bodyData.append(bodyPartData)
+         bodyData.append("\r\n")
       }
 
       bodyData.append("--\(boundary)--")

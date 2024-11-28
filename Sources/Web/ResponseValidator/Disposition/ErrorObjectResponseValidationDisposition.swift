@@ -31,7 +31,7 @@ public struct ErrorObjectResponseValidationDisposition: ResponseValidationDispos
 
    // MARK: - ResponseValidationDisposition
 
-   public func processResponse<SuccessObject>(
+   public func processResponse<SuccessObject: Sendable>(
       _ response: Response,
       for request: some Request<SuccessObject>
    ) throws -> SuccessObject {
