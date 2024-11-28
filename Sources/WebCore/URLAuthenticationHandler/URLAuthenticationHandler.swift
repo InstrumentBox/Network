@@ -1,5 +1,5 @@
 //
-//  <#Filename#>.swift
+//  URLAuthenticationHandler.swift
 //
 //  Copyright © 2024 Aleksei Zaikin.
 //
@@ -21,3 +21,25 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
+
+import Foundation
+
+/// A protocol you must implement to handle URL authentication challenges.
+public protocol URLAuthenticationHandler: Sendable {
+   /// Checks that handler can process URL authentication challenge.
+   ///
+   /// - Parameters:
+   ///   - challenge: A possible challenge to be processed.
+   /// - Returns: `true` if handle can process challenge. Otherwise `false`.
+   func canHandleChallenge(_ challenge: URLAuthenticationChallenge) -> Bool
+   
+   /// Handles challenge and returns credentials in response to a session-level authentication
+   /// request from the remote server.
+   ///
+   /// - Parameters:
+   ///   - challenge: A challenge to be handled.
+   /// - Returns: Disposition how to handle challenge and credential that should be used.
+   func handleChallenge(
+      _ challenge: URLAuthenticationChallenge
+   ) async -> (URLSession.AuthChallengeDisposition, URLCredential?)
+}

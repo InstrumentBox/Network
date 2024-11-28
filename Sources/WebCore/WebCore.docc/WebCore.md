@@ -21,6 +21,8 @@ request authorization, SSL pinning. Built on top of new concurrency model introd
 
 - <doc:EvaluateServerTrust>
 
+- ``URLAuthenticationHandler``
+- ``ServerTrustURLAuthenticationHandler``
 - ``ServerTrustPolicy``
 - ``TrustAllServerTrustPolicy``
 - ``DefaultServerTrustPolicy``

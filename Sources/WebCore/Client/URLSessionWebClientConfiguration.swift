@@ -47,10 +47,10 @@ public class URLSessionWebClientConfiguration: @unchecked Sendable {
 
    /// An object that will be used to authorize each request sent by a web client.
    public var requestAuthorizer: (any RequestAuthorizer)?
-
-   /// The dictionary of policies mapped to a particular host. Map policy to `*` if you want to use
-   /// this policy for each host, for which separate policy is not specified.
-   public var serverTrustPolicies: [String: any ServerTrustPolicy]?
+   
+   /// A set of handlers to process URL authentication challenge. The first handler that can handle
+   /// challenge will be used.
+   public var urlAuthenticationHandlers: [any URLAuthenticationHandler]?
 
    /// Handler that will be used to receive 2FA challenges.
    public var twoFactorAuthenticationHandler: (any TwoFactorAuthenticationHandler)?

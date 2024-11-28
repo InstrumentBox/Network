@@ -39,32 +39,14 @@ final class WebCoreURLSessionDelegate: NSObject, URLSessionDelegate {
       _ session: URLSession,
       didReceive challenge: URLAuthenticationChallenge
    ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
-      if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
-         return authenticateServerTrustChallenge(challenge)
-      }
-
-      return (.performDefaultHandling, nil)
-   }
-
-   // MARK: - Server Trust Authentication
-
-   private func authenticateServerTrustChallenge(
-      _ challenge: URLAuthenticationChallenge
-   ) -> (URLSession.AuthChallengeDisposition, URLCredential?) {
-      let host = challenge.protectionSpace.host
-      guard
-         let serverTrust = challenge.protectionSpace.serverTrust,
-         let serverTrustPolicies = configuration.serverTrustPolicies,
-         let policy = serverTrustPolicies[host] ?? serverTrustPolicies["*"]
-      else {
+      guard let handlers = configuration.urlAuthenticationHandlers else {
          return (.performDefaultHandling, nil)
       }
 
-      if policy.evaluate(serverTrust, for: host) {
-         let credential = URLCredential(trust: serverTrust)
-         return (.useCredential, credential)
-      } else {
-         return (.cancelAuthenticationChallenge, nil)
+      for handler in handlers where handler.canHandleChallenge(challenge) {
+         return await handler.handleChallenge(challenge)
       }
+
+      return (.performDefaultHandling, nil)
    }
 }
