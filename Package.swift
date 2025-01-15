@@ -64,10 +64,10 @@ let package = Package(
          ]
       ),
 
-      .target(name: "WebCore", dependencies: ["Web"]),
+      .target(name: "WebCore", dependencies: ["Web", "Logging"]),
       .testTarget(name: "WebCoreTests", dependencies: ["Web", "WebCore", "NetworkTestUtils"]),
 
-      .target(name: "WebStub", dependencies: ["Web"]),
+      .target(name: "WebStub", dependencies: ["Web", "Logging"]),
       .testTarget(
          name: "WebStubTests",
          dependencies: ["Web", "WebCore", "WebStub", "NetworkTestUtils"],
@@ -83,6 +83,8 @@ let package = Package(
             .process("ResponseParser/Resources/IncorrectStatusCode.response")
          ]
       ),
+
+      .target(name: "Logging", dependencies: ["Web"], packageAccess: true),
 
       .target(
          name: "NetworkTestUtils",

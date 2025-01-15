@@ -98,3 +98,7 @@ Converters, etc. Built on top of new concurrency model introduced in Swift 5.5.
 - ``PropertyListDecoderResponseConverter``
 - ``StringResponseConverter``
 - ``StringResponseConverterError``
+
+### Logging
+
+- <doc:LoggingRequestsAndResponses>

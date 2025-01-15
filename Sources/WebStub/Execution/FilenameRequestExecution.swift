@@ -23,6 +23,7 @@
 //
 
 import Foundation
+import Logging
 import Web
 
 public enum FilenameRequestExecutionError: Error, Equatable {
@@ -54,16 +55,22 @@ actor FilenameRequestExecution: RequestExecution {
          try await Task.sleep(nanoseconds: value)
       }
 
+      webStubTraceResponse(response, for: request)
+
       let disposition = request.responseValidator.validate(response)
       return try disposition.processResponse(response, for: request)
    }
 
    private func response(for request: some Request) async throws -> Response {
+      let urlRequest = try request.toURLRequest(with: nil)
+
+      webStubTraceRequest(request, convertedTo: urlRequest)
+      webStubTraceRequestCURL(request, convertedTo: urlRequest)
+
       if let cachedResponse {
          return cachedResponse
       }
 
-      let urlRequest = try request.toURLRequest(with: nil)
       guard let parser = ResponseParser(request: urlRequest, responseURL: responseURL) else {
          throw FilenameRequestExecutionError.cannotCreateResponseParser(responseURL)
       }

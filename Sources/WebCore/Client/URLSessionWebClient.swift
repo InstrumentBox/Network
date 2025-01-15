@@ -23,6 +23,7 @@
 //
 
 import Foundation
+import Logging
 import Web
 
 /// An implementation of a `WebClient` based on `URLSession`.
@@ -61,8 +62,15 @@ public final class URLSessionWebClient: WebClient {
    ) async throws -> SuccessObject {
       let task = Task {
          let urlRequest = try await makeURLRequest(request: request)
+
+         webCoreTraceRequest(request, convertedTo: urlRequest)
+         webCoreTraceRequestCURL(request, convertedTo: urlRequest)
+
          var response = try await session.data(for: urlRequest)
          response = try await handleTwoFactorAuthenticationChallengeIfNeeded(response)
+
+         webCoreTraceResponse(response, for: request)
+
          let object = try processResponse(response, for: request)
          return object
       }
