@@ -56,7 +56,7 @@ extension SecCertificate {
       let trustCreationStatus = SecTrustCreateWithCertificates(self, policy, &trust)
 
       if let trust, trustCreationStatus == errSecSuccess {
-         publicKey = SecTrustCopyPublicKey(trust)
+         publicKey = SecTrustCopyKey(trust)
       }
 
       return publicKey
