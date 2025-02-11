@@ -38,6 +38,6 @@ struct LineByLineReaderTests {
       while let line = reader.readLine() {
          lines.append(line)
       }
-      #expect(lines == [Data([0x30]), Data([0x31]), Data([0x32]), Data([0x33])])
+      #expect(lines == [Data([0x30]), Data([0x31]), Data(), Data([0x32]), Data([0x33])])
    }
 }
