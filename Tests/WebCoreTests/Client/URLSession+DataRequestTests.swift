@@ -31,7 +31,7 @@ import Testing
 
 @Suite("URLSession data request extensions")
 struct URLSessionDataRequestTests {
-   // MARK: - Test Cases
+   // MARK: - Test
 
    @Test("Returns response using common function")
    func useCommonFunction() async throws {
