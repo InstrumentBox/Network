@@ -5,7 +5,7 @@ Read how to convert a response to Swift objects.
 ## Overview
 
 The response converter is an object to which a web client delegates responsibility to convert
-binary response body from to a Swift object.
+binary response body from server to a Swift object.
 
 Each request returns two response converters: one for successful response and one for failed. The 
 *Web* library has several built-in response converters such as

@@ -30,7 +30,7 @@ package func webCoreTraceRequest(_ request: some Request, convertedTo urlRequest
    traceRequest(request, convertedTo: urlRequest, using: logger)
 }
 
-package func webCoreTraceRequestCURL( _ request: some Request,convertedTo urlRequest: URLRequest) {
+package func webCoreTraceRequestCURL( _ request: some Request, convertedTo urlRequest: URLRequest) {
    let logger = Loggers.logger(forSubsystem: .webCore, category: .requestCURL)
    traceRequestCURL(request, convertedTo: urlRequest, using: logger)
 }
@@ -45,7 +45,7 @@ package func webStubTraceRequest(_ request: some Request, convertedTo urlRequest
    traceRequest(request, convertedTo: urlRequest, using: logger)
 }
 
-package func webStubTraceRequestCURL( _ request: some Request,convertedTo urlRequest: URLRequest) {
+package func webStubTraceRequestCURL( _ request: some Request, convertedTo urlRequest: URLRequest) {
    let logger = Loggers.logger(forSubsystem: .webStub, category: .requestCURL)
    traceRequestCURL(request, convertedTo: urlRequest, using: logger)
 }

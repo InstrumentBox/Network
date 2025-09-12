@@ -6,8 +6,8 @@ Read how to validate a response.
 
 `Request` also has one more property called `responseValidator`, which returns default validator
 for every request. The default (`StatusCodeContentTypeResponseValidator`) validator checks that 
-status code is in 200...299 range and response's content type matches requested one. In case when 
-there's no *Content-Type* header in response and/or no *Accept* header in request, validator 
+status code is in 200...299 range and response's content type matches the requested one. In case 
+when there's no *Content-Type* header in response and/or no *Accept* header in request, validator 
 considers status code only.
 
 ## Create Your Own

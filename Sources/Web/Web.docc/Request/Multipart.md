@@ -38,7 +38,7 @@ form data. In this case you are responsible to add boundary, headers, and all ne
 
 ```swift
 struct MyFormData: BodyPart {
-   func toBodyPartData(with boundary: String) throws -> Data {
+   func toBodyPartData() throws -> Data {
       // Make form data here
    }
 }
