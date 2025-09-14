@@ -38,6 +38,29 @@ struct MIME: Hashable, Sendable, CustomStringConvertible {
    // MARK: - Factory
 
    static func parseMIMEString(_ mimeString: String) -> MIME? {
+      if #available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, *) {
+         regex_parseMIMEString(mimeString)
+      } else {
+         nsRegularExpression_parseMIMEString(mimeString)
+      }
+   }
+
+   @available(iOS 16.0, macOS 13.0, macCatalyst 16.0, tvOS 16.0, watchOS 9.0, *)
+   private static func regex_parseMIMEString(_ mimeString: String) -> MIME? {
+      let regex = /^(?<type>(\w+([-.+\w]*\w)?)|(\*))\/(?<subtype>(\w+([-.+\w]*\w)?)|(\*))(;\s?q=\d(.\d)?)?$/
+      guard let match = try? regex.firstMatch(in: mimeString) else {
+         return nil
+      }
+
+      let output = match.output
+      let typeRange = output.type.startIndex..<output.type.endIndex
+      let subtypeRange = output.subtype.startIndex..<output.subtype.endIndex
+      let type = String(mimeString[typeRange])
+      let subtype = String(mimeString[subtypeRange])
+      return MIME(type: type, subtype: subtype)
+   }
+
+   private static func nsRegularExpression_parseMIMEString(_ mimeString: String) -> MIME? {
       let typeCaptureGroupName = "type"
       let subtypeCaptureGroupName = "subtype"
       let pattern = String(

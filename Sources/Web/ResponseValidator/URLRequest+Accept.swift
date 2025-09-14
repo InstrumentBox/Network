@@ -30,7 +30,9 @@ extension URLRequest {
          return []
       }
 
-      let mimeStrings = accept.components(separatedBy: ", ")
+      let mimeStrings = accept
+         .components(separatedBy: ",")
+         .map { $0.trimmingCharacters(in: .whitespaces) }
       return mimeStrings.compactMap(MIME.parseMIMEString)
    }
 }
